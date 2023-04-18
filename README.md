@@ -10,3 +10,4 @@ Estructura de carpetas
 6. views: vistas de la aplicación
 7. services: peticiones http, normalmente se llamarán desde el stores
 8. helpers: funciones que son reusables, usando patrón de módulos de javascript
+9. assets: carpeta donde se colocan todos los recursos de la web "imágenes, svg, pdfs, audio, video"

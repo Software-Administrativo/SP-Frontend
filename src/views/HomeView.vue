@@ -1,6 +1,5 @@
 <template>
-  <span>Home view</span>  
+  <span>Home view</span>
 </template>
-
-<script setup>
-</script>
+<script setup></script>
+<style scoped></style>
