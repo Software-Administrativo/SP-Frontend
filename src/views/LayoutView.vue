@@ -10,7 +10,6 @@
         ></router-view>
       </q-page-container>
     </div>
-    <!-- <Footer v-if="routeName != 'login'"></Footer> -->
   </q-layout>
 </template>
 
