@@ -19,4 +19,7 @@ export default defineConfig({
       template: { transformAssetUrls },
     }),
   ],
+  build: {
+    chunkSizeWarningLimit: 1600
+  }
 });
