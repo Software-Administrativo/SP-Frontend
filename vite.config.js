@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
+import { transformAssetUrls } from "@quasar/vite-plugin";
 
 // Creación de alias
 import { fileURLToPath, URL } from "node:url";
@@ -17,9 +17,6 @@ export default defineConfig({
   plugins: [
     vue({
       template: { transformAssetUrls },
-    }),
-    quasar({
-      sassVariables: "src/quasar-variables.sass",
     }),
   ],
 });

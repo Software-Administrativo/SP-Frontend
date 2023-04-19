@@ -3,9 +3,8 @@ import { createApp } from "vue";
 import { Quasar } from "quasar";
 import { createPinia } from "pinia";
 
-// Importaciones de quasar
-import "@quasar/extras/material-icons/material-icons.css";
-import "quasar/src/css/index.sass";
+// Import Quasar css
+import 'quasar/dist/quasar.css'
 
 // Importar el componente principal de la aplicación
 import App from "./App.vue";
