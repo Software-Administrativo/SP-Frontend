@@ -1,12 +1,24 @@
+// Importar las librerías de Vue, Vue Router y Quasar
 import { createApp } from "vue";
+import { Quasar } from "quasar";
 import { createPinia } from "pinia";
 
+// Importaciones de quasar
+import "@quasar/extras/material-icons/material-icons.css";
+import "quasar/src/css/index.sass";
+
+// Importar el componente principal de la aplicación
 import App from "./App.vue";
 import router from "./routes";
 
-const app = createApp(App);
+// Pinia para manejar el estado de la aplicación
+const pinia = createPinia();
 
-app.use(createPinia());
-app.use(router);
+// Crear la instancia de Vue y pasarle el router y quasar
+const myApp = createApp(App)
+  .use(Quasar, { plugins: {} })
+  .use(router)
+  .use(pinia);
 
-app.mount("#app");
+// Assumes you have a <div id="app"></div> in your index.html
+myApp.mount("#app");
