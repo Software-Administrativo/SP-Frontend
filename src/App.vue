@@ -1,15 +1,22 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+import Login from "@/views/SignInView.vue"
 </script>
 
 <template>
-  <nav>
+  <!-- <nav>
     <RouterLink to="/">Home</RouterLink>
     <hr />
     <RouterLink to="/about">About</RouterLink>
   </nav>
   <RouterView />
-  <q-btn color="white" text-color="black" label="Standard" />
+  <q-btn color="white" text-color="black" label="Standard" /> -->
+
+
+ 
+  <Login />
+
+
 </template>
 
 <style scoped>

@@ -1,5 +1,19 @@
 <template>
-  <span>SignIn View</span>
+  <div class="bg-login">
+  </div>
 </template>
-<script setup></script>
-<style scoped></style>
+
+<script setup>
+import FormLogin from "@/modules/login/FormLogin.vue";
+
+</script>
+
+<style scoped>
+.bg-login{
+  background: url(../assets/sign-in/imageFondo.png);
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
+}
+
+</style>
