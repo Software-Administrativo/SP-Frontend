@@ -1,18 +1,18 @@
+<template>
+  <Layout></Layout>
+</template>
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import Layout from './views/LayoutView.vue'
 </script>
 
-<template>
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <hr />
-    <RouterLink to="/about">About</RouterLink>
-  </nav>
-  <RouterView />
-  <q-btn color="white" text-color="black" label="Standard" />
-</template>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
+@import "./assets/global/icomoon/style.css";
 
-<style scoped>
+*{
+  font-family: 'Akshar', sans-serif;
+}
+
 /* Set border box for all elements, delete padding and margin */
 html,
 body {
