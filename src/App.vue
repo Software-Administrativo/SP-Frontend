@@ -1,18 +1,17 @@
+<template>
+  <Layout></Layout>
+</template>
 <script setup>
-import { RouterLink, RouterView } from "vue-router";
+import Layout from './views/LayoutView.vue'
 </script>
 
-<template>
-  <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <hr />
-    <RouterLink to="/about">About</RouterLink>
-  </nav>
-  <RouterView />
-  <q-btn color="white" text-color="black" label="Standard" />
-</template>
-
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+*{
+  font-family: 'Lato', sans-serif;
+}
+
 /* Set border box for all elements, delete padding and margin */
 html,
 body {
