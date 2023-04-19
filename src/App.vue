@@ -5,11 +5,12 @@
 import Layout from './views/LayoutView.vue'
 </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
+@import "./assets/global/icomoon/style.css";
 
 *{
-  font-family: 'Lato', sans-serif;
+  font-family: 'Akshar', sans-serif;
 }
 
 /* Set border box for all elements, delete padding and margin */
