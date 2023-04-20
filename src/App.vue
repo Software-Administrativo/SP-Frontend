@@ -1,9 +1,10 @@
 <template>
-  <Layout></Layout>
+  <SignIn></SignIn>
 </template>
 
 <script setup>
 import Layout from './views/LayoutView.vue'
+import SignIn from './views/SignInView.vue'
 </script>
 
 <style>
