@@ -10,6 +10,6 @@ import Cards from "@/modules/home/Cards.vue";
 </script>
 <style scoped>
 .separator {
-  border: 1.8px solid #ecedee;
+  border: 1.8px solid var(--color-gray);
 }
 </style>

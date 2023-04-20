@@ -80,12 +80,12 @@ const paths = [
   margin-top: 50px;
   height: calc(100vh - 50px);
   width: 200px;
-  border-right: 3px #e9eaec solid;
+  border-right: 3px solid var(--color-gray);
   position: relative;
   background-color: white;
 }
 .separator {
-  border: 1.8px solid #ecedee;
+  border: 1.8px solid var(--color-gray);
 }
 .item {
   text-decoration: none;
@@ -112,7 +112,7 @@ const paths = [
   left: calc(50% - 30px);
 }
 .icon {
-  color: #2766a9;
+  color: var(--color-blue);
   font-size: 15px;
   margin-left: 10px;
   padding-top: 10px;

@@ -78,7 +78,7 @@ const goToModule = (route) => {
 .my-card {
   width: 230px;
   border-radius: 10px;
-  border: 1.8px solid #ecedee;
+  border: 1.8px solid var(--color-gray);
 }
 .my-card:hover {
   cursor: pointer;
@@ -87,12 +87,12 @@ const goToModule = (route) => {
   font-size: 15px;
 }
 .icon {
-  color: #2766a9;
+  color: var(--color-blue);
   font-size: 30px;
   margin: calc(50% - 15px);
 }
 .separator {
-  border: 1.8px solid #ecedee;
+  border: 1.8px solid var(--color-gray);
 }
 .enter-card {
   font-size: 12px;

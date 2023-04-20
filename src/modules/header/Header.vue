@@ -18,6 +18,6 @@ function toggle() {
 
 <style scoped>
 .header {
-  background-color: #2766a9;
+  background-color: var(--color-blue);
 }
 </style>

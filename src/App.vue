@@ -14,6 +14,11 @@ import Layout from "./views/LayoutView.vue";
   font-family: "Akshar", sans-serif;
 }
 
+:root {
+  --color-blue: #2766a9;
+  --color-gray: #e9eaec;
+}
+
 /* Set border box for all elements, delete padding and margin */
 html,
 body {
