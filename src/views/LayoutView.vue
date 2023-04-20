@@ -5,8 +5,7 @@
       <Sidebar class="col-2" v-if="menu.menuIsOpen == true"></Sidebar>
       <q-page-container>
         <router-view
-          v-bind:style="routerStyle"
-          class="router-view"
+          :style="routerStyle"
         ></router-view>
       </q-page-container>
     </div>
@@ -29,9 +28,9 @@ const routeName = computed(() => {
 
 const routerStyle = computed(() => {
   if (menu.menuIsOpen == true) {
-    return "width: 83vw; height: calc(100vh); overflow: hidden;";
+    return "width: 83vw; height: 100vh; overflow: hidden;";
   } else {
-    return "width: 100vw; height: calc(100vh); overflow: hidden;";
+    return "width: 100vw; height: 100vh; overflow: hidden;";
   }
 });
 </script>

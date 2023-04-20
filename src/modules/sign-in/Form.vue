@@ -1,5 +1,5 @@
 <template>
-  <div class="row" style="width: 370px;">
+  <div class="container row">
     <div class="col-12 row">
       <div class="col-12 row">
         <p class="select-type-document col-3">Tipo</p>
@@ -52,5 +52,9 @@ const types = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
 
 .btn-login {
   background-color: #0068a5;
+}
+
+.container {
+  width: 370px;
 }
 </style>
