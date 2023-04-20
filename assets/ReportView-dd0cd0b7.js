@@ -1,1 +1,0 @@
-import{_ as e,o as c,c as o}from"./index-5655e104.js";const r={};function t(n,s){return c(),o("span",null,"Report View")}const _=e(r,[["render",t]]);export{_ as default};
