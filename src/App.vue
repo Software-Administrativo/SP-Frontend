@@ -1,6 +1,7 @@
 <template>
   <Layout></Layout>
 </template>
+
 <script setup>
 import Layout from './views/LayoutView.vue'
 </script>
@@ -9,7 +10,7 @@ import Layout from './views/LayoutView.vue'
 @import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
 @import "./assets/global/icomoon/style.css";
 
-*{
+* {
   font-family: 'Akshar', sans-serif;
 }
 
