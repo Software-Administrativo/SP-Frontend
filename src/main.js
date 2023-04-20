@@ -4,10 +4,10 @@ import { Quasar } from "quasar";
 import { createPinia } from "pinia";
 
 // Import Quasar css
-import 'quasar/dist/quasar.css'
+import "quasar/dist/quasar.css";
 
 // Import icon libraries
-import '@quasar/extras/material-icons/material-icons.css'
+import "@quasar/extras/material-icons/material-icons.css";
 
 // Importar el componente principal de la aplicación
 import App from "./App.vue";

@@ -14,7 +14,7 @@
       <q-input class="col-8" filled v-model="documentUser" type="number" />
     </div>
     <div class="col-12 row q-mt-md">
-    <div class="col-12 row"> <p>Contraseña</p></div>
+      <div class="col-12 row"><p>Contraseña</p></div>
       <q-input
         class="col-12"
         v-model="password"

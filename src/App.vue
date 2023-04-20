@@ -3,15 +3,15 @@
 </template>
 
 <script setup>
-import Layout from './views/LayoutView.vue'
+import Layout from "./views/LayoutView.vue";
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Akshar&display=swap");
 @import "./assets/global/icomoon/style.css";
 
 * {
-  font-family: 'Akshar', sans-serif;
+  font-family: "Akshar", sans-serif;
 }
 
 /* Set border box for all elements, delete padding and margin */
