@@ -3,7 +3,7 @@
     <q-toolbar>
       <q-btn flat round dense icon="menu" class="q-mr-sm" @click="toggle()" />
       <q-space></q-space>
-      <q-btn flat round dense icon="logout" class="q-mr-xs" />
+      <q-btn flat round dense icon="logout" class="q-mr-xs" to="./" />
     </q-toolbar>
   </q-header>
 </template>
@@ -17,7 +17,7 @@ function toggle() {
 </script>
 
 <style scoped>
-.header{
-  background-color: #2766A9;
+.header {
+  background-color: #2766a9;
 }
 </style>

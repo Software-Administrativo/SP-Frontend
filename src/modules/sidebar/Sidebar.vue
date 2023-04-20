@@ -1,16 +1,24 @@
 <template>
   <div class="sidebar">
-    <img src="../../assets/sidebar/user-image.svg" class="icon-user q-pt-md" width="40">
+    <img
+      src="../../assets/sidebar/user-image.svg"
+      class="icon-user q-pt-md"
+      width="40"
+    />
     <h6 class="name-user text-center q-ma-none q-pb-sm">Laura Susano</h6>
-    <q-separator class="separator"/>
-    <div v-for="(item) in paths">
+    <q-separator class="separator" />
+    <div v-for="item in paths">
       <RouterLink class="item" :to="item.path">
         <i v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
       </RouterLink>
-      <q-separator class="separator"/>
+      <q-separator class="separator" />
     </div>
-    <img src="../../assets/global/project-logo.svg" alt="logo" class="logo-global">
+    <img
+      src="../../assets/global/project-logo.svg"
+      alt="logo"
+      class="logo-global"
+    />
   </div>
 </template>
 
@@ -72,11 +80,12 @@ const paths = [
   margin-top: 50px;
   height: calc(100vh - 50px);
   width: 200px;
-  border-right: 3px #E9EAEC solid;
+  border-right: 3px #e9eaec solid;
   position: relative;
+  background-color: white;
 }
-.separator{
-  border: 1.8px solid #ECEDEE;
+.separator {
+  border: 1.8px solid #ecedee;
 }
 .item {
   text-decoration: none;
@@ -88,21 +97,22 @@ const paths = [
   color: black;
   margin: 3px;
 }
-.icon-user{
+.icon-user {
   color: white;
   font-size: 35px;
   margin-left: calc(50% - 20px);
 }
-.name-user{
+.name-user {
   font-size: 13px;
 }
-.logo-global{
+.logo-global {
   position: absolute;
+  width: 60px;
   bottom: 20px;
-  left: calc(50% - 50px);
+  left: calc(50% - 30px);
 }
-.icon{
-  color: #2766A9;
+.icon {
+  color: #2766a9;
   font-size: 15px;
   margin-left: 10px;
   padding-top: 10px;

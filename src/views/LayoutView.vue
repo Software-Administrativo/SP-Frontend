@@ -1,9 +1,12 @@
 <template>
   <q-layout>
     <Header v-if="routeName != 'sign-in'"></Header>
-    <div class="row">
-      <Sidebar class="col-2" v-if="menu.menuIsOpen == true"></Sidebar>
-      <div :style="routerStyle">
+    <div class="row view-router">
+      <Sidebar
+        class="col-2 view-sidebar"
+        v-if="menu.menuIsOpen == true"
+      ></Sidebar>
+      <div class="router-style">
         <router-view></router-view>
       </div>
     </div>
@@ -23,12 +26,26 @@ const menu = menuState();
 const routeName = computed(() => {
   return useRoute().name;
 });
-
-const routerStyle = computed(() => {
-  if (menu.menuIsOpen == true) {
-    return "width: calc(100vw - 200px); height: calc(100vh - 50px); overflow: hidden; margin-top: 50px;";
-  } else {
-    return "width: 100vw; height: calc(100vh - 50px); overflow: hidden; margin-top: 50px;";
-  }
-});
 </script>
+
+<style scoped>
+.view-router {
+  position: relative;
+}
+.view-sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.router-style {
+  width: 100vw;
+  max-width: 1000px;
+  min-width: 300px;
+  height: calc(100vh - 50px);
+  overflow: hidden;
+  margin-left: calc(25% - 80px);
+  margin-right: calc(25% - 80px);
+  margin-top: 50px;
+}
+</style>

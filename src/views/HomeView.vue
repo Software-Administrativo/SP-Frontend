@@ -1,5 +1,15 @@
 <template>
-  <span>Home view</span>
+  <div class="q-py-md">
+    <h6 class="q-my-lg">LISTA DE MODULOS</h6>
+    <q-separator class="separator" />
+    <Cards />
+  </div>
 </template>
-<script setup></script>
-<style scoped></style>
+<script setup>
+import Cards from "@/modules/home/Cards.vue";
+</script>
+<style scoped>
+.separator {
+  border: 1.8px solid #ecedee;
+}
+</style>
