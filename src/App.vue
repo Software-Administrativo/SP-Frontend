@@ -1,4 +1,8 @@
+<template>
+  <Layout></Layout>
+</template>
 <script setup>
+<<<<<<< HEAD
 import { RouterLink, RouterView } from "vue-router";
 import Login from "@/views/SignInView.vue"
 </script>
@@ -18,8 +22,19 @@ import Login from "@/views/SignInView.vue"
 
 
 </template>
+=======
+import Layout from './views/LayoutView.vue'
+</script>
 
-<style scoped>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Akshar&display=swap');
+@import "./assets/global/icomoon/style.css";
+
+*{
+  font-family: 'Akshar', sans-serif;
+}
+>>>>>>> c3054ff5d2543c5aebea915a9b3145a564fe83b6
+
 /* Set border box for all elements, delete padding and margin */
 html,
 body {
