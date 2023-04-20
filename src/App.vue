@@ -1,8 +1,6 @@
 <template>
   <Layout></Layout>
 </template>
-<script setup>
-</script>
 
 <script setup>
 import Layout from './views/LayoutView.vue'
