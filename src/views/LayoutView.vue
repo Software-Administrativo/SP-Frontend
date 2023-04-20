@@ -3,11 +3,9 @@
     <Header v-if="routeName != 'sign-in'"></Header>
     <div class="row">
       <Sidebar class="col-2" v-if="menu.menuIsOpen == true"></Sidebar>
-      <q-page-container>
-        <router-view
-          :style="routerStyle"
-        ></router-view>
-      </q-page-container>
+      <div :style="routerStyle">
+        <router-view></router-view>
+      </div>
     </div>
   </q-layout>
 </template>
@@ -28,9 +26,9 @@ const routeName = computed(() => {
 
 const routerStyle = computed(() => {
   if (menu.menuIsOpen == true) {
-    return "width: 83vw; height: 100vh; overflow: hidden;";
+    return "width: calc(100vw - 200px); height: calc(100vh - 50px); overflow: hidden; margin-top: 50px;";
   } else {
-    return "width: 100vw; height: 100vh; overflow: hidden;";
+    return "width: 100vw; height: calc(100vh - 50px); overflow: hidden; margin-top: 50px;";
   }
 });
 </script>
