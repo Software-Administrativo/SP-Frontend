@@ -2,7 +2,7 @@
   <div class="q-py-md">
     <h6 class="q-my-lg">ACCESO AL SISTEMA</h6>
     <q-separator class="separator" />
-    <Button @onClick="clickButton" label="Crear nuevo usuario" />
+    <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
     <div class="container-table q-mt-lg q-pa-md" rounded>
       <q-table
         class="my-sticky-header-table"
@@ -18,8 +18,8 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import Button from "@/commons/Button-add.vue";
 import { getUsers } from "@/api/system";
+import ButtonAdd from "@/commons/ButtonAdd.vue";
 
 const rows = ref([]);
 
@@ -64,7 +64,7 @@ const pagination = ref({
   page: 1,
   rowsPerPage: 10,
   sortBy: "id",
-  descending: true,
+  descending: false,
 });
 
 const getDataUsers = async () => {
@@ -87,7 +87,8 @@ onMounted(() => {
 }
 .container-table {
   border-radius: 15px;
-  height: 50vh;
+  height: 100%;
+  max-height: 50vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;

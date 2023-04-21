@@ -90,15 +90,17 @@ const paths = [
 .item {
   text-decoration: none;
   display: flex;
+  color: black;
+}
+.item:hover{
+  background-color: var(--color-gray);
 }
 .name {
   margin-left: 20px !important;
   font-size: 12px;
-  color: black;
   margin: 3px;
 }
 .icon-user {
-  color: white;
   font-size: 35px;
   margin-left: calc(50% - 20px);
 }
@@ -112,8 +114,8 @@ const paths = [
   left: calc(50% - 30px);
 }
 .icon {
-  color: var(--color-blue);
   font-size: 15px;
+  color: var(--color-blue);
   margin-left: 10px;
   padding-top: 10px;
 }
