@@ -30,19 +30,19 @@
       v-model="password"
       dense
       filled
-      :type="isPwd ? 'password' : 'text'"
-      hint="Contraseña incorrecta"
+      :type="isPasswordType ? 'password' : 'text'"
+      :hint="messageError"
     >
       <template v-slot:append>
         <q-icon
-          :name="isPwd ? 'visibility_off' : 'visibility'"
+          :name="isPasswordType ? 'visibility_off' : 'visibility'"
           class="cursor-pointer"
-          @click="isPwd = !isPwd"
+          @click="isPasswordType = !isPasswordType"
         />
       </template>
     </q-input>
   </div>
-  <q-btn class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
+  <q-btn class="btn-login text-white full-width q-mt-lg" to="/home">Entrar</q-btn>
 </template>
 
 <script setup>
@@ -51,7 +51,8 @@ import { ref } from "vue";
 const typeDocument = ref(null);
 const documentUser = ref("");
 const password = ref("");
-const isPwd = ref(true);
+const isPasswordType = ref(true);
+let messageError = ref()
 
 const types = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
 </script>
