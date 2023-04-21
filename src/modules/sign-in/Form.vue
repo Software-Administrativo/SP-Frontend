@@ -55,6 +55,8 @@ const types = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
 }
 
 .container {
-  width: 370px;
+  width: 470px;
 }
+
+
 </style>
