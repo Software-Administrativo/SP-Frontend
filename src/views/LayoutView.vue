@@ -4,9 +4,9 @@
     <div class="row view-router">
       <Sidebar
         class="col-2 view-sidebar"
-        v-if="menu.menuIsOpen == true"
+        v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
       ></Sidebar>
-      <div class="router-style">
+      <div :style="routerStyle">
         <router-view></router-view>
       </div>
     </div>
@@ -26,6 +26,15 @@ const menu = menuState();
 const routeName = computed(() => {
   return useRoute().name;
 });
+
+const routerStyle = computed(() => {
+  console.log(routeName.value);
+  if (routeName.value == "sign-in"){
+    return "width: 100vw; max-width: 1000px; min-width: 300px;"
+  } else {
+    return "width: 100vw; max-width: 1000px; min-width: 300px; height: calc(100vh - 50px); overflow: hidden; margin-left: calc(25% - 80px); margin-right: calc(25% - 80px); margin-top: 50px;"
+  }
+});
 </script>
 
 <style scoped>
@@ -38,7 +47,7 @@ const routeName = computed(() => {
   left: 0;
   z-index: 1;
 }
-.router-style {
+/* .router-style {
   width: 100vw;
   max-width: 1000px;
   min-width: 300px;
@@ -47,5 +56,5 @@ const routeName = computed(() => {
   margin-left: calc(25% - 80px);
   margin-right: calc(25% - 80px);
   margin-top: 50px;
-}
+} */
 </style>

@@ -7,7 +7,7 @@
     />
     <h6 class="name-user text-center q-ma-none q-pb-sm">Laura Susano</h6>
     <q-separator class="separator" />
-    <div v-for="item in paths">
+    <div v-for="item in paths"  :key="item.name">
       <RouterLink class="item" :to="item.path">
         <i v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
@@ -23,6 +23,9 @@
 </template>
 
 <script setup>
+import { onUpdated } from "vue";
+import { menuState } from "@/stores/menu";
+
 const paths = [
   {
     name: "Inicio",
@@ -73,6 +76,13 @@ const paths = [
     rol: "admin",
   },
 ];
+
+const menu = menuState();
+
+onUpdated(() => {
+  menu.value = false;
+});
+
 </script>
 
 <style scoped>
