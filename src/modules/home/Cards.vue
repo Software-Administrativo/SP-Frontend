@@ -82,6 +82,7 @@ const goToModule = (route) => {
 }
 .my-card:hover {
   cursor: pointer;
+  background-color: var(--color-gray);
 }
 .title-module {
   font-size: 15px;

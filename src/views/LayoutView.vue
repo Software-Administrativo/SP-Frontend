@@ -28,7 +28,6 @@ const routeName = computed(() => {
 });
 
 const routerStyle = computed(() => {
-  console.log(routeName.value);
   if (routeName.value == "sign-in"){
     return "width: 100vw; max-width: 1000px; min-width: 300px;"
   } else {
