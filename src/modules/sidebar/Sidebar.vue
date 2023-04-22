@@ -107,15 +107,14 @@ onUpdated(() => {
 }
 .name {
   margin-left: 20px !important;
-  font-size: 12px;
+  font-size: var(--font-small);
   margin: 3px;
 }
 .icon-user {
-  font-size: 35px;
   margin-left: calc(50% - 20px);
 }
 .name-user {
-  font-size: 13px;
+  font-size: var(--font-small);
 }
 .logo-global {
   position: absolute;
@@ -124,7 +123,7 @@ onUpdated(() => {
   left: calc(50% - 30px);
 }
 .icon {
-  font-size: 15px;
+  font-size: var(--font-large);
   color: var(--color-blue);
   margin-left: 10px;
   padding-top: 10px;
