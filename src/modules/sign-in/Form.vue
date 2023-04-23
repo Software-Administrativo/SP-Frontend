@@ -31,7 +31,7 @@
       dense
       filled
       :type="isPasswordType ? 'password' : 'text'"
-      :hint="messageError"
+      :hint="error"
     >
       <template v-slot:append>
         <q-icon
@@ -42,19 +42,38 @@
       </template>
     </q-input>
   </div>
-  <q-btn class="btn-login text-white full-width q-mt-lg" to="/home">Entrar</q-btn>
+  <q-btn @click="sendProperties()" class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
 </template>
 
 <script setup>
+// Imports
 import { ref } from "vue";
 
-const typeDocument = ref(null);
-const documentUser = ref("");
-const password = ref("");
+// Data - mocked data just for testing routes and its permissions
+const typeDocument = ref("CC");
+const documentUser = ref("1234");
+const password = ref("1234");
 const isPasswordType = ref(true);
-let messageError = ref()
-
 const types = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
+
+// Props
+const props = defineProps({
+  error: {
+    type: String,
+    default: null,
+  },
+})
+
+// Emits
+const emits = defineEmits({
+  onForm: null
+})
+
+// Functions
+const sendProperties = () => {
+  emits('onForm', {typeDocument, documentUser, password})
+}
+
 </script>
 <style scoped>
 .select-type-document {
