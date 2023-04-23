@@ -32,14 +32,12 @@ const typeDocument = ref("");
 const documentUser = ref("");
 const password = ref("");
 const isInactive = computed(() => {
-  // CAMBIAR
-  console.log("cambiar");
+  return typeDocument.value === "" || documentUser.value === "" || password.value === "";
 })
 
 const selectStyles = ref({
   marginRight: "8.3%"
 })
-
 
 // Emits
 const emits = defineEmits({
@@ -48,7 +46,7 @@ const emits = defineEmits({
 
 // Functions
 const sendProperties = () => {
-  emits('onForm', { typeDocument, documentUser, password })
+  emits('onForm', { typeDocument: typeDocument.value, documentUser : documentUser.value, password : password.value })
 }
 
 // Función que se activa cuando el componente Select emite el evento onSelect y recibimos su valor 

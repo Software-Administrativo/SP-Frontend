@@ -2,7 +2,11 @@
   <section class="row background-sugar">
     <div class="col-md-6 col-12 window-height bg-white q-pa-md">
       <div class="row">
-        <img class="image-size" src="../assets/sign-in/sign-in-logo.svg" alt="Logo trapiche">
+        <img
+          class="image-size"
+          src="../assets/sign-in/sign-in-logo.svg"
+          alt="Logo trapiche"
+        />
       </div>
       <div class="form-container column justify-center items-center">
         <div class="form column">
@@ -14,26 +18,32 @@
     </div>
     <div class="col-md-6 col-0 window-height"></div>
   </section>
+
+  <!-- <ModalForm>
+    <h1>Registrar Acceso</h1>
+    <div class="row">
+      <div class="col-3">
+        <Select @onSelect="getSelectData" type="documents" label="Tipo"></Select>
+      </div>
+    </div>
+  </ModalForm> -->
+
 </template>
 
 <script setup>
 // Imports
 import { useRouter } from "vue-router";
+import { validateUser } from "@/api/sign-in";
 import Form from "@/modules/sign-in/Form.vue";
 
 // Data
 const router = useRouter();
 
 // Function to receive the data from the form
-const validateIfUserExist = ({ typeDocument, documentUser, password }) => {
-    console.log(typeDocument.value);
-    console.log(documentUser.value);
-    console.log(password.value);
-    // Here we can call the API to validate if the user exist, but in this case we just redirect to the home view if the user is 1234 and the password is 1234
-    // if (documentUser.value === "1234" && password.value === "1234") {
-    //   router.push({ name: "home" });
-    // }
-}
+const validateIfUserExist = async (data) => {
+  const validateDataUser = await validateUser(data);
+  // router.push({ name: "home" });
+};
 </script>
 <style scoped>
 .background-sugar {
