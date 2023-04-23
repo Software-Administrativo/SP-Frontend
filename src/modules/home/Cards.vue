@@ -69,7 +69,13 @@ const goToModule = (route) => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   grid-gap: 20px;
+  max-height: 75vh;
+  padding-bottom: 20px;
   place-items: center;
+  overflow-y: scroll;
+}
+.item-card-module::-webkit-scrollbar {
+  display: none;
 }
 .icon-section-card {
   padding-top: 26px;
@@ -85,7 +91,7 @@ const goToModule = (route) => {
   background-color: var(--color-gray);
 }
 .title-module {
-  font-size: 15px;
+  font-size: var(--font-large);
 }
 .icon {
   color: var(--color-blue);
@@ -96,6 +102,6 @@ const goToModule = (route) => {
   border: 1.8px solid var(--color-gray);
 }
 .enter-card {
-  font-size: 12px;
+  font-size: var(--font-small);
 }
 </style>

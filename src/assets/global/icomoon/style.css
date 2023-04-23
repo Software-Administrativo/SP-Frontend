@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?8821p1');
-  src:  url('fonts/icomoon.eot?8821p1#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?8821p1') format('truetype'),
-    url('fonts/icomoon.woff?8821p1') format('woff'),
-    url('fonts/icomoon.svg?8821p1#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?rtjhmx');
+  src:  url('fonts/icomoon.eot?rtjhmx#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?rtjhmx') format('truetype'),
+    url('fonts/icomoon.woff?rtjhmx') format('woff'),
+    url('fonts/icomoon.svg?rtjhmx#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,54 +25,72 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-unit-extent:before {
-  content: "\e903";
-}
-.icon-persons:before {
+.icon-wineries:before {
   content: "\e900";
 }
-.icon-tages:before {
+.icon-brands:before {
   content: "\e901";
 }
-.icon-type-document:before {
+.icon-categories:before {
   content: "\e902";
 }
-.icon-type-labors:before {
+.icon-product:before {
+  content: "\e903";
+}
+.icon-inventory-entries:before {
+  content: "\e904";
+}
+.icon-inventory-adjust:before {
   content: "\e905";
 }
-.icon-create-estate:before {
+.icon-persons:before {
   content: "\e906";
 }
-.icon-lots:before {
+.icon-tages:before {
   content: "\e907";
 }
-.icon-type-money:before {
-  content: "\e909";
-}
-.icon-eps:before {
+.icon-type-document:before {
   content: "\e908";
 }
-.icon-home:before {
+.icon-unit-extent:before {
+  content: "\e909";
+}
+.icon-type-labors:before {
   content: "\e90a";
 }
-.icon-inventory:before {
+.icon-create-estate:before {
   content: "\e90b";
 }
-.icon-cost:before {
+.icon-lots:before {
   content: "\e90c";
 }
-.icon-transformation:before {
+.icon-eps:before {
   content: "\e90d";
 }
-.icon-order:before {
+.icon-type-money:before {
   content: "\e90e";
 }
-.icon-report:before {
+.icon-home:before {
   content: "\e90f";
 }
-.icon-maintenance:before {
+.icon-inventory:before {
   content: "\e910";
 }
-.icon-system:before {
+.icon-cost:before {
   content: "\e911";
+}
+.icon-transformation:before {
+  content: "\e912";
+}
+.icon-order:before {
+  content: "\e913";
+}
+.icon-report:before {
+  content: "\e914";
+}
+.icon-maintenance:before {
+  content: "\e915";
+}
+.icon-system:before {
+  content: "\e916";
 }
