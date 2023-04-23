@@ -5,14 +5,19 @@ import { sugarAxios } from "../global";
  * name: pokemon name
  * @returns API Response, with the data of the pokemon
  */
-const getPokemon = async (name) => {
+const validateUser = async ({typeDocument, documentUser, password}) => {
   try {
-    const { data } = await sugarAxios.get(`/pokemon/${name}`);
-    console.log(data.abilities);
-    return data.abilities;
+    const { data } = await sugarAxios.post(`users/login`, 
+    {
+      "tpdocument": typeDocument,
+      "numdocument": documentUser,
+      "password": password
+    });
+    console.log(data.message);
+    // return data;
   } catch (error) {
-    console.error(error);
+    return data
   }
 };
 
-export { getPokemon };
+export { validateUser };

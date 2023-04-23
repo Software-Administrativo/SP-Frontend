@@ -1,22 +1,52 @@
 <template>
-  <div class="bg-login col-12 row">
-    <div class="col-6 bg-white container">
-      <div class="si-logo col-12 row q-mt-md q-ml-md"></div>
-      <div class="form">
-        <h2 class="q-mb-md">Bienvenido</h2>
-        <h5 class="text-grey q-mt-xs q-mb-md">Ingresa a tu cuenta</h5>
-        <Form />
+  <section class="row background-sugar">
+    <div class="col-md-6 col-12 window-height bg-white q-pa-md">
+      <div class="row">
+        <img
+          class="image-size"
+          src="../assets/sign-in/sign-in-logo.svg"
+          alt="Logo trapiche"
+        />
+      </div>
+      <div class="form-container column justify-center items-center">
+        <div class="form column">
+          <h2 class="q-mb-md">Bienvenido</h2>
+          <h5 class="text-grey q-mt-xs q-mb-md">Ingresa a tu cuenta</h5>
+          <Form @onForm="validateIfUserExist" />
+        </div>
       </div>
     </div>
-  </div>
+    <div class="col-md-6 col-0 window-height"></div>
+  </section>
+
+  <!-- <ModalForm>
+    <h1>Registrar Acceso</h1>
+    <div class="row">
+      <div class="col-3">
+        <Select @onSelect="getSelectData" type="documents" label="Tipo"></Select>
+      </div>
+    </div>
+  </ModalForm> -->
+
 </template>
 
 <script setup>
+// Imports
+import { useRouter } from "vue-router";
+import { validateUser } from "@/api/sign-in";
 import Form from "@/modules/sign-in/Form.vue";
-</script>
 
+// Data
+const router = useRouter();
+
+// Function to receive the data from the form
+const validateIfUserExist = async (data) => {
+  const validateDataUser = await validateUser(data);
+  // router.push({ name: "home" });
+};
+</script>
 <style scoped>
-.bg-login {
+.background-sugar {
   background: url(../assets/sign-in/image-background.png);
   background-position: center center;
   background-size: cover;
@@ -25,26 +55,23 @@ import Form from "@/modules/sign-in/Form.vue";
   height: 100vh;
 }
 
-.si-logo {
-  background-image: url(../assets/sign-in/sign-in-logo.png);
-  background-repeat: no-repeat;
-  background-size: 28%;
-  max-width: 600px;
-  min-width: 300px;
-  height: 20%;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  width: 60%;
-  max-width: 380px;
-  min-width: 300px;
-  margin: 0 auto;
+.image-size {
+  width: 40%;
+  max-width: 193px;
+  height: 100%;
 }
 
-@media (max-width: 700px){
-  .container{
-    width: 100vw;
+.form-container {
+  height: calc(100% - 150px);
+}
+
+.form {
+  width: 60%;
+}
+
+@media (max-width: 500px) {
+  .form {
+    width: 90%;
   }
 }
 </style>

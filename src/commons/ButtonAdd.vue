@@ -1,6 +1,7 @@
 <template>
+  <!-- Botón para crear nuevos datos en las tablas -->
   <q-btn
-    class="q-mt-md q-px-sm"
+    class="fix-margin q-mt-md q-px-sm"
     :label=defineLabel()
     icon="add"
     @click="handleClick"
@@ -28,3 +29,8 @@ const defineLabel = () => {
 }
 
 </script>
+<style scoped>
+.fix-margin {
+  margin-left: 3px;
+}
+</style>

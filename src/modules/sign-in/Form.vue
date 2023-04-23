@@ -1,66 +1,69 @@
 <template>
   <div class="row">
     <div class="col-3">
-      <label for="type">Tipo</label>
-      <q-select
-        class="select-type-document q-pa-none"
-        dense
-        filled
-        name="type"
-        v-model="typeDocument"
-        :options="types"
-      />
+      <Select @onSelect="getSelectData" :style="selectStyles" type="documents" label="Tipo"></Select>
     </div>
     <div class="col">
-      <label for="document">Número de documento</label>
-      <q-input
-        class=""
-        dense
-        filled
-        name="document"
-        v-model="documentUser"
-        type="number"
-      />
+      <Input @onWrite="getInputData" label="Número documento" type="number" />
     </div>
   </div>
   <div class="row q-mt-md">
-    <label>Contraseña</label>
-    <q-input
-      class="col-12"
-      v-model="password"
-      dense
-      filled
-      :type="isPasswordType ? 'password' : 'text'"
-      :hint="messageError"
-    >
-      <template v-slot:append>
-        <q-icon
-          :name="isPasswordType ? 'visibility_off' : 'visibility'"
-          class="cursor-pointer"
-          @click="isPasswordType = !isPasswordType"
-        />
-      </template>
-    </q-input>
+    <div class="col-12">
+      <Password @onPassword="getPasswordData" label="Contraseña" />
+    </div>
   </div>
-  <q-btn class="btn-login text-white full-width q-mt-lg" to="/home">Entrar</q-btn>
+  <template v-if="isInactive">
+    <q-btn disable @click="sendProperties()" class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
+  </template>
+  <template v-else>
+    <q-btn @click="sendProperties()" class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
+  </template>
 </template>
 
 <script setup>
-import { ref } from "vue";
+// Imports
+import { computed, ref } from "vue";
+import Select from "@/commons/forms/Select.vue";
+import Input from "@/commons/forms/Input.vue";
+import Password from "@/commons/forms/Password.vue";
 
-const typeDocument = ref(null);
+// Data - mocked data just for testing routes and its permissions
+const typeDocument = ref("");
 const documentUser = ref("");
 const password = ref("");
-const isPasswordType = ref(true);
-let messageError = ref()
+const isInactive = computed(() => {
+  return typeDocument.value === "" || documentUser.value === "" || password.value === "";
+})
 
-const types = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
-</script>
-<style scoped>
-.select-type-document {
-  margin-right: 8.3%;
+const selectStyles = ref({
+  marginRight: "8.3%"
+})
+
+// Emits
+const emits = defineEmits({
+  onForm: null
+})
+
+// Functions
+const sendProperties = () => {
+  emits('onForm', { typeDocument: typeDocument.value, documentUser : documentUser.value, password : password.value })
 }
 
+// Función que se activa cuando el componente Select emite el evento onSelect y recibimos su valor 
+const getSelectData = (value) => {
+  typeDocument.value = value;
+}
+
+const getInputData = (value) => {
+  documentUser.value = value;
+}
+
+const getPasswordData = (value) => {
+  password.value = value;
+}
+
+</script>
+<style scoped>
 .btn-login {
   background-color: #0068a5;
 }

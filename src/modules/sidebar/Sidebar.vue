@@ -86,6 +86,10 @@ onUpdated(() => {
 </script>
 
 <style scoped>
+.router-link-active {
+  background-color: var(--color-gray);
+}
+
 .sidebar {
   margin-top: 50px;
   height: calc(100vh - 50px);
