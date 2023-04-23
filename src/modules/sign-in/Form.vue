@@ -1,68 +1,45 @@
 <template>
   <div class="row">
     <div class="col-3">
-      <label for="type">Tipo</label>
-      <q-select
-        class="select-type-document q-pa-none"
-        dense
-        filled
-        name="type"
-        v-model="typeDocument"
-        :options="types"
-      />
+      <Select @onSelect="getSelectData" :style="selectStyles" type="documents" label="Tipo"></Select>
     </div>
     <div class="col">
-      <label for="document">Número de documento</label>
-      <q-input
-        class=""
-        dense
-        filled
-        name="document"
-        v-model="documentUser"
-        type="number"
-      />
+      <Input @onWrite="getInputData" label="Número documento" type="number" />
     </div>
   </div>
   <div class="row q-mt-md">
-    <label>Contraseña</label>
-    <q-input
-      class="col-12"
-      v-model="password"
-      dense
-      filled
-      :type="isPasswordType ? 'password' : 'text'"
-      :hint="error"
-    >
-      <template v-slot:append>
-        <q-icon
-          :name="isPasswordType ? 'visibility_off' : 'visibility'"
-          class="cursor-pointer"
-          @click="isPasswordType = !isPasswordType"
-        />
-      </template>
-    </q-input>
+    <div class="col-12">
+      <Password @onPassword="getPasswordData" label="Contraseña" />
+    </div>
   </div>
-  <q-btn @click="sendProperties()" class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
+  <template v-if="isInactive">
+    <q-btn disable @click="sendProperties()" class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
+  </template>
+  <template v-else>
+    <q-btn @click="sendProperties()" class="btn-login text-white full-width q-mt-lg">Entrar</q-btn>
+  </template>
 </template>
 
 <script setup>
 // Imports
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import Select from "@/commons/forms/Select.vue";
+import Input from "@/commons/forms/Input.vue";
+import Password from "@/commons/forms/Password.vue";
 
 // Data - mocked data just for testing routes and its permissions
-const typeDocument = ref("CC");
-const documentUser = ref("1234");
-const password = ref("1234");
-const isPasswordType = ref(true);
-const types = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
-
-// Props
-const props = defineProps({
-  error: {
-    type: String,
-    default: null,
-  },
+const typeDocument = ref("");
+const documentUser = ref("");
+const password = ref("");
+const isInactive = computed(() => {
+  // CAMBIAR
+  console.log("cambiar");
 })
+
+const selectStyles = ref({
+  marginRight: "8.3%"
+})
+
 
 // Emits
 const emits = defineEmits({
@@ -71,15 +48,24 @@ const emits = defineEmits({
 
 // Functions
 const sendProperties = () => {
-  emits('onForm', {typeDocument, documentUser, password})
+  emits('onForm', { typeDocument, documentUser, password })
+}
+
+// Función que se activa cuando el componente Select emite el evento onSelect y recibimos su valor 
+const getSelectData = (value) => {
+  typeDocument.value = value;
+}
+
+const getInputData = (value) => {
+  documentUser.value = value;
+}
+
+const getPasswordData = (value) => {
+  password.value = value;
 }
 
 </script>
 <style scoped>
-.select-type-document {
-  margin-right: 8.3%;
-}
-
 .btn-login {
   background-color: #0068a5;
 }
