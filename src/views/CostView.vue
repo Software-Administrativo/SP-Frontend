@@ -8,24 +8,24 @@ import { ref } from "vue";
 
 const itemsListModules = ref([
   {
-    name: "Gastos de siembra",
+    label: "Gastos de siembra",
     icon: "icon icon-wineries",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Gastos de actividades",
+    label: "Gastos de actividades",
     icon: "icon icon-brands",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Gastos administrativos",
+    label: "Gastos administrativos",
     icon: "icon icon-product",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Otro tipo de gasto",
+    label: "Otro tipo de gasto",
     icon: "icon icon-categories",
-    path: "/home"
+    name: "/home"
   },
 ]);
 </script>

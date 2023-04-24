@@ -3,9 +3,9 @@
     <h6 class="q-my-lg">{{ props.title }}</h6>
     <q-separator class="separator" />
     <div class="container-list q-mt-lg q-pa-md" rounded>
-      <div class="item-list" v-for="(item, i) in props.items" :key="i" @click="goToModule(item.path)">
+      <div class="item-list" v-for="(item, i) in props.items" :key="i" @click="goToModule(item.name)">
         <i class="item-icon" v-bind:class="item.icon"></i>
-        <p class="item-name">{{ item.name }}</p>
+        <p class="item-name">{{ item.label }}</p>
       </div>
     </div>
   </div>
@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const goToModule = (route) => {
-  router.push({ name: route});
+  router.push({ name: route });
 };
 </script>
 
@@ -45,12 +45,14 @@ const goToModule = (route) => {
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
+
 .icon {
   color: var(--color-blue);
   font-size: var(--font-large);
   margin-left: 10px;
   padding-top: 10px;
 }
+
 .item-list {
   display: flex;
   align-items: left;
@@ -59,13 +61,14 @@ const goToModule = (route) => {
   padding-bottom: 0px;
   border-bottom: 2px solid var(--color-gray);
 }
+
 .item-list:hover {
   cursor: pointer;
   background-color: var(--color-gray);
 }
+
 .item-name {
   font-size: var(--font-medium);
   margin-left: 10px;
   padding-top: 8px;
-}
-</style>
+}</style>
