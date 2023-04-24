@@ -1,19 +1,34 @@
 <template>
-  <div class="modal-forms bg-white">
-    <i class="icon icon-close self-end"/>
+  <div class="container-modal">
+    <div class="column modal-forms bg-white">
+      <i class="icon icon-close self-end" @click="toggle()"/>
       <q-separator class="separator"/>
       <slot />
+    </div>
   </div>
 </template>
 <script setup>
+import { modalState } from "@/stores/modal.js";
 
+const modal = modalState();
+
+function toggle() {
+  modal.toggleModal();
+}
 
 </script>
 <style scoped>
-.modal-forms{
-  position: absolute;
-  top: 50%;
-  width: 450px;
+.container-modal{
+  position: fixed;
+  background-color: #2766a96e;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+.modal-forms {
+  width: 80%;
+  padding-bottom: 20px;
+  max-width: 400px;
   border: 3px solid var(--color-gray) !important;
   border-radius: 12px;
 }

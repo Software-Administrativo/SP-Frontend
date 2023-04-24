@@ -71,7 +71,7 @@ const getDataUsers = async () => {
   const data = await getUsers();
   let count = 1;
   data.forEach((item) => {
-    item.status = item.status ? "Activo" : "Inactivo";
+    item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
   });
   rows.value = data;
