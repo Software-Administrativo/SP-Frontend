@@ -1,6 +1,6 @@
 // Importar las librerías de Vue, Vue Router y Quasar
 import { createApp } from "vue";
-import { Quasar } from "quasar";
+import { Quasar, Dialog } from "quasar";
 import { createPinia } from "pinia";
 
 // Import Quasar css
@@ -18,7 +18,7 @@ const pinia = createPinia();
 
 // Crear la instancia de Vue y pasarle el router y quasar
 const myApp = createApp(App)
-  .use(Quasar, { plugins: {} })
+  .use(Quasar, { plugins: { Dialog } })
   .use(router)
   .use(pinia);
 

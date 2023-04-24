@@ -16,28 +16,58 @@
       />
     </div>
   </div>
-  <template v-if="showRegisterPays">
-    <ModalForm class="column modal-form">
+  <template v-if="modal.modalIsOpen">
+    <ModalForm>
       <h6 class="q-my-md text-center">Registrar Acceso</h6>
       <div class="row q-px-xl">
         <div class="col-12">
-          <Input class="q-pb-md" label="Nombre" type="text" v-model="nameTypePays"/>
-          <Input class="q-pb-md" label="Descripción" type="text" v-model="descriptionTypePays"/>
+          <Input
+            class="q-pb-xs"
+            label="Nombre"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="nameTypePays"
+            @onWrite="getInputName"
+          />
+          <Input
+            label="Descripción"
+            type="text"
+            :required=false
+            v-model="descriptionTypePays"
+            @onWrite="getInputDescription"
+          />
+          <span class="text-required q-pb-sm">Todos los campos con 
+          <span class="text-red">*</span> son obligatorios</span>
+          <div class="row justify-center">
+            <ButtonSave :disable="disableSave" @onClick="saveInfo" />
+          </div>
         </div>
       </div>
     </ModalForm>
   </template>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
-import { getTypePays } from "@/api/maintenance";
+import { ref, onMounted, computed } from "vue";
+import { getTypePays, postTypePays } from "@/api/maintenance/type-pays";
+import { modalState } from "@/stores/modal.js";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import Input from "@/commons/forms/Input.vue";
+import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
-const showRegisterPays = ref(false);
-let nameTypePays = ref();
-let descriptionTypePays = ref();
+const modal = modalState();
+
+let nameTypePays = ref("");
+let descriptionTypePays = ref("");
+let disableSave = computed(() => {
+  return nameTypePays.value == "";
+});
+
+const rules = [
+  (v) => !!v || "Este campo es requerido",
+  (v) => (v && v.length <= 10) || "El nombre debe tener menos de 10 caracteres",
+];
 
 const rows = ref([]);
 const columns = ref([
@@ -65,10 +95,6 @@ const columns = ref([
   },
 ]);
 
-const clickButton = () => {
-  showRegisterPays.value = true;
-};
-
 const pagination = ref({
   page: 1,
   rowsPerPage: 10,
@@ -76,13 +102,40 @@ const pagination = ref({
   descending: false,
 });
 
+const clickButton = () => {
+  modal.toggleModal();
+  nameTypePays.value = ""
+  descriptionTypePays.value = ""
+};
+
+const getInputName = (value) => {
+  nameTypePays.value = value;
+};
+
+const getInputDescription = (value) => {
+  descriptionTypePays.value = value;
+};
+
+const saveInfo = () => {
+  postDataTypePays();
+  modal.toggleModal();
+};
+
+const postDataTypePays = async () => {
+  const { pays } = await postTypePays({
+    name: nameTypePays.value,
+    description: descriptionTypePays.value,
+  });
+  getDataTypePays();
+}
+
 const getDataTypePays = async () => {
   const { pays } = await getTypePays();
   let count = 1;
   pays.forEach((item) => {
-    item.status = item.status ? "Activo" : "Inactivo";
+    item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description = item.description ? "No registra" : item.description;
+    item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
   });
   rows.value = pays;
 };
@@ -92,6 +145,10 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.text-required{
+  display: inline-block;
+  font-size: 12px;
+}
 .table-container {
   position: relative;
 }
@@ -105,12 +162,5 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
-}
-.modal-forms {
-  position: absolute;
-  top: calc(50% - 190px);
-  left: calc(50% - 180px);
-  width: 360px;
-  border: 2px solid var(--color-gray);
 }
 </style>
