@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const goToModule = (route) => {
-  router.push(route);
+  router.push({ name: route});
 };
 </script>
 

@@ -17,17 +17,7 @@
       </div>
     </div>
     <div class="col-md-6 col-0 window-height"></div>
-  </section>
-
-  <!-- <ModalForm>
-    <h1>Registrar Acceso</h1>
-    <div class="row">
-      <div class="col-3">
-        <Select @onSelect="getSelectData" type="documents" label="Tipo"></Select>
-      </div>
-    </div>
-  </ModalForm> -->
-
+  </section>  
 </template>
 
 <script setup>
@@ -42,7 +32,11 @@ const router = useRouter();
 // Function to receive the data from the form
 const validateIfUserExist = async (data) => {
   const validateDataUser = await validateUser(data);
-  // router.push({ name: "home" });
+  if(validateDataUser.message){
+    console.log('Credenciales incorrectas');
+  } else {
+    router.push({ name: "home" });
+  }
 };
 </script>
 <style scoped>

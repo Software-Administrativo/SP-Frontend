@@ -1,7 +1,7 @@
 import { sugarAxios } from "../global";
 
 /**
- * name: data users
+ * data: data users
  * @returns API Response, with the data of the users
  */
 const getUsers = async () => {  
