@@ -1,41 +1,49 @@
 <template>
-  <ListModules title="INVENTARIO" :items="itemsListModules" />
+  <ListModules v-if="routeName == 'inventory'" title="INVENTARIO" :items="itemsListModules" />
+  <template v-if="routeName != 'inventory'">
+    <RouterView></RouterView>
+  </template>
 </template>
 
 <script setup>
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import ListModules from "@/modules/global/ListModules.vue";
-import { ref } from "vue";
+
+const routeName = computed(() => {
+  return useRoute().name;
+});
 
 const itemsListModules = ref([
   {
     name: "Bodegas",
     icon: "icon icon-wineries",
-    path: "/home"
+    path: "inventory-cellars"
   },
   {
     name: "Marcas",
     icon: "icon icon-brands",
-    path: "/home"
+    path: "inventory-brands"
   },
   {
     name: "Categorias",
     icon: "icon icon-categories",
-    path: "/home"
+    path: "inventory-categories"
   },
   {
     name: "Productos",
     icon: "icon icon-product",
-    path: "/home"
+    path: "inventory-products"
   },
   {
-    name: "Entrada al inventario",
+    name: "Entradas al inventario",
     icon: "icon icon-inventory-entries",
-    path: "/home"
+    path: "inventory-entries"
   },
   {
     name: "Ajustes de existencia",
     icon: "icon icon-inventory-adjust",
-    path: "/home"
+    path: "inventory-stock"
   }
 ]);
 </script>

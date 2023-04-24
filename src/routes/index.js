@@ -22,6 +22,38 @@ const router = createRouter({
       path: "/inventory",
       name: "inventory",
       component: () => import("../views/InventoryView.vue"),
+      children: [
+        {
+          path: 'cellars',
+          name: 'inventory-cellars',
+          component: () => import("../pages/inventory/Cellars.vue"),
+        },
+        {
+          path: 'brands',
+          name: 'inventory-brands',
+          component: () => import("../pages/inventory/Brands.vue"),
+        },
+        {
+          path: 'categories',
+          name: 'inventory-categories',
+          component: () => import("../pages/inventory/Categories.vue"),
+        },
+        {
+          path: 'products',
+          name: 'inventory-products',
+          component: () => import("../pages/inventory/Products.vue"),
+        },
+        {
+          path: 'entries',
+          name: 'inventory-entries',
+          component: () => import("../pages/inventory/InventoryEntries.vue"),
+        },
+        {
+          path: 'stock',
+          name: 'inventory-stock-adjustments',
+          component: () => import("../pages/inventory/StockAdjustments.vue"),
+        },
+      ]
     },
     {
       path: "/maintenance",

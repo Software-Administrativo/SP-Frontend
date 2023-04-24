@@ -21,15 +21,15 @@ const itemsListModules = ref([
     path: "maintenance-pays"
   },
   {
-    name: "Tipo gastos",
-    icon: "icon icon-cost",
-    path: "/home"
-  },
-  {
     name: "Tipo labores",
     icon: "icon icon-type-labors",
     path: "maintenance-labors"
   },
+  {
+    name: "Tipo gastos",
+    icon: "icon icon-cost",
+    path: "/home"
+  },  
   {
     name: "Unidades de medida",
     icon: "icon icon-unit-extent",
