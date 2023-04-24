@@ -2,7 +2,7 @@
   <!-- Botón para crear nuevos datos en las tablas -->
   <q-btn
     class="fix-margin q-mt-md q-px-sm"
-    :label=defineLabel()
+    :label=props.label
     icon="add"
     @click="handleClick"
   />
@@ -23,10 +23,6 @@ const emits = defineEmits({
 const handleClick = (event) => {
   emits("onClick", event)
 };
-
-const defineLabel = () => {
-  return props.label
-}
 
 </script>
 <style scoped>

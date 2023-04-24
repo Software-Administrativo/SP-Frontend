@@ -13,8 +13,7 @@ const validateUser = async ({typeDocument, documentUser, password}) => {
       "numdocument": documentUser,
       "password": password
     });
-    console.log(data.message);
-    // return data;
+    return data;
   } catch (error) {
     return data
   }

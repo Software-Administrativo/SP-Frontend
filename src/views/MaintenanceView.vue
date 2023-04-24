@@ -1,16 +1,24 @@
 <template>
-  <ListModules title="MANTENIMIENTO" :items="itemsListModules" />
+  <ListModules v-if="routeName == 'maintenance'" title="MANTENIMIENTO" :items="itemsListModules" />
+  <template v-if="routeName != 'maintenance'">
+    <RouterView></RouterView>
+  </template>
 </template>
 
 <script setup>
+import { ref, computed } from "vue";
+import { useRoute } from "vue-router";
 import ListModules from "@/modules/global/ListModules.vue";
-import { ref } from "vue";
+
+const routeName = computed(() => {
+  return useRoute().name;
+});
 
 const itemsListModules = ref([
   {
     name: "Tipo pagos",
     icon: "icon icon-type-money",
-    path: "/home"
+    path: "maintenance-pays"
   },
   {
     name: "Tipo gastos",
@@ -20,7 +28,7 @@ const itemsListModules = ref([
   {
     name: "Tipo labores",
     icon: "icon icon-type-labors",
-    path: "/home"
+    path: "maintenance-labors"
   },
   {
     name: "Unidades de medida",

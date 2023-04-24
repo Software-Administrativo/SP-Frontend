@@ -27,6 +27,18 @@ const router = createRouter({
       path: "/maintenance",
       name: "maintenance",
       component: () => import("../views/MaintenanceView.vue"),
+      children: [
+        {
+          path: 'pays',
+          name: 'maintenance-pays',
+          component: () => import("../pages/maintenance/TypePays.vue"),
+        },
+        {
+          path: 'labors',
+          name: 'maintenance-labors',
+          component: () => import("../pages/maintenance/TypeLabors.vue"),
+        },
+      ]
     },
     {
       path: "/order",
