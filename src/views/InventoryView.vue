@@ -16,34 +16,34 @@ const routeName = computed(() => {
 
 const itemsListModules = ref([
   {
-    name: "Bodegas",
+    label: "Bodegas",
     icon: "icon icon-wineries",
-    path: "inventory-cellars"
+    name: "inventory-cellars"
   },
   {
-    name: "Marcas",
+    label: "Marcas",
     icon: "icon icon-brands",
-    path: "inventory-brands"
+    name: "inventory-brands"
   },
   {
-    name: "Categorias",
+    label: "Categorias",
     icon: "icon icon-categories",
-    path: "inventory-categories"
+    name: "inventory-categories"
   },
   {
-    name: "Productos",
+    label: "Productos",
     icon: "icon icon-product",
-    path: "inventory-products"
+    name: "inventory-products"
   },
   {
-    name: "Entradas al inventario",
+    label: "Entradas al inventario",
     icon: "icon icon-inventory-entries",
-    path: "inventory-entries"
+    name: "inventory-entries"
   },
   {
-    name: "Ajustes de existencia",
+    label: "Ajustes de existencia",
     icon: "icon icon-inventory-adjust",
-    path: "inventory-stock"
+    name: "inventory-stock-adjustments"
   }
 ]);
 </script>

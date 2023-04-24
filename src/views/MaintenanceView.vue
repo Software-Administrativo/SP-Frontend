@@ -16,54 +16,54 @@ const routeName = computed(() => {
 
 const itemsListModules = ref([
   {
-    name: "Tipo pagos",
+    label: "Tipo pagos",
     icon: "icon icon-type-money",
-    path: "maintenance-pays"
+    name: "maintenance-pays"
   },
   {
-    name: "Tipo labores",
+    label: "Tipo labores",
     icon: "icon icon-type-labors",
-    path: "maintenance-labors"
+    name: "maintenance-labors"
   },
   {
-    name: "Tipo gastos",
+    label: "Tipo gastos",
     icon: "icon icon-cost",
-    path: "/home"
+    name: "/home"
   },  
   {
-    name: "Unidades de medida",
+    label: "Unidades de medida",
     icon: "icon icon-unit-extent",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "EPS",
+    label: "EPS",
     icon: "icon icon-eps",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Tipo de documento",
+    label: "Tipo de documento",
     icon: "icon icon-type-document",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Lotes",
+    label: "Lotes",
     icon: "icon icon-lots",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Etapas",
+    label: "Etapas",
     icon: "icon icon-tages",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Finca",
+    label: "Finca",
     icon: "icon icon-create-estate",
-    path: "/home"
+    name: "/home"
   },
   {
-    name: "Personas",
+    label: "Personas",
     icon: "icon icon-persons",
-    path: "/home"
+    name: "/home"
   },
 ]);
 </script>
