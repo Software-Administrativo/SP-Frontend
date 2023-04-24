@@ -70,6 +70,46 @@ const router = createRouter({
           name: 'maintenance-labors',
           component: () => import("../pages/maintenance/TypeLabors.vue"),
         },
+        {
+          path: 'spents',
+          name: 'maintenance-spents',
+          component: () => import("../pages/maintenance/TypeSpents.vue"),
+        },
+        {
+          path: 'units-measurement',
+          name: 'maintenance-units-measurement',
+          component: () => import("../pages/maintenance/UnitsMeasurement.vue"),
+        },
+        {
+          path: 'eps',
+          name: 'maintenance-eps',
+          component: () => import("../pages/maintenance/Eps.vue"),
+        },
+        {
+          path: 'type-document',
+          name: 'maintenance-type-document',
+          component: () => import("../pages/maintenance/TypeDocument.vue"),
+        },
+        {
+          path: 'lots',
+          name: 'maintenance-lots',
+          component: () => import("../pages/maintenance/Lots.vue"),
+        },
+        {
+          path: 'stages',
+          name: 'maintenance-stages',
+          component: () => import("../pages/maintenance/Stages.vue"),
+        },
+        {
+          path: 'create-farm',
+          name: 'maintenance-create-farm',
+          component: () => import("../pages/maintenance/CreateFarm.vue"),
+        },
+        {
+          path: 'people',
+          name: 'maintenance-people',
+          component: () => import("../pages/maintenance/People.vue"),
+        },
       ]
     },
     {

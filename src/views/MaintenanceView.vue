@@ -28,42 +28,42 @@ const itemsListModules = ref([
   {
     label: "Tipo gastos",
     icon: "icon icon-cost",
-    name: "/home"
+    name: "maintenance-spents"
   },  
   {
     label: "Unidades de medida",
     icon: "icon icon-unit-extent",
-    name: "/home"
+    name: "maintenance-units-measurement"
   },
   {
     label: "EPS",
     icon: "icon icon-eps",
-    name: "/home"
+    name: "maintenance-eps"
   },
   {
     label: "Tipo de documento",
     icon: "icon icon-type-document",
-    name: "/home"
+    name: "maintenance-type-document"
   },
   {
     label: "Lotes",
     icon: "icon icon-lots",
-    name: "/home"
+    name: "maintenance-lots"
   },
   {
     label: "Etapas",
     icon: "icon icon-tages",
-    name: "/home"
+    name: "maintenance-stages"
   },
   {
     label: "Finca",
     icon: "icon icon-create-estate",
-    name: "/home"
+    name: "maintenance-create-farm"
   },
   {
     label: "Personas",
     icon: "icon icon-persons",
-    name: "/home"
+    name: "maintenance-people"
   },
 ]);
 </script>
