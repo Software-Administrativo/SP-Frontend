@@ -1,18 +1,22 @@
 <template>
   <div :style="props.styles">
-      <label :for="props.label">{{ props.label }}</label>
-      <q-input
-        dense
-        filled
-        :name="props.label"
-        v-model="data"
-        :type="props.type"
-      />
+    <label :for="props.label"
+      >{{ props.label }}
+      <span class="text-red">{{ props.required ? "*" : "" }}</span>
+    </label>
+    <q-input
+      dense
+      filled
+      :name="props.label"
+      v-model="data"
+      :type="props.type"
+      :rules="props.ruless"
+    />
   </div>
 </template>
 <script setup>
 // Imports
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 
 // Data
 const data = ref("");
@@ -24,19 +28,29 @@ const props = defineProps({
   },
   label: {
     type: String,
-    required: true
+    required: true,
   },
   styles: {
     type: Object,
-    required: false
-  }
-})
+    required: false,
+  },
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  ruless: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
+});
 
 const emits = defineEmits({
-  onWrite: null
-})
+  onWrite: null,
+});
 
 watch(data, () => {
-  emits('onWrite', data.value)
-})
+  emits("onWrite", data.value);
+});
 </script>

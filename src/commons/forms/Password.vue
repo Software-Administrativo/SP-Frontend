@@ -5,6 +5,7 @@
       v-model="password"
       dense
       filled
+      :rules="[val => !!val || 'Contraseña requerida']"
       :type="isPasswordType ? 'password' : 'text'"
     >
       <template v-slot:append>
