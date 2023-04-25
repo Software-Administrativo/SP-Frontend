@@ -1,6 +1,295 @@
 <template>
-  <h1>holiwi</h1>   
+  <div class="q-py-md table-container">
+    <h6 class="q-my-lg">LOTES</h6>
+    <q-separator class="separator" />
+    <ButtonAdd @onClick="clickButton" label="Crear nuevo lote" />
+    <div class="container-table q-mt-lg q-pa-md" rounded>
+      <q-table
+        class="my-sticky-header-table"
+        flat
+        bordered
+        title="Usuarios"
+        :rows="rows"
+        :columns="columns"
+        row-key="name"
+        v-model:pagination="pagination"
+      />
+    </div>
+  </div>
+  <template v-if="modal.modalIsOpen">
+    <ModalForm>
+      <h6 class="q-my-md text-center">REGISTRAR LOTE</h6>
+      <div class="row q-px-xl">
+        <div class="col-12">
+          <Input
+            class="q-pb-xs"
+            label="Finca"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="nameLots"
+            @onWrite="getInputName"
+          />
+          <Input
+            class="q-pb-xs"
+            label="Nombre"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="nameLots"
+            @onWrite="getInputName"
+          />
+          <Input
+            label="Descripción"
+            :required=false
+            type="text"             
+            :ruless=rules
+            v-model="descriptionLots"
+            @onWrite="getInputDescription"
+          />
+          <Input
+            label="Tamaño"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="sizeLots"
+            @onWrite="getInputSize"
+          />
+          <Input
+            label="Estado del suelo"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="soilStateLots"
+            @onWrite="getInputSoilState"
+          />
+          <Input
+            label="Padre"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="fatherLots"
+            @onWrite="getInputFather"
+          />
+          <Input
+            label="Densidad Siembra"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="plantingDensityLots"
+            @onWrite="getInputPlantingDensity"
+          />
+          <Input
+            label="Número de Plantas"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="plantsNumberLots"
+            @onWrite="getInputPlantsNumber"
+          />
+          <span class="text-required q-pb-sm">Todos los campos con 
+          <span class="text-red">*</span> son obligatorios</span>
+          <div class="row justify-center">
+            <ButtonSave :disable="disableSave" @onClick="saveInfo" />
+          </div>
+        </div>
+      </div>
+    </ModalForm>
+  </template>
 </template>
-
 <script setup>
+import { ref, onMounted, computed } from "vue";
+import { getLots, postLots } from "@/api/maintenance/lots";
+import { modalState } from "@/stores/modal.js";
+import ButtonAdd from "@/commons/ButtonAdd.vue";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import Input from "@/commons/forms/Input.vue";
+import ButtonSave from "@/commons/forms/ButtonSave.vue";
+
+const modal = modalState();
+
+let nameLots = ref("");
+let descriptionLots = ref("");
+let sizeLots = ref("");
+let soilStateLots = ref("");
+let fatherLots = ref("");
+let plantingDensityLots = ref("");
+let plantsNumberLots = ref("");
+let disableSave = computed(() => {
+  return nameLots.value == "";
+});
+
+const rules = [
+  (v) => !!v || "Este campo es requerido",
+  (v) => (v && v.length <= 10) || "El nombre debe tener menos de 10 caracteres",
+];
+
+const rows = ref([]);
+const columns = ref([
+  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "name",
+    label: "Nombre",
+    field: "name",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "description",
+    label: "Descripción",
+    field: "description",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "size",
+    label: "Tamaño",
+    field: "size",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "status",
+    label: "Estado",
+    field: "status",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "soilState",
+    label: "Estado del Suelo",
+    field: "soilState",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "class",
+    label: "Clase",
+    field: "class",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "father",
+    label: "Padre",
+    field: "father",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "plantingDensity",
+    label: "Densidad Siembra",
+    field: "plantingDensity",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "plantsNumber",
+    label: "Número de Plantas",
+    field: "plantsNumber",
+    align: "left",
+    sortable: true,
+  },
+]);
+
+const pagination = ref({
+  page: 1,
+  rowsPerPage: 10,
+  sortBy: "id",
+  descending: false,
+});
+
+const clickButton = () => {
+  modal.toggleModal();
+  nameLots.value = ""
+  descriptionLots.value = ""
+  sizeLots.value = ""
+};
+
+const getInputName = (value) => {
+  nameLots.value = value;
+};
+
+const getInputDescription = (value) => {
+  descriptionLots.value = value;
+};
+
+const getInputSize = (value) => {
+  sizeLots.value = value;
+};
+
+const getInputSoilState = (value) => {
+  soilStateLots.value = value;
+};
+
+const getInputFather = (value) => {
+  fatherLots.value = value;
+};
+
+const getInputPlantingDensity = (value) => {
+  plantingDensityLots.value = value;
+};
+
+const getInputPlantsNumber = (value) => {
+  plantsNumberLots.value = value;
+};
+
+
+const saveInfo = () => {
+  postDataLots();
+  modal.toggleModal();
+};
+
+const postDataLots = async () => {
+  console.log(
+    plantsNumberLots.value, 
+    plantingDensityLots.value, 
+    fatherLots.value,
+    soilStateLots.value,
+    sizeLots.value,
+    descriptionLots.value,
+    nameLots.value
+    );
+  //falta peticion del backend
+ /*  const { lots } = await postLots({
+    name: nameLots.value,
+    description: descriptionLots.value,
+  });
+  getDataLots(); */
+}
+
+const getDataLots = async () => {
+  const { lots } = await getLots();
+  let count = 1;
+  lots.forEach((item) => {
+    item.status = item.status ? "Inactivo" : "Activo";
+    item.id = count++;
+    item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
+  });
+  rows.value = lots;
+};
+
+onMounted(() => {
+  getDataLots();
+});
 </script>
+<style scoped>
+.text-required{
+  display: inline-block;
+  font-size: 12px;
+}
+.table-container {
+  position: relative;
+}
+.separator {
+  border: 1.8px solid var(--color-gray);
+}
+.container-table {
+  border-radius: 15px;
+  height: 100%;
+  max-height: 50vh;
+  border: 2px solid var(--color-gray);
+  box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+</style>

@@ -18,7 +18,7 @@
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm>
-      <h6 class="q-my-md text-center">Registrar Acceso</h6>
+      <h6 class="q-my-md text-center">REGISTRAR PAGO</h6>
       <div class="row q-px-xl">
         <div class="col-12">
           <Input
@@ -73,14 +73,14 @@ const rows = ref([]);
 const columns = ref([
   { name: "id", label: "#", field: "id", align: "left", sortable: true },
   {
-    name: "Nombre",
+    name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
   },
   {
-    name: "Descripción",
+    name: "description",
     label: "Descripción",
     field: "description",
     align: "left",
