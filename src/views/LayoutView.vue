@@ -1,13 +1,15 @@
 <template>
-  <q-layout>
+  <q-layout class="container-view">
     <Header v-if="routeName != 'sign-in'"></Header>
-    <div class="row view-router">
+    <div class="row">
       <Sidebar
-        class="col-2 view-sidebar"
+        class="col-2" :style="sidebar"
         v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
       ></Sidebar>
-      <div :style="routerStyle">
-        <router-view></router-view>
+      <div :style="viewRouter">
+        <div class="view-container">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </q-layout>
@@ -27,33 +29,34 @@ const routeName = computed(() => {
   return useRoute().name;
 });
 
-const routerStyle = computed(() => {
-  if (routeName.value == "sign-in"){
-    return "width: 100vw; max-width: 1000px; min-width: 300px;"
+const viewRouter = computed(() => {
+  if (menu.menuIsOpen) {
+    return "width: calc(100% - 200px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else {
-    return "width: 100vw; max-width: 1000px; min-width: 300px; height: calc(100vh - 50px); overflow: hidden; margin-left: calc(25% - 80px); margin-right: calc(25% - 80px); margin-top: 50px;"
+    return "width: 100%; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
+  }
+});
+
+const sidebar = computed(() => {
+  if (menu.menuIsOpen) {
+    if(window.screen.width > 680){
+      // CAMBIAR
+      console.log(window.screen.width);
+    }
+    return
+  } else {
+
   }
 });
 </script>
 
 <style scoped>
-.view-router {
-  position: relative;
-}
-.view-sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-/* .router-style {
+.container-view {
   width: 100vw;
-  max-width: 1000px;
-  min-width: 300px;
-  height: calc(100vh - 50px);
-  overflow: hidden;
-  margin-left: calc(25% - 80px);
-  margin-right: calc(25% - 80px);
-  margin-top: 50px;
-} */
+  height: 100vh;
+}
+.view-container{
+  width: 80%;
+  max-width: 1200px;
+}
 </style>

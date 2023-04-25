@@ -1,18 +1,20 @@
 <template>
-  <div class="q-py-md">
+  <div class="q-py-md table-container">
     <h6 class="q-my-lg">ACCESO AL SISTEMA</h6>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
-    <div class="container-table q-mt-lg q-pa-md" rounded>
-      <q-table
-        class="my-sticky-header-table"
-        flat bordered
-        title="Usuarios"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-      />
+    <div class="container-content">
+      <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
+      <div class="container-table q-mt-lg q-pa-md" rounded>
+        <q-table
+          flat
+          bordered
+          title="Usuarios"
+          :rows="rows"
+          :columns="columns"
+          row-key="name"
+          v-model:pagination="pagination"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -82,12 +84,19 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.table-container {
+  position: relative;
+}
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+.container-content{
+  max-width: 900px;
+  margin: 0 auto;
+}
 .container-table {
   border-radius: 15px;
-  height: 100%;
+  height: 80%;
   max-height: 50vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);

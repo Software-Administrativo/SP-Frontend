@@ -2,18 +2,19 @@
   <div class="q-py-md table-container">
     <h6 class="q-my-lg">TIPOS DE PAGO</h6>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear tipo de pago" />
-    <div class="container-table q-mt-lg q-pa-md" rounded>
-      <q-table
-        class="my-sticky-header-table"
-        flat
-        bordered
-        title="Usuarios"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-      />
+    <div class="container-content">
+      <ButtonAdd @onClick="clickButton" label="Crear tipo de pago" />
+      <div class="container-table q-mt-lg q-pa-md" rounded>
+        <q-table
+          flat
+          bordered
+          title="Usuarios"
+          :rows="rows"
+          :columns="columns"
+          row-key="name"
+          v-model:pagination="pagination"
+        />
+      </div>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
@@ -24,21 +25,23 @@
           <Input
             class="q-pb-xs"
             label="Nombre"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="nameTypePays"
             @onWrite="getInputName"
           />
           <Input
             label="Descripción"
             type="text"
-            :required=false
+            :required="false"
             v-model="descriptionTypePays"
             @onWrite="getInputDescription"
           />
-          <span class="text-required q-pb-sm">Todos los campos con 
-          <span class="text-red">*</span> son obligatorios</span>
+          <span class="text-required q-pb-sm"
+            >Todos los campos con <span class="text-red">*</span> son
+            obligatorios</span
+          >
           <div class="row justify-center">
             <ButtonSave :disable="disableSave" @onClick="saveInfo" />
           </div>
@@ -104,8 +107,8 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameTypePays.value = ""
-  descriptionTypePays.value = ""
+  nameTypePays.value = "";
+  descriptionTypePays.value = "";
 };
 
 const getInputName = (value) => {
@@ -127,7 +130,7 @@ const postDataTypePays = async () => {
     description: descriptionTypePays.value,
   });
   getDataTypePays();
-}
+};
 
 const getDataTypePays = async () => {
   const { pays } = await getTypePays();
@@ -135,7 +138,12 @@ const getDataTypePays = async () => {
   pays.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
+    item.description =
+      item.description == ""
+        ? "No registra"
+        : item.description || item.description == null
+        ? "No registra"
+        : item.description;
   });
   rows.value = pays;
 };
@@ -145,7 +153,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.text-required{
+.text-required {
   display: inline-block;
   font-size: 12px;
 }
@@ -155,9 +163,13 @@ onMounted(() => {
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+.container-content{
+  max-width: 900px;
+  margin: 0 auto;
+}
 .container-table {
   border-radius: 15px;
-  height: 100%;
+  height: 80%;
   max-height: 50vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);

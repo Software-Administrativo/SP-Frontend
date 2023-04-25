@@ -103,7 +103,7 @@ const router = createRouter({
         {
           path: 'create-farm',
           name: 'maintenance-create-farm',
-          component: () => import("../pages/maintenance/CreateFarm.vue"),
+          component: () => import("../pages/maintenance/Farm.vue"),
         },
         {
           path: 'people',
