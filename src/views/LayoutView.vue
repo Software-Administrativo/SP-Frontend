@@ -7,7 +7,7 @@
         v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
       ></Sidebar>
       <div :style="viewRouter">
-        <div class="view-container">
+        <div :style="viewContainer">
           <router-view></router-view>
         </div>
       </div>
@@ -37,15 +37,22 @@ const viewRouter = computed(() => {
   }
 });
 
+const viewContainer = computed(() => {
+  if(routeName.value == "sign-in"){
+    return "width: 100vw; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
+  } else {
+    return "width: 80%; max-width: 1200px;";
+  }
+})
+
 const sidebar = computed(() => {
   if (menu.menuIsOpen) {
-    if(window.screen.width > 680){
-      // CAMBIAR
-      console.log(window.screen.width);
+    if(window.screen.width < 680){
+      return "width: 100%"
     }
     return
   } else {
-
+    // Pendiente
   }
 });
 </script>
@@ -54,9 +61,5 @@ const sidebar = computed(() => {
 .container-view {
   width: 100vw;
   height: 100vh;
-}
-.view-container{
-  width: 80%;
-  max-width: 1200px;
 }
 </style>

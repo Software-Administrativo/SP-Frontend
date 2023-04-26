@@ -175,4 +175,19 @@ onMounted(() => {
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
+@media (min-width: 0px) and (max-width : 400px){
+  .container-table{
+    max-width: 300px;
+  }
+}
+@media (min-width: 401px) and (max-width : 520px){
+  .container-table{
+    max-width: 410px;
+  }
+}
+@media (min-width: 521px) and (max-width : 620px){
+  .container-table{
+    max-width: 510px;
+  }
+}
 </style>
