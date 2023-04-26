@@ -1,8 +1,8 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">TIPOS DE GASTOS</h6>
+    <h6 class="q-my-lg">Finca</h6>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear tipo de gasto" />
+    <ButtonAdd @onClick="clickButton" label="Crear nueva finca" />
     <div class="container-table q-mt-lg q-pa-md" rounded>
       <q-table
         class="my-sticky-header-table"
@@ -18,7 +18,7 @@
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm>
-      <h6 class="q-my-md text-center">REGISTRAR GASTO</h6>
+      <h6 class="q-my-md text-center">REGISTRAR FINCA</h6>
       <div class="row q-px-xl">
         <div class="col-12">
           <Input
@@ -27,15 +27,51 @@
             :required=true
             type="text"
             :ruless=rules
-            v-model="nameTypeSpents"
+            v-model="nameFarm"
             @onWrite="getInputName"
           />
           <Input
+            class="q-pb-xs"
             label="Descripción"
             type="text"
-            :required=false
-            v-model="descriptionTypeSpents"
+            :required=false 
+            :ruless=rules
+            v-model="descriptionFarm"
             @onWrite="getInputDescription"
+          />
+          <Input
+            class="q-pb-xs"
+            label="NIT"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="nitFarm"
+            @onWrite="getInputNit"
+          />
+          <Input
+            class="q-pb-xs"
+            label="Ubicación"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="ubicationFarm"
+            @onWrite="getInputUbication"
+          />
+          <Input
+            class="q-pb-xs"
+            label="Unidad Cana"
+            :required=true
+            type="text"
+            :ruless=rules
+          />
+          <Input
+            class="q-pb-xs"
+            label="Minimo Existencias"
+            :required=true
+            type="text"
+            :ruless=rules
+            v-model="minimumExistenceFarm"
+            @onWrite="getInputMiniumExistence"
           />
           <span class="text-required q-pb-sm">Todos los campos con 
           <span class="text-red">*</span> son obligatorios</span>
@@ -49,7 +85,7 @@
 </template>
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { getTypeSpents, postTypeSpents } from "@/api/maintenance/type-spents";
+import { getFarm, postFarm } from "@/api/maintenance/farm";
 import { modalState } from "@/stores/modal.js";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
@@ -58,10 +94,13 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
 
-let nameTypeSpents = ref("");
-let descriptionTypeSpents = ref("");
+let nameFarm = ref("");
+let descriptionFarm = ref("");
+let nitFarm = ref("");
+let ubicationFarm = ref("");
+let minimumExistenceFarm = ref(""); 
 let disableSave = computed(() => {
-  return nameTypeSpents.value == "";
+  return nameFarm.value == "";
 });
 
 const rules = [
@@ -87,6 +126,27 @@ const columns = ref([
     sortable: true,
   },
   {
+    name: "nit",
+    label: "NIT",
+    field: "nit",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "ubication",
+    label: "Ubicación",
+    field: "ubication",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "miniumExistence",
+    label: "Minimo Existencias",
+    field: "miniumExistence",
+    align: "left",
+    sortable: true,
+  },
+  {
     name: "status",
     label: "Estado",
     field: "status",
@@ -104,44 +164,60 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameTypeSpents.value = ""
-  descriptionTypeSpents.value = ""
+  nameFarm.value = ""
+  descriptionFarm.value = ""
+  nitFarm.value = ""
+  ubicationFarm.value = ""
+  minimumExistenceFarm.value = ""
 };
 
 const getInputName = (value) => {
-  nameTypeSpents.value = value;
+  nameFarm.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionTypeSpents.value = value;
+  descriptionFarm.value = value;
+};
+
+const getInputNit = (value) => {
+  nitFarm.value = value;
+};
+
+const getInputUbication = (value) => {
+  ubicationFarm.value = value;
+};
+
+const getInputMiniumExistence = (value) => {
+  minimumExistenceFarm.value = value;
 };
 
 const saveInfo = () => {
-  postDataTypeSpents();
+  postDataFarm();
   modal.toggleModal();
 };
 
-const postDataTypeSpents = async () => {
-  const { spents } = await postTypeSpents({
-    name: nameTypeSpents.value,
-    description: descriptionTypeSpents.value,
+const postDataFarm = async () => {
+  //falta peticion del backend
+  const { farm } = await postFarm({
+    name: nameFarm.value,
+    description: descriptionFarm.value,
   });
-  getDataTypeSpents();
+  getDataFarm();
 }
 
-const getDataTypeSpents = async () => {
-  const { spents } = await getTypeSpents();
+const getDataFarm = async () => {
+  const { farm } = await getFarm();
   let count = 1;
-  spents.forEach((item) => {
+  farm.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
     item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
   });
-  rows.value = spents;
+  rows.value = farm;
 };
 
 onMounted(() => {
-  getDataTypeSpents();
+  getDataFarm();
 });
 </script>
 <style scoped>
