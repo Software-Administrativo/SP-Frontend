@@ -1,5 +1,9 @@
 <template>
-  <ListModules v-if="routeName == 'inventory'" title="INVENTARIO" :items="itemsListModules" />
+  <ListModules
+    v-if="routeName == 'inventory'"
+    title="INVENTARIO"
+    :items="itemsListModules"
+  />
   <template v-if="routeName != 'inventory'">
     <RouterView></RouterView>
   </template>
@@ -18,35 +22,34 @@ const itemsListModules = ref([
   {
     label: "Bodegas",
     icon: "icon icon-wineries",
-    name: "inventory-cellars"
+    name: "inventory-cellars",
   },
   {
     label: "Marcas",
     icon: "icon icon-brands",
-    name: "inventory-brands"
+    name: "inventory-brands",
   },
   {
     label: "Categorias",
     icon: "icon icon-categories",
-    name: "inventory-categories"
+    name: "inventory-categories",
   },
   {
     label: "Productos",
     icon: "icon icon-product",
-    name: "inventory-products"
+    name: "inventory-products",
   },
   {
     label: "Entradas al inventario",
     icon: "icon icon-inventory-entries",
-    name: "inventory-entries"
+    name: "inventory-entries",
   },
   {
     label: "Ajustes de existencia",
     icon: "icon icon-inventory-adjust",
-    name: "inventory-stock-adjustments"
-  }
+    name: "inventory-stock-adjustments",
+  },
 ]);
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

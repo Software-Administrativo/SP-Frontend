@@ -24,73 +24,75 @@
           <q-select
             class="q-pb-xs"
             filled
-            dense 
+            dense
             label="Finca"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="model"
             :options="options"
           />
           <Input
             class="q-pb-xs"
             label="Nombre"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="nameLots"
             @onWrite="getInputName"
           />
           <Input
             label="Descripción"
-            :required=false
-            type="text"             
-            :ruless=rules
+            :required="false"
+            type="text"
+            :ruless="rules"
             v-model="descriptionLots"
             @onWrite="getInputDescription"
           />
           <Input
             label="Tamaño"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="sizeLots"
             @onWrite="getInputSize"
           />
           <Input
             label="Estado del suelo"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="soilStateLots"
             @onWrite="getInputSoilState"
           />
           <Input
             label="Padre"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="fatherLots"
             @onWrite="getInputFather"
           />
           <Input
             label="Densidad Siembra"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="plantingDensityLots"
             @onWrite="getInputPlantingDensity"
           />
           <Input
             label="Número de Plantas"
-            :required=true
+            :required="true"
             type="number"
-            :ruless=rules
+            :ruless="rules"
             v-model="plantsNumberLots"
             @onWrite="getInputPlantsNumber"
           />
-          <span class="text-required q-pb-sm">Todos los campos con 
-          <span class="text-red">*</span> son obligatorios</span>
+          <span class="text-required q-pb-sm"
+            >Todos los campos con <span class="text-red">*</span> son
+            obligatorios</span
+          >
           <div class="row justify-center">
             <ButtonSave :disable="disableSave" @onClick="saveInfo" />
           </div>
@@ -111,9 +113,7 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 const modal = modalState();
 
 let model = ref(null);
-const options = [
-        '1', '2', '3', '4', '5'
-      ]
+const options = ["1", "2", "3", "4", "5"];
 
 let nameLots = ref("");
 let descriptionLots = ref("");
@@ -208,13 +208,13 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameLots.value = ""
-  descriptionLots.value = ""
-  sizeLots.value = ""
-  soilStateLots.value = ""
-  fatherLots.value = ""
-  plantingDensityLots.value = ""
-  plantsNumberLots.value = ""
+  nameLots.value = "";
+  descriptionLots.value = "";
+  sizeLots.value = "";
+  soilStateLots.value = "";
+  fatherLots.value = "";
+  plantingDensityLots.value = "";
+  plantsNumberLots.value = "";
 };
 
 const getInputName = (value) => {
@@ -245,7 +245,6 @@ const getInputPlantsNumber = (value) => {
   plantsNumberLots.value = value;
 };
 
-
 const saveInfo = () => {
   postDataLots();
   modal.toggleModal();
@@ -253,21 +252,21 @@ const saveInfo = () => {
 
 const postDataLots = async () => {
   console.log(
-    plantsNumberLots.value, 
-    plantingDensityLots.value, 
+    plantsNumberLots.value,
+    plantingDensityLots.value,
     fatherLots.value,
     soilStateLots.value,
     sizeLots.value,
     descriptionLots.value,
     nameLots.value
-    );
+  );
   //falta peticion del backend
- /*  const { lots } = await postLots({
+  /*  const { lots } = await postLots({
     name: nameLots.value,
     description: descriptionLots.value,
   });
   getDataLots(); */
-}
+};
 
 const getDataLots = async () => {
   const { lots } = await getLots();
@@ -275,7 +274,12 @@ const getDataLots = async () => {
   lots.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
+    item.description =
+      item.description == ""
+        ? "No registra"
+        : item.description || item.description == null
+        ? "No registra"
+        : item.description;
   });
   rows.value = lots;
 };
@@ -285,7 +289,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.text-required{
+.text-required {
   display: inline-block;
   font-size: 12px;
 }
@@ -295,12 +299,31 @@ onMounted(() => {
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+.container-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
 .container-table {
   border-radius: 15px;
-  height: 100%;
+  height: 80%;
   max-height: 50vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+@media (min-width: 0px) and (max-width: 400px) {
+  .container-table {
+    max-width: 300px;
+  }
+}
+@media (min-width: 401px) and (max-width: 520px) {
+  .container-table {
+    max-width: 410px;
+  }
+}
+@media (min-width: 521px) and (max-width: 620px) {
+  .container-table {
+    max-width: 510px;
+  }
 }
 </style>

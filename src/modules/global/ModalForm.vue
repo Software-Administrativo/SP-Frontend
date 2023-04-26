@@ -1,8 +1,8 @@
 <template>
   <div class="container-modal">
     <div class="column modal-forms bg-white">
-      <i class="icon icon-close self-end" @click="toggle()"/>
-      <q-separator class="separator"/>
+      <i class="icon icon-close self-end" @click="toggle()" />
+      <q-separator class="separator" />
       <slot />
     </div>
   </div>
@@ -15,10 +15,9 @@ const modal = modalState();
 function toggle() {
   modal.toggleModal();
 }
-
 </script>
 <style scoped>
-.container-modal{
+.container-modal {
   position: fixed;
   background-color: #2766a96e;
   inset: 0;

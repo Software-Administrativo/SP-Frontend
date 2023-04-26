@@ -1,16 +1,18 @@
 <template>
-  <div class="item-card-module">
-    <div class="q-mt-lg" v-for="item in infoModules">
-      <p class="title-module">{{ item.name }}</p>
-      <q-card class="my-card" @click="goToModule(item.path)">
-        <q-card-section class="icon-section-card">
-          <i v-bind:class="item.icon" />
-        </q-card-section>
-        <q-separator class="separator" />
-        <div class="row justify-center">
-          <span class="q-py-sm enter-card">Ingresar</span>
-        </div>
-      </q-card>
+  <div class="container-view">
+    <div class="item-card-module">
+      <div class="q-mt-lg" v-for="item in infoModules">
+        <p class="title-module">{{ item.name }}</p>
+        <q-card class="my-card" @click="goToModule(item.path)">
+          <q-card-section class="icon-section-card">
+            <i v-bind:class="item.icon" />
+          </q-card-section>
+          <q-separator class="separator" />
+          <div class="row justify-center">
+            <span class="q-py-sm enter-card">Ingresar</span>
+          </div>
+        </q-card>
+      </div>
     </div>
   </div>
 </template>
@@ -65,11 +67,17 @@ const goToModule = (route) => {
 </script>
 
 <style scoped>
+.container-view {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
 .item-card-module {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   grid-gap: 20px;
-  max-height: 75vh;
+  width: 100%;
+  max-height: 70vh;
   padding-bottom: 20px;
   place-items: center;
   overflow-y: scroll;
@@ -103,5 +111,13 @@ const goToModule = (route) => {
 }
 .enter-card {
   font-size: var(--font-small);
+}
+
+@media (max-width: 600px) {
+  .my-card {
+    width: 200px;
+    border-radius: 10px;
+    border: 1.8px solid var(--color-gray);
+  }
 }
 </style>

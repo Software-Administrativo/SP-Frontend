@@ -12,18 +12,18 @@ const getEps = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const postEps = async (type) => {
   try {
     const { data } = await sugarAxios.post(`/maintenance/eps/register`, {
-      "name": type.name,
-      "description": type.description
+      name: type.name,
+      description: type.description,
     });
     return data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export { getEps, postEps };

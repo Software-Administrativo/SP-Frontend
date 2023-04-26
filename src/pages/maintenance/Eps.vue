@@ -24,9 +24,9 @@
           <Input
             class="q-pb-xs"
             label="Nombre"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="nameEps"
             @onWrite="getInputName"
           />
@@ -34,13 +34,15 @@
             class="q-pb-xs"
             label="Descripción"
             type="text"
-            :required=false 
-            :ruless=rules
+            :required="false"
+            :ruless="rules"
             v-model="descriptionEps"
             @onWrite="getInputDescription"
           />
-          <span class="text-required q-pb-sm">Todos los campos con 
-          <span class="text-red">*</span> son obligatorios</span>
+          <span class="text-required q-pb-sm"
+            >Todos los campos con <span class="text-red">*</span> son
+            obligatorios</span
+          >
           <div class="row justify-center">
             <ButtonSave :disable="disableSave" @onClick="saveInfo" />
           </div>
@@ -106,9 +108,9 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameEps.value = ""
-  descriptionEps.value = ""
-  observationEps.value = ""
+  nameEps.value = "";
+  descriptionEps.value = "";
+  observationEps.value = "";
 };
 
 const getInputName = (value) => {
@@ -118,8 +120,6 @@ const getInputName = (value) => {
 const getInputDescription = (value) => {
   descriptionEps.value = value;
 };
-
-
 
 const saveInfo = () => {
   postDataEps();
@@ -133,7 +133,7 @@ const postDataEps = async () => {
     description: descriptionEps.value,
   });
   getDataEps();
-}
+};
 
 const getDataEps = async () => {
   const { eps } = await getEps();
@@ -141,7 +141,12 @@ const getDataEps = async () => {
   eps.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
+    item.description =
+      item.description == ""
+        ? "No registra"
+        : item.description || item.description == null
+        ? "No registra"
+        : item.description;
   });
   rows.value = eps;
 };
@@ -151,7 +156,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.text-required{
+.text-required {
   display: inline-block;
   font-size: 12px;
 }
@@ -161,12 +166,31 @@ onMounted(() => {
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+.container-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
 .container-table {
   border-radius: 15px;
-  height: 100%;
+  height: 80%;
   max-height: 50vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+@media (min-width: 0px) and (max-width: 400px) {
+  .container-table {
+    max-width: 300px;
+  }
+}
+@media (min-width: 401px) and (max-width: 520px) {
+  .container-table {
+    max-width: 410px;
+  }
+}
+@media (min-width: 521px) and (max-width: 620px) {
+  .container-table {
+    max-width: 510px;
+  }
 }
 </style>

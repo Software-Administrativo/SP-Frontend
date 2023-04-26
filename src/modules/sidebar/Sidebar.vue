@@ -7,7 +7,7 @@
     />
     <h6 class="name-user text-center q-ma-none q-pb-sm">Laura Susano</h6>
     <q-separator class="separator" />
-    <div v-for="item in paths"  :key="item.name">
+    <div v-for="item in paths" :key="item.name">
       <RouterLink class="item" :to="item.path">
         <i v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
@@ -82,7 +82,6 @@ const menu = menuState();
 onUpdated(() => {
   menu.value = false;
 });
-
 </script>
 
 <style scoped>
@@ -91,12 +90,11 @@ onUpdated(() => {
 }
 
 .sidebar {
-  margin-top: 50px;
   height: calc(100vh - 50px);
   width: 200px;
+  background-color: white;
   border-right: 3px solid var(--color-gray);
   position: relative;
-  background-color: white;
 }
 .separator {
   border: 1.8px solid var(--color-gray);
@@ -106,7 +104,7 @@ onUpdated(() => {
   display: flex;
   color: black;
 }
-.item:hover{
+.item:hover {
   background-color: var(--color-gray);
 }
 .name {

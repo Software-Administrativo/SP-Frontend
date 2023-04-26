@@ -12,18 +12,18 @@ const getTypeLabors = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const postTypeLabors = async (type) => {
   try {
     const { data } = await sugarAxios.post(`/maintenance/works/register`, {
-      "name": type.name,
-      "description": type.description
+      name: type.name,
+      description: type.description,
     });
     return data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export { getTypeLabors, postTypeLabors };

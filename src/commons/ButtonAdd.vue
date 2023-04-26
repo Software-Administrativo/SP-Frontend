@@ -1,7 +1,7 @@
 <template>
   <q-btn
     class="fix-margin q-mt-md q-px-sm"
-    :label=props.label
+    :label="props.label"
     icon="add"
     @click="handleClick"
   />
@@ -11,7 +11,7 @@ const props = defineProps({
   label: {
     type: String,
     required: true,
-  }
+  },
 });
 
 const emits = defineEmits({
@@ -19,7 +19,7 @@ const emits = defineEmits({
 });
 
 const handleClick = (event) => {
-  emits("onClick", event)
+  emits("onClick", event);
 };
 </script>
 <style scoped>
