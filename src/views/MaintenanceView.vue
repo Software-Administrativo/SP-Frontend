@@ -58,7 +58,7 @@ const itemsListModules = ref([
   {
     label: "Finca",
     icon: "icon icon-create-estate",
-    name: "maintenance-create-farm"
+    name: "maintenance-farm"
   },
   {
     label: "Personas",

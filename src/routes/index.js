@@ -101,9 +101,9 @@ const router = createRouter({
           component: () => import("../pages/maintenance/Stages.vue"),
         },
         {
-          path: 'create-farm',
-          name: 'maintenance-create-farm',
-          component: () => import("../pages/maintenance/CreateFarm.vue"),
+          path: 'farm',
+          name: 'maintenance-farm',
+          component: () => import("../pages/maintenance/Farm.vue"),
         },
         {
           path: 'people',

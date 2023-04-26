@@ -1,8 +1,8 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">LOTES</h6>
+    <h6 class="q-my-lg">Finca</h6>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear nuevo lote" />
+    <ButtonAdd @onClick="clickButton" label="Crear nueva finca" />
     <div class="container-table q-mt-lg q-pa-md" rounded>
       <q-table
         class="my-sticky-header-table"
@@ -18,76 +18,60 @@
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm>
-      <h6 class="q-my-md text-center">REGISTRAR LOTE</h6>
+      <h6 class="q-my-md text-center">REGISTRAR FINCA</h6>
       <div class="row q-px-xl">
         <div class="col-12">
-          <q-select
-            class="q-pb-xs"
-            filled
-            dense 
-            label="Finca"
-            :required=true
-            type="text"
-            :ruless=rules
-            v-model="model"
-            :options="options"
-          />
           <Input
             class="q-pb-xs"
             label="Nombre"
             :required=true
             type="text"
             :ruless=rules
-            v-model="nameLots"
+            v-model="nameFarm"
             @onWrite="getInputName"
           />
           <Input
+            class="q-pb-xs"
             label="Descripción"
-            :required=false
-            type="text"             
+            type="text"
+            :required=false 
             :ruless=rules
-            v-model="descriptionLots"
+            v-model="descriptionFarm"
             @onWrite="getInputDescription"
           />
           <Input
-            label="Tamaño"
+            class="q-pb-xs"
+            label="NIT"
             :required=true
             type="text"
             :ruless=rules
-            v-model="sizeLots"
-            @onWrite="getInputSize"
+            v-model="nitFarm"
+            @onWrite="getInputNit"
           />
           <Input
-            label="Estado del suelo"
+            class="q-pb-xs"
+            label="Ubicación"
             :required=true
             type="text"
             :ruless=rules
-            v-model="soilStateLots"
-            @onWrite="getInputSoilState"
+            v-model="ubicationFarm"
+            @onWrite="getInputUbication"
           />
           <Input
-            label="Padre"
+            class="q-pb-xs"
+            label="Unidad Cana"
             :required=true
             type="text"
             :ruless=rules
-            v-model="fatherLots"
-            @onWrite="getInputFather"
           />
           <Input
-            label="Densidad Siembra"
+            class="q-pb-xs"
+            label="Minimo Existencias"
             :required=true
             type="text"
             :ruless=rules
-            v-model="plantingDensityLots"
-            @onWrite="getInputPlantingDensity"
-          />
-          <Input
-            label="Número de Plantas"
-            :required=true
-            type="number"
-            :ruless=rules
-            v-model="plantsNumberLots"
-            @onWrite="getInputPlantsNumber"
+            v-model="minimumExistenceFarm"
+            @onWrite="getInputMiniumExistence"
           />
           <span class="text-required q-pb-sm">Todos los campos con 
           <span class="text-red">*</span> son obligatorios</span>
@@ -101,7 +85,7 @@
 </template>
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { getLots, postLots } from "@/api/maintenance/lots";
+import { getFarm, postFarm } from "@/api/maintenance/farm";
 import { modalState } from "@/stores/modal.js";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
@@ -110,20 +94,13 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
 
-let model = ref(null);
-const options = [
-        '1', '2', '3', '4', '5'
-      ]
-
-let nameLots = ref("");
-let descriptionLots = ref("");
-let sizeLots = ref("");
-let soilStateLots = ref("");
-let fatherLots = ref("");
-let plantingDensityLots = ref("");
-let plantsNumberLots = ref("");
+let nameFarm = ref("");
+let descriptionFarm = ref("");
+let nitFarm = ref("");
+let ubicationFarm = ref("");
+let minimumExistenceFarm = ref(""); 
 let disableSave = computed(() => {
-  return nameLots.value == "";
+  return nameFarm.value == "";
 });
 
 const rules = [
@@ -149,9 +126,23 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "size",
-    label: "Tamaño",
-    field: "size",
+    name: "nit",
+    label: "NIT",
+    field: "nit",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "ubication",
+    label: "Ubicación",
+    field: "ubication",
+    align: "left",
+    sortable: true,
+  },
+  {
+    name: "miniumExistence",
+    label: "Minimo Existencias",
+    field: "miniumExistence",
     align: "left",
     sortable: true,
   },
@@ -159,41 +150,6 @@ const columns = ref([
     name: "status",
     label: "Estado",
     field: "status",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "soilState",
-    label: "Estado del Suelo",
-    field: "soilState",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "class",
-    label: "Clase",
-    field: "class",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "father",
-    label: "Padre",
-    field: "father",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "plantingDensity",
-    label: "Densidad Siembra",
-    field: "plantingDensity",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "plantsNumber",
-    label: "Número de Plantas",
-    field: "plantsNumber",
     align: "left",
     sortable: true,
   },
@@ -208,80 +164,60 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameLots.value = ""
-  descriptionLots.value = ""
-  sizeLots.value = ""
-  soilStateLots.value = ""
-  fatherLots.value = ""
-  plantingDensityLots.value = ""
-  plantsNumberLots.value = ""
+  nameFarm.value = ""
+  descriptionFarm.value = ""
+  nitFarm.value = ""
+  ubicationFarm.value = ""
+  minimumExistenceFarm.value = ""
 };
 
 const getInputName = (value) => {
-  nameLots.value = value;
+  nameFarm.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionLots.value = value;
+  descriptionFarm.value = value;
 };
 
-const getInputSize = (value) => {
-  sizeLots.value = value;
+const getInputNit = (value) => {
+  nitFarm.value = value;
 };
 
-const getInputSoilState = (value) => {
-  soilStateLots.value = value;
+const getInputUbication = (value) => {
+  ubicationFarm.value = value;
 };
 
-const getInputFather = (value) => {
-  fatherLots.value = value;
+const getInputMiniumExistence = (value) => {
+  minimumExistenceFarm.value = value;
 };
-
-const getInputPlantingDensity = (value) => {
-  plantingDensityLots.value = value;
-};
-
-const getInputPlantsNumber = (value) => {
-  plantsNumberLots.value = value;
-};
-
 
 const saveInfo = () => {
-  postDataLots();
+  postDataFarm();
   modal.toggleModal();
 };
 
-const postDataLots = async () => {
-  console.log(
-    plantsNumberLots.value, 
-    plantingDensityLots.value, 
-    fatherLots.value,
-    soilStateLots.value,
-    sizeLots.value,
-    descriptionLots.value,
-    nameLots.value
-    );
+const postDataFarm = async () => {
   //falta peticion del backend
- /*  const { lots } = await postLots({
-    name: nameLots.value,
-    description: descriptionLots.value,
+  const { farm } = await postFarm({
+    name: nameFarm.value,
+    description: descriptionFarm.value,
   });
-  getDataLots(); */
+  getDataFarm();
 }
 
-const getDataLots = async () => {
-  const { lots } = await getLots();
+const getDataFarm = async () => {
+  const { farm } = await getFarm();
   let count = 1;
-  lots.forEach((item) => {
+  farm.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
     item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
   });
-  rows.value = lots;
+  rows.value = farm;
 };
 
 onMounted(() => {
-  getDataLots();
+  getDataFarm();
 });
 </script>
 <style scoped>
