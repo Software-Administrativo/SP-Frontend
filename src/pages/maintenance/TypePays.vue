@@ -8,7 +8,7 @@
         <q-table
           flat
           bordered
-          title="Usuarios"
+          title="Tipos de Pagos"
           :rows="rows"
           :columns="columns"
           row-key="name"
