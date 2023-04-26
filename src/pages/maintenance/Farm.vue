@@ -2,18 +2,20 @@
   <div class="q-py-md table-container">
     <h6 class="q-my-lg">Finca</h6>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear nueva finca" />
-    <div class="container-table q-mt-lg q-pa-md" rounded>
-      <q-table
-        class="my-sticky-header-table"
-        flat
-        bordered
-        title="Usuarios"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-      />
+    <div class="container-content">
+      <ButtonAdd @onClick="clickButton" label="Crear nueva finca" />
+      <div class="container-table q-mt-lg q-pa-md" rounded>
+        <q-table
+          class="my-sticky-header-table"
+          flat
+          bordered
+          title="Usuarios"
+          :rows="rows"
+          :columns="columns"
+          row-key="name"
+          v-model:pagination="pagination"
+        />
+      </div>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
@@ -24,9 +26,9 @@
           <Input
             class="q-pb-xs"
             label="Nombre"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="nameFarm"
             @onWrite="getInputName"
           />
@@ -34,47 +36,49 @@
             class="q-pb-xs"
             label="Descripción"
             type="text"
-            :required=false 
-            :ruless=rules
+            :required="false"
+            :ruless="rules"
             v-model="descriptionFarm"
             @onWrite="getInputDescription"
           />
           <Input
             class="q-pb-xs"
             label="NIT"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="nitFarm"
             @onWrite="getInputNit"
           />
           <Input
             class="q-pb-xs"
             label="Ubicación"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="ubicationFarm"
             @onWrite="getInputUbication"
           />
           <Input
             class="q-pb-xs"
             label="Unidad Cana"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
           />
           <Input
             class="q-pb-xs"
             label="Minimo Existencias"
-            :required=true
+            :required="true"
             type="text"
-            :ruless=rules
+            :ruless="rules"
             v-model="minimumExistenceFarm"
             @onWrite="getInputMiniumExistence"
           />
-          <span class="text-required q-pb-sm">Todos los campos con 
-          <span class="text-red">*</span> son obligatorios</span>
+          <span class="text-required q-pb-sm"
+            >Todos los campos con <span class="text-red">*</span> son
+            obligatorios</span
+          >
           <div class="row justify-center">
             <ButtonSave :disable="disableSave" @onClick="saveInfo" />
           </div>
@@ -98,14 +102,13 @@ let nameFarm = ref("");
 let descriptionFarm = ref("");
 let nitFarm = ref("");
 let ubicationFarm = ref("");
-let minimumExistenceFarm = ref(""); 
+let minimumExistenceFarm = ref("");
 let disableSave = computed(() => {
   return nameFarm.value == "";
 });
 
 const rules = [
   (v) => !!v || "Este campo es requerido",
-  (v) => (v && v.length <= 10) || "El nombre debe tener menos de 10 caracteres",
 ];
 
 const rows = ref([]);
@@ -164,11 +167,11 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameFarm.value = ""
-  descriptionFarm.value = ""
-  nitFarm.value = ""
-  ubicationFarm.value = ""
-  minimumExistenceFarm.value = ""
+  nameFarm.value = "";
+  descriptionFarm.value = "";
+  nitFarm.value = "";
+  ubicationFarm.value = "";
+  minimumExistenceFarm.value = "";
 };
 
 const getInputName = (value) => {
@@ -203,7 +206,7 @@ const postDataFarm = async () => {
     description: descriptionFarm.value,
   });
   getDataFarm();
-}
+};
 
 const getDataFarm = async () => {
   const { farm } = await getFarm();
@@ -211,7 +214,8 @@ const getDataFarm = async () => {
   farm.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description = item.description=='' ? "No registra" : item.description || item.description == null ? "No registra" : item.description;
+    item.description =
+      item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = farm;
 };
@@ -221,7 +225,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.text-required{
+.text-required {
   display: inline-block;
   font-size: 12px;
 }
@@ -231,12 +235,34 @@ onMounted(() => {
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+.container-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
 .container-table {
   border-radius: 15px;
-  height: 100%;
-  max-height: 50vh;
+  height: 80%;
+  max-height: 60vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: scroll;
+}
+.container-table::-webkit-scrollbar {
+  display: none;
+}
+@media (min-width: 0px) and (max-width: 400px) {
+  .container-table {
+    max-width: 300px;
+  }
+}
+@media (min-width: 401px) and (max-width: 520px) {
+  .container-table {
+    max-width: 410px;
+  }
+}
+@media (min-width: 521px) and (max-width: 620px) {
+  .container-table {
+    max-width: 510px;
+  }
 }
 </style>

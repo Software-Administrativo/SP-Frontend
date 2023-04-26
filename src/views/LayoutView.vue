@@ -4,6 +4,7 @@
     <div class="row">
       <Sidebar
         class="col-2"
+        @onRoute="clickButton($event)"
         :style="sidebar"
         v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
       ></Sidebar>
@@ -19,12 +20,13 @@
 <script setup>
 import { RouterView } from "vue-router";
 import { menuState } from "@/stores/menu";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import Header from "@/modules/header/Header.vue";
 
 const menu = menuState();
+const showRouter = ref();
 
 const routeName = computed(() => {
   return useRoute().name;
@@ -46,14 +48,17 @@ const viewContainer = computed(() => {
   }
 });
 
+function clickButton(event){
+  console.log(event);
+  menu.toggleMenu();
+}
+
 const sidebar = computed(() => {
-  if (menu.menuIsOpen) {
-    if (window.screen.width < 680) {
+  if (window.screen.width < 680) {
+    if (menu.menuIsOpen) {
+      showRouter.value = false;
       return "width: 100%";
     }
-    return;
-  } else {
-    // Pendiente
   }
 });
 </script>
@@ -62,5 +67,6 @@ const sidebar = computed(() => {
 .container-view {
   width: 100vw;
   height: 100vh;
+  overflow:hidden;
 }
 </style>

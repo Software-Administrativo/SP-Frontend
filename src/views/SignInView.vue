@@ -24,17 +24,22 @@
 // Imports
 import { useRouter } from "vue-router";
 import { validateUser } from "@/api/sign-in";
+import { useStorage } from "@/stores/localStorage.js";
 import Form from "@/modules/sign-in/Form.vue";
+import { computed } from "vue";
 
 // Data
 const router = useRouter();
+const storage = useStorage();
+let tokens = computed(() => storage.getStorage);
 
 // Function to receive the data from the form
 const validateIfUserExist = async (data) => {
   const validateDataUser = await validateUser(data);
-  if (validateDataUser.message) {
+  if (validateDataUser.msg == "Credenciales incorrectas") {
     console.log("Credenciales incorrectas");
   } else {
+    storage.addStorage(validateDataUser.token)
     router.push({ name: "home" });
   }
 };

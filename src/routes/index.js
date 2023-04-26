@@ -1,4 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useStorage } from "@/stores/localStorage.js";
+
+const checkAuth = async (to, from, next) => {
+  const storage = useStorage()
+
+  // const isAuthenticated = storage.userData
+  // if (isAuthenticated._token !== "") {
+  //   next();
+  // } else {
+  //   next("/");
+  // }
+};
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,11 +19,22 @@ const router = createRouter({
       path: "/",
       name: "sign-in",
       component: () => import("../views/SignInView.vue"),
+      // beforeEnter: async (to, from, next) => {
+        // const storeCtrl = useStorage()
+        // const isAuthenticated = storeCtrl.getStorage
+        // console.log(isAuthenticated)
+        // if (isAuthenticated =! []) {
+        //   next("/home");
+        // } else {
+        //   next();
+        // }
+      // },
     },
     {
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
+      beforeEnter: checkAuth,
     },
     {
       path: "/cost",
@@ -84,11 +107,6 @@ const router = createRouter({
           path: "eps",
           name: "maintenance-eps",
           component: () => import("../pages/maintenance/Eps.vue"),
-        },
-        {
-          path: "type-document",
-          name: "maintenance-type-document",
-          component: () => import("../pages/maintenance/TypeDocument.vue"),
         },
         {
           path: "lots",
