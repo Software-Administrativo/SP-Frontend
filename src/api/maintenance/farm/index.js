@@ -12,21 +12,21 @@ const getFarm = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const postFarm = async (type) => {
   try {
     const { data } = await sugarAxios.post(`/maintenance/farm/register`, {
-      "name": type.name,
-      "description": type.description,
-      "nit": type.nit,
-      "ubication": type.ubication,
-      "miniumExistence": type.miniumExistence      
+      name: type.name,
+      description: type.description,
+      nit: type.nit,
+      ubication: type.ubication,
+      miniumExistence: type.miniumExistence,
     });
     return data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export { getFarm, postFarm };

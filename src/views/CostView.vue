@@ -10,25 +10,24 @@ const itemsListModules = ref([
   {
     label: "Gastos de siembra",
     icon: "icon icon-wineries",
-    name: "/home"
+    name: "/home",
   },
   {
     label: "Gastos de actividades",
     icon: "icon icon-brands",
-    name: "/home"
+    name: "/home",
   },
   {
     label: "Gastos administrativos",
     icon: "icon icon-product",
-    name: "/home"
+    name: "/home",
   },
   {
     label: "Otro tipo de gasto",
     icon: "icon icon-categories",
-    name: "/home"
+    name: "/home",
   },
 ]);
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

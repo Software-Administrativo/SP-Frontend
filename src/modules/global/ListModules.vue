@@ -1,9 +1,14 @@
 <template>
-  <div class="q-py-md">
-    <h6 class="q-my-lg">{{ props.title }}</h6>
+  <div class="q-mb-sm">
+    <h6 class="q-my-lg title">{{ props.title }}</h6>
     <q-separator class="separator" />
     <div class="container-list q-mt-lg q-pa-md" rounded>
-      <div class="item-list" v-for="(item, i) in props.items" :key="i" @click="goToModule(item.name)">
+      <div
+        class="item-list"
+        v-for="(item, i) in props.items"
+        :key="i"
+        @click="goToModule(item.name)"
+      >
         <i class="item-icon" v-bind:class="item.icon"></i>
         <p class="item-name">{{ item.label }}</p>
       </div>
@@ -37,13 +42,24 @@ const goToModule = (route) => {
   display: grid;
   grid-template-columns: repeat(2, minmax(105px, 1fr));
   border-radius: 15px;
-  padding: 25px;
+  padding: 10px 20px;
   padding-bottom: 35px;
   height: 100%;
   max-height: 80vh;
+  margin-top: 0px;
+  max-width: 800px;
+  margin: 0 auto;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+.title {
+  display: inline-block;
+  margin-top: 40px;
+}
+.separator {
+  border: 1.8px solid var(--color-gray);
+  margin-bottom: 20px;
 }
 
 .icon {
@@ -71,4 +87,17 @@ const goToModule = (route) => {
   font-size: var(--font-medium);
   margin-left: 10px;
   padding-top: 8px;
-}</style>
+}
+
+@media (max-width: 600px) {
+  .container-list {
+    grid-template-columns: repeat(1, minmax(100px, 1fr));
+    max-height: 70vh !important;
+    overflow-y: scroll;
+  }
+}
+
+.container-list::-webkit-scrollbar {
+  display: none;
+}
+</style>

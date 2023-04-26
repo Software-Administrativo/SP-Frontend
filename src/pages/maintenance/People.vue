@@ -1,6 +1,5 @@
 <template>
-  <h1>holiwi</h1>   
+  <h1>holiwi</h1>
 </template>
 
-<script setup>
-</script>
+<script setup></script>

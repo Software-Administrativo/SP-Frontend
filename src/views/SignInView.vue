@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="col-md-6 col-0 window-height"></div>
-  </section>  
+  </section>
 </template>
 
 <script setup>
@@ -32,8 +32,8 @@ const router = useRouter();
 // Function to receive the data from the form
 const validateIfUserExist = async (data) => {
   const validateDataUser = await validateUser(data);
-  if(validateDataUser.message){
-    console.log('Credenciales incorrectas');
+  if (validateDataUser.message) {
+    console.log("Credenciales incorrectas");
   } else {
     router.push({ name: "home" });
   }

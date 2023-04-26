@@ -12,18 +12,21 @@ const getTypeDocument = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const postTypeDocument = async (type) => {
   try {
-    const { data } = await sugarAxios.post(`/maintenance/typeDocument/register`, {
-      "name": type.name,
-      "description": type.description
-    });
+    const { data } = await sugarAxios.post(
+      `/maintenance/typeDocument/register`,
+      {
+        name: type.name,
+        description: type.description,
+      }
+    );
     return data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export { getTypeDocument, postTypeDocument };

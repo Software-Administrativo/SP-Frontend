@@ -1,5 +1,9 @@
 <template>
-  <ListModules v-if="routeName == 'maintenance'" title="MANTENIMIENTO" :items="itemsListModules" />
+  <ListModules
+    v-if="routeName == 'maintenance'"
+    title="MANTENIMIENTO"
+    :items="itemsListModules"
+  />
   <template v-if="routeName != 'maintenance'">
     <RouterView></RouterView>
   </template>
@@ -18,55 +22,54 @@ const itemsListModules = ref([
   {
     label: "Tipo pagos",
     icon: "icon icon-type-money",
-    name: "maintenance-pays"
+    name: "maintenance-pays",
   },
   {
     label: "Tipo labores",
     icon: "icon icon-type-labors",
-    name: "maintenance-labors"
+    name: "maintenance-labors",
   },
   {
     label: "Tipo gastos",
     icon: "icon icon-cost",
-    name: "maintenance-spents"
-  },  
+    name: "maintenance-spents",
+  },
   {
     label: "Unidades de medida",
     icon: "icon icon-unit-extent",
-    name: "maintenance-units-measurement"
+    name: "maintenance-units-measurement",
   },
   {
     label: "EPS",
     icon: "icon icon-eps",
-    name: "maintenance-eps"
+    name: "maintenance-eps",
   },
   {
     label: "Tipo de documento",
     icon: "icon icon-type-document",
-    name: "maintenance-type-document"
+    name: "maintenance-type-document",
   },
   {
     label: "Lotes",
     icon: "icon icon-lots",
-    name: "maintenance-lots"
+    name: "maintenance-lots",
   },
   {
     label: "Etapas",
     icon: "icon icon-tages",
-    name: "maintenance-stages"
+    name: "maintenance-stages",
   },
   {
     label: "Finca",
     icon: "icon icon-create-estate",
-    name: "maintenance-farm"
+    name: "maintenance-farm",
   },
   {
     label: "Personas",
     icon: "icon icon-persons",
-    name: "maintenance-people"
+    name: "maintenance-people",
   },
 ]);
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,11 +1,26 @@
 <template>
-  <q-header elevated class="header">
+  <div class="header">
     <q-toolbar>
-      <q-btn flat round dense icon="menu" class="q-mr-sm" @click="toggle()" />
+      <q-btn
+        flat
+        round
+        dense
+        icon="menu"
+        class="text-white"
+        @click="toggle()"
+      />
       <q-space></q-space>
-      <q-btn flat round dense icon="logout" class="q-mr-xs" to="./" @click="sidebarHide()"/>
+      <q-btn
+        flat
+        round
+        dense
+        icon="logout"
+        class="text-white"
+        to="./"
+        @click="sidebarHide()"
+      />
     </q-toolbar>
-  </q-header>
+  </div>
 </template>
 
 <script setup>
@@ -15,7 +30,7 @@ function toggle() {
   menu.toggleMenu();
 }
 function sidebarHide() {
-  if (menu.menuIsOpen == true){
+  if (menu.menuIsOpen == true) {
     menu.toggleMenu();
   }
 }
@@ -24,5 +39,6 @@ function sidebarHide() {
 <style scoped>
 .header {
   background-color: var(--color-blue);
+  width: 100%;
 }
 </style>

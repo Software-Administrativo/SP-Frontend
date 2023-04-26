@@ -24,36 +24,36 @@ const router = createRouter({
       component: () => import("../views/InventoryView.vue"),
       children: [
         {
-          path: 'cellars',
-          name: 'inventory-cellars',
+          path: "cellars",
+          name: "inventory-cellars",
           component: () => import("../pages/inventory/Cellars.vue"),
         },
         {
-          path: 'brands',
-          name: 'inventory-brands',
+          path: "brands",
+          name: "inventory-brands",
           component: () => import("../pages/inventory/Brands.vue"),
         },
         {
-          path: 'categories',
-          name: 'inventory-categories',
+          path: "categories",
+          name: "inventory-categories",
           component: () => import("../pages/inventory/Categories.vue"),
         },
         {
-          path: 'products',
-          name: 'inventory-products',
+          path: "products",
+          name: "inventory-products",
           component: () => import("../pages/inventory/Products.vue"),
         },
         {
-          path: 'entries',
-          name: 'inventory-entries',
+          path: "entries",
+          name: "inventory-entries",
           component: () => import("../pages/inventory/InventoryEntries.vue"),
         },
         {
-          path: 'stock',
-          name: 'inventory-stock-adjustments',
+          path: "stock",
+          name: "inventory-stock-adjustments",
           component: () => import("../pages/inventory/StockAdjustments.vue"),
         },
-      ]
+      ],
     },
     {
       path: "/maintenance",
@@ -61,43 +61,43 @@ const router = createRouter({
       component: () => import("../views/MaintenanceView.vue"),
       children: [
         {
-          path: 'pays',
-          name: 'maintenance-pays',
+          path: "pays",
+          name: "maintenance-pays",
           component: () => import("../pages/maintenance/TypePays.vue"),
         },
         {
-          path: 'labors',
-          name: 'maintenance-labors',
+          path: "labors",
+          name: "maintenance-labors",
           component: () => import("../pages/maintenance/TypeLabors.vue"),
         },
         {
-          path: 'spents',
-          name: 'maintenance-spents',
+          path: "spents",
+          name: "maintenance-spents",
           component: () => import("../pages/maintenance/TypeSpents.vue"),
         },
         {
-          path: 'units-measurement',
-          name: 'maintenance-units-measurement',
+          path: "units-measurement",
+          name: "maintenance-units-measurement",
           component: () => import("../pages/maintenance/UnitsMeasurement.vue"),
         },
         {
-          path: 'eps',
-          name: 'maintenance-eps',
+          path: "eps",
+          name: "maintenance-eps",
           component: () => import("../pages/maintenance/Eps.vue"),
         },
         {
-          path: 'type-document',
-          name: 'maintenance-type-document',
+          path: "type-document",
+          name: "maintenance-type-document",
           component: () => import("../pages/maintenance/TypeDocument.vue"),
         },
         {
-          path: 'lots',
-          name: 'maintenance-lots',
+          path: "lots",
+          name: "maintenance-lots",
           component: () => import("../pages/maintenance/Lots.vue"),
         },
         {
-          path: 'stages',
-          name: 'maintenance-stages',
+          path: "stages",
+          name: "maintenance-stages",
           component: () => import("../pages/maintenance/Stages.vue"),
         },
         {
@@ -106,11 +106,11 @@ const router = createRouter({
           component: () => import("../pages/maintenance/Farm.vue"),
         },
         {
-          path: 'people',
-          name: 'maintenance-people',
+          path: "people",
+          name: "maintenance-people",
           component: () => import("../pages/maintenance/People.vue"),
         },
-      ]
+      ],
     },
     {
       path: "/order",

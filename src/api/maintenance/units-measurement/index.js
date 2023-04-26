@@ -11,18 +11,18 @@ const getTypeUnitsMeasurement = async () => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const postTypeUnitsMeasurement = async (type) => {
   try {
     const { data } = await sugarAxios.post(`/maintenance/unittypes/register`, {
-      "name": type.name,
-      "description": type.description
+      name: type.name,
+      description: type.description,
     });
     return data;
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 export { getTypeUnitsMeasurement, postTypeUnitsMeasurement };
