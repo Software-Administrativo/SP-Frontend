@@ -25,20 +25,20 @@
 
 <script setup>
 import { menuState } from "@/stores/menu";
-import { closeSesionUser } from "@/api/logout";
+import { useStorage } from "@/stores/localStorage"
+
+const storage = useStorage();
+
 const menu = menuState();
 function toggle() {
   menu.toggleMenu();
 }
-const logoutSession = async() => {
+
+const logoutSession = () => {
   if (menu.menuIsOpen == true) {
     menu.toggleMenu();
   }
-  // PENDIENTE
-  // const closeSesion = await closeSesionUser(token);
-  // if(closeSesion.msg){
-  //   // Modal
-  // }
+  storage.deleteStorage();
 }
 </script>
 

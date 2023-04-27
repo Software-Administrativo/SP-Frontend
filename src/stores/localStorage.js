@@ -1,22 +1,20 @@
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
-export const useStorage = defineStore("useStorage", {
-  // Estado inicial
-  state: () => ({
-    data: JSON.parse(localStorage.getItem("tokens")) ?? [],
-  }),
-  getters: {
-    getStorage(state) {
-      return state.data;
-    },
-  },
-  actions: {
-    addStorage(token) {
-      this.data.push(token);
-      localStorage.setItem("tokens", JSON.stringify(this.data));
-    },
-    deleteStorage(token){
-      localStorage.removeItem("tokens")
-    }
+export const useStorage = defineStore("useStorage", () => {
+  // State
+  const token = ref(localStorage.getItem("token") ?? "");
+
+  // Functions
+  const addStorage = (value) => {
+    token.value = value;
+    localStorage.setItem("token", token.value);
+  };
+
+  const deleteStorage = () => {
+    token.value = "";
+    localStorage.removeItem("token");
   }
+
+  return { token, addStorage, deleteStorage }
 });
