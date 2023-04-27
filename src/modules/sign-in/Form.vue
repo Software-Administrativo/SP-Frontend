@@ -17,6 +17,9 @@
       <Password @onPassword="getPasswordData" label="Contraseña" />
     </div>
   </div>
+  <span class="invalidateData" v-if="props.error"
+    >Credenciales Incorrectas</span
+  >
   <template v-if="isInactive">
     <q-btn
       disable
@@ -53,6 +56,14 @@ const isInactive = computed(() => {
   );
 });
 
+const props = defineProps({
+  error: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+});
+
 const selectStyles = ref({
   marginRight: "8.3%",
 });
@@ -87,5 +98,10 @@ const getPasswordData = (value) => {
 <style scoped>
 .btn-login {
   background-color: #0068a5;
+}
+.invalidateData {
+  background-color: rgba(255, 0, 0, 0.288);
+  border-radius: 5px;
+  padding: 5px 15px;
 }
 </style>

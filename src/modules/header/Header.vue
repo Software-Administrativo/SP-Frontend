@@ -17,7 +17,7 @@
         icon="logout"
         class="text-white"
         to="./"
-        @click="sidebarHide()"
+        @click="logoutSession()"
       />
     </q-toolbar>
   </div>
@@ -25,14 +25,20 @@
 
 <script setup>
 import { menuState } from "@/stores/menu";
+import { closeSesionUser } from "@/api/logout";
 const menu = menuState();
 function toggle() {
   menu.toggleMenu();
 }
-function sidebarHide() {
+const logoutSession = async() => {
   if (menu.menuIsOpen == true) {
     menu.toggleMenu();
   }
+  // PENDIENTE
+  // const closeSesion = await closeSesionUser(token);
+  // if(closeSesion.msg){
+  //   // Modal
+  // }
 }
 </script>
 

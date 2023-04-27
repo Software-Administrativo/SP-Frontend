@@ -45,11 +45,6 @@ const itemsListModules = ref([
     name: "maintenance-eps",
   },
   {
-    label: "Tipo de documento",
-    icon: "icon icon-type-document",
-    name: "maintenance-type-document",
-  },
-  {
     label: "Lotes",
     icon: "icon icon-lots",
     name: "maintenance-lots",
