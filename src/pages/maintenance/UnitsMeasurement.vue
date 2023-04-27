@@ -8,7 +8,7 @@
         class="my-sticky-header-table"
         flat
         bordered
-        title="Usuarios"
+        title="Unidades de Medida"
         :rows="rows"
         :columns="columns"
         row-key="name"
