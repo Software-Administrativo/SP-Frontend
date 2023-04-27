@@ -170,7 +170,7 @@ const router = createRouter({
   ],
 });
 
-// Validate if user can access to route
+// Validate if user can access to route / obtener el rol del usuario, validar el token
 router.beforeEach((to, from) => {
   if (to.meta.requiresAuth) {
     const { token } = useStorage();
@@ -178,7 +178,11 @@ router.beforeEach((to, from) => {
       return {
         path: "/",
       };
-    }
+    } 
+    // else {
+    //   // const tokenStatus = fetch: true | false
+    //   return tokenStatus ? true : false;
+    // }
   }
 })
 
