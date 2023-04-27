@@ -12,7 +12,10 @@
         <div class="form column">
           <h2 class="q-mb-md">Bienvenido</h2>
           <h5 class="text-grey q-mt-xs q-mb-md">Ingresa a tu cuenta</h5>
-          <Form @onForm="validateIfUserExist" />
+          <Form @onForm="validateIfUserExist" :error="isValidate" />
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </div>
@@ -26,20 +29,29 @@ import { useRouter } from "vue-router";
 import { validateUser } from "@/api/sign-in";
 import { useStorage } from "@/stores/localStorage.js";
 import Form from "@/modules/sign-in/Form.vue";
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 // Data
 const router = useRouter();
 const storage = useStorage();
+const isLoading = ref(false);
+let isValidate = ref();
 let tokens = computed(() => storage.getStorage);
 
 // Function to receive the data from the form
 const validateIfUserExist = async (data) => {
+  isLoading.value = true;
   const validateDataUser = await validateUser(data);
   if (validateDataUser.msg == "Credenciales incorrectas") {
+    isLoading.value = false;
+    isValidate.value = true;
+    setTimeout(() => {
+      isValidate.value = false;
+    }, "2000");
     console.log("Credenciales incorrectas");
   } else {
-    storage.addStorage(validateDataUser.token)
+    isLoading.value = false;
+    storage.addStorage(validateDataUser.token);
     router.push({ name: "home" });
   }
 };
@@ -66,6 +78,10 @@ const validateIfUserExist = async (data) => {
 
 .form {
   width: 60%;
+}
+.spinner {
+  margin: 0 auto;
+  margin-top: 25px;
 }
 
 @media (max-width: 500px) {
