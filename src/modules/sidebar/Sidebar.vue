@@ -7,7 +7,7 @@
     />
     <h6 class="name-user text-center q-ma-none q-pb-sm">Laura Susano</h6>
     <q-separator class="separator" />
-    <div v-for="item in paths" :key="item.name">
+    <div v-for="item in paths" :key="item.name" @click="clickRoute">
       <RouterLink class="item" :to="item.path">
         <i v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
@@ -25,6 +25,8 @@
 <script setup>
 import { onUpdated } from "vue";
 import { menuState } from "@/stores/menu";
+import { event } from "quasar";
+import { computed } from "vue";
 
 const paths = [
   {
@@ -81,6 +83,14 @@ const menu = menuState();
 
 onUpdated(() => {
   menu.value = false;
+});
+
+const emits = defineEmits({
+  onRoute: null,
+});
+
+const clickRoute = computed(() => {
+  emits("onRoute", event);
 });
 </script>
 

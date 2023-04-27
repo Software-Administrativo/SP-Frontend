@@ -163,10 +163,13 @@ onMounted(() => {
 .container-table {
   border-radius: 15px;
   height: 80%;
-  max-height: 50vh;
+  max-height: 60vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: scroll;
+}
+.container-table::-webkit-scrollbar {
+  display: none;
 }
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {

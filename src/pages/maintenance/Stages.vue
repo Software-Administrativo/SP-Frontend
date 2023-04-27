@@ -2,18 +2,20 @@
   <div class="q-py-md table-container">
     <h6 class="q-my-lg">ETAPAS</h6>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear nueva etapa" />
-    <div class="container-table q-mt-lg q-pa-md" rounded>
-      <q-table
-        class="my-sticky-header-table"
-        flat
-        bordered
-        title="Etapas"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-      />
+    <div class="container-content">
+      <ButtonAdd @onClick="clickButton" label="Crear nueva etapa" />
+      <div class="container-table q-mt-lg q-pa-md" rounded>
+        <q-table
+          class="my-sticky-header-table"
+          flat
+          bordered
+          title="Usuarios"
+          :rows="rows"
+          :columns="columns"
+          row-key="name"
+          v-model:pagination="pagination"
+        />
+      </div>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
@@ -93,7 +95,6 @@ let disableSave = computed(() => {
 
 const rules = [
   (v) => !!v || "Este campo es requerido",
-  (v) => (v && v.length <= 10) || "El nombre debe tener menos de 10 caracteres",
 ];
 
 const rows = ref([]);
@@ -176,11 +177,7 @@ const getDataStages = async () => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
     item.description =
-      item.description == ""
-        ? "No registra"
-        : item.description || item.description == null
-        ? "No registra"
-        : item.description;
+      item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = stages;
 };
@@ -207,10 +204,13 @@ onMounted(() => {
 .container-table {
   border-radius: 15px;
   height: 80%;
-  max-height: 50vh;
+  max-height: 60vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: scroll;
+}
+.container-table::-webkit-scrollbar {
+  display: none;
 }
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
