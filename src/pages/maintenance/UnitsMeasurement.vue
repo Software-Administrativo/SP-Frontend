@@ -29,15 +29,16 @@
             :required="true"
             type="text"
             :ruless="rules"
-            v-model="nameUnitMeasurement"
+            v-model="nameUnitsMeasurement"
             @onWrite="getInputName"
           />
           <Input
-            label="Descripción"
+            label="Tipo de Unidad"   
+            :required="true"
             type="text"
-            :required="false"
-            v-model="descriptionUnitMeasurement"
-            @onWrite="getInputDescription"
+            :ruless="rules"
+            v-model="unittypeUnitsMeasurement"
+            @onWrite="getInputunittype"
           />
           <span class="text-required q-pb-sm"
             >Todos los campos con <span class="text-red">*</span> son
@@ -65,10 +66,10 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
 
-let nameUnitMeasurement = ref("");
-let descriptionUnitMeasurement = ref("");
+let nameUnitsMeasurement = ref("");
+let unittypeUnitsMeasurement = ref("");
 let disableSave = computed(() => {
-  return nameUnitMeasurement.value == "";
+  return (nameUnitsMeasurement.value == "" || unittypeUnitsMeasurement.value == "");
 });
 
 const rules = [
@@ -86,9 +87,9 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "description",
-    label: "Descripción",
-    field: "description",
+    name: "unittype",
+    label: "Tipo de unidad",
+    field: "unittype",
     align: "left",
     sortable: true,
   },
@@ -110,45 +111,44 @@ const pagination = ref({
 
 const clickButton = () => {
   modal.toggleModal();
-  nameUnitMeasurement.value = "";
-  descriptionUnitMeasurement.value = "";
+  nameUnitsMeasurement.value = "";
+  unittypeUnitsMeasurement.value = "";
 };
 
 const getInputName = (value) => {
-  nameUnitMeasurement.value = value;
+  nameUnitsMeasurement.value = value;
 };
 
-const getInputDescription = (value) => {
-  descriptionUnitMeasurement.value = value;
+const getInputunittype = (value) => {
+  unittypeUnitsMeasurement.value = value;
 };
 
 const saveInfo = () => {
-  postDataUnitMeasurement();
+  postDataUnitsMeasurement();
   modal.toggleModal();
 };
 
-const postDataUnitMeasurement = async () => {
-  const { unittypes } = await postTypeUnitsMeasurement({
-    name: nameUnitMeasurement.value,
-    description: descriptionUnitMeasurement.value,
+const postDataUnitsMeasurement = async () => {
+  const { unitType } = await postTypeUnitsMeasurement({
+    name: nameUnitsMeasurement.value,
+    unittype: unittypeUnitsMeasurement.value,
   });
-  getDataUnitMeasurement();
+  getDataUnitsMeasurement();
 };
 
-const getDataUnitMeasurement = async () => {
-  const { unittypes } = await getTypeUnitsMeasurement();
+const getDataUnitsMeasurement = async () => {
+  const { unitType } = await getTypeUnitsMeasurement();
   let count = 1;
-  unittypes.forEach((item) => {
+  console.log(unitType);
+  unitType.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description =
-      item.description.trim() == "" ? "No registra" : item.description;
   });
-  rows.value = unittypes;
+  rows.value = unitType;
 };
 
 onMounted(() => {
-  getDataUnitMeasurement();
+  getDataUnitsMeasurement();
 });
 </script>
 <style scoped>

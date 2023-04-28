@@ -24,9 +24,15 @@ const getTypePays = async () => {
 
 const postTypePays = async (type) => {
   try {
-    const { data } = await sugarAxios.post(`/maintenance/pays/register`, {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.post(`/maintenance/pays/register`, { 
       name: type.name,
-      description: type.description,
+      description: type.description
+    },{
+      headers: {
+        token:
+          tokenExist,
+      },
     });
     return data;
   } catch (error) {
