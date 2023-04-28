@@ -49,7 +49,6 @@ const viewContainer = computed(() => {
 });
 
 function clickButton(event){
-  console.log(event);
   menu.toggleMenu();
 }
 

@@ -7,7 +7,6 @@ import { sugarAxios } from "../../global";
 const getStages = async () => {
   try {
     const { data } = await sugarAxios.get(`/maintenance/stages`);
-    console.log(data);
     return data;
   } catch (error) {
     console.error(error);

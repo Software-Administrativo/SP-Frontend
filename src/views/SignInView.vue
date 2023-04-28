@@ -48,7 +48,6 @@ const validateIfUserExist = async (data) => {
     isValidate.value = true;
   } else {
     isLoading.value = false;
-    console.log(validateDataUser);
     storage.addStorage(validateDataUser.token);
     router.push({ name: "home" });
   }

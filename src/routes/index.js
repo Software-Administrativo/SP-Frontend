@@ -178,11 +178,15 @@ router.beforeEach((to, from) => {
       return {
         path: "/",
       };
-    } 
-    // else {
-    //   // const tokenStatus = fetch: true | false
-    //   return tokenStatus ? true : false;
-    // }
+    } else {
+      const validateToken = useStorage();
+      const isValidateJWT = validateToken.decodeJwt();
+      if (!isValidateJWT){
+        return {
+          path: "/",
+        }
+      }
+    }
   }
 })
 
