@@ -25,30 +25,27 @@
 
 <script setup>
 // Imports
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { validateUser } from "@/api/sign-in";
 import { useStorage } from "@/stores/localStorage.js";
 import Form from "@/modules/sign-in/Form.vue";
-import { ref, computed } from "vue";
+import { RESPONSES } from "@/helpers"
 
 // Data
 const router = useRouter();
 const storage = useStorage();
 const isLoading = ref(false);
-let isValidate = ref();
-let tokens = computed(() => storage.getStorage);
+let isValidate = ref(false);
 
 // Function to receive the data from the form
 const validateIfUserExist = async (data) => {
+  isValidate.value = false;
   isLoading.value = true;
   const validateDataUser = await validateUser(data);
-  if (validateDataUser.msg == "Credenciales incorrectas") {
+  if (validateDataUser.msg == RESPONSES.WRONG) {
     isLoading.value = false;
     isValidate.value = true;
-    setTimeout(() => {
-      isValidate.value = false;
-    }, "2000");
-    console.log("Credenciales incorrectas");
   } else {
     isLoading.value = false;
     storage.addStorage(validateDataUser.token);

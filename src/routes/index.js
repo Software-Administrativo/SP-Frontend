@@ -1,50 +1,47 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import { useStorage } from "@/stores/localStorage.js";
-
-const checkAuth = async (to, from, next) => {
-  const storage = useStorage()
-
-  // const isAuthenticated = storage.userData
-  // if (isAuthenticated._token !== "") {
-  //   next();
-  // } else {
-  //   next("/");
-  // }
-};
+import SignInView from "@/views/SignInView.vue"
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: "/:catchAll(.*)", redirect: "/"
+    },
     {
       path: "/",
       name: "sign-in",
-      component: () => import("../views/SignInView.vue"),
-      // beforeEnter: async (to, from, next) => {
-        // const storeCtrl = useStorage()
-        // const isAuthenticated = storeCtrl.getStorage
-        // console.log(isAuthenticated)
-        // if (isAuthenticated =! []) {
-        //   next("/home");
-        // } else {
-        //   next();
-        // }
-      // },
+      component: SignInView,
+      meta: {
+        requiresAuth: false,
+      },
     },
     {
       path: "/home",
       name: "home",
       component: () => import("../views/HomeView.vue"),
-      beforeEnter: checkAuth,
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      }
     },
     {
       path: "/cost",
       name: "cost",
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      },
       component: () => import("../views/CostView.vue"),
     },
     {
       path: "/inventory",
       name: "inventory",
       component: () => import("../views/InventoryView.vue"),
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      },
       children: [
         {
           path: "cellars",
@@ -81,6 +78,10 @@ const router = createRouter({
     {
       path: "/maintenance",
       name: "maintenance",
+      meta: {
+        requiresAuth: true,
+        rol: ['admin']
+      },
       component: () => import("../views/MaintenanceView.vue"),
       children: [
         {
@@ -133,24 +134,60 @@ const router = createRouter({
     {
       path: "/order",
       name: "order",
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      },
       component: () => import("../views/OrderView.vue"),
     },
     {
       path: "/report",
       name: "report",
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      },
       component: () => import("../views/ReportView.vue"),
     },
     {
       path: "/system",
       name: "system",
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      },
       component: () => import("../views/SystemView.vue"),
     },
     {
       path: "/transformation",
       name: "transformation",
+      meta: {
+        requiresAuth: true,
+        rol: ['admin', 'user']
+      },
       component: () => import("../views/TransformationView.vue"),
     },
   ],
 });
+
+// Validate if user can access to route / obtener el rol del usuario, validar el token
+router.beforeEach((to, from) => {
+  if (to.meta.requiresAuth) {
+    const { token } = useStorage();
+    if (!token) {
+      return {
+        path: "/",
+      };
+    } else {
+      const validateToken = useStorage();
+      const isValidateJWT = validateToken.decodeJwt();
+      if (!isValidateJWT){
+        return {
+          path: "/",
+        }
+      }
+    }
+  }
+})
 
 export default router;
