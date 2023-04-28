@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">Finca</h6>
+    <h6 class="title q-my-lg">Finca</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva finca" />
@@ -13,6 +13,7 @@
           :rows="rows"
           :columns="columns"
           row-key="name"
+          :loading="loading"
           v-model:pagination="pagination"
         />
       </div>
@@ -97,6 +98,7 @@ import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
+const loading = ref(false);
 
 let nameFarm = ref("");
 let descriptionFarm = ref("");
@@ -107,19 +109,27 @@ let disableSave = computed(() => {
   return nameFarm.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -127,6 +137,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "nit",
@@ -134,6 +146,8 @@ const columns = ref([
     field: "nit",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "ubication",
@@ -141,6 +155,8 @@ const columns = ref([
     field: "ubication",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "miniumExistence",
@@ -148,6 +164,8 @@ const columns = ref([
     field: "miniumExistence",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -155,6 +173,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -209,6 +229,7 @@ const postDataFarm = async () => {
 };
 
 const getDataFarm = async () => {
+  loading.value = true;
   const { farm } = await getFarm();
   let count = 1;
   farm.forEach((item) => {
@@ -218,6 +239,7 @@ const getDataFarm = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = farm;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -246,6 +268,9 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
+}
+.title {
+  font-size: var(--font-title);
 }
 .container-table::-webkit-scrollbar {
   display: none;

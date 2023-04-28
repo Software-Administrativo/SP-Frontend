@@ -5,7 +5,7 @@
     <q-separator class="separator" />
     <div v-for="item in paths" :key="item.name" @click="clickRoute">
       <RouterLink class="item" :to="item.path">
-        <i v-bind:class="item.icon"></i>
+        <i class="icon-module" v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
       </RouterLink>
       <q-separator class="separator" />
@@ -115,7 +115,7 @@ const clickRoute = computed(() => {
 
 .name {
   margin-left: 20px !important;
-  font-size: var(--font-small);
+  font-size: 16px;
   margin: 3px;
 }
 
@@ -124,7 +124,7 @@ const clickRoute = computed(() => {
 }
 
 .name-user {
-  font-size: var(--font-small);
+  font-size: 15px;
 }
 
 .logo-global {

@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">UNIDADES DE MEDIDA</h6>
+    <h6 class="title q-my-lg">UNIDADES DE MEDIDA</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear unidad de medida" />
@@ -13,6 +13,7 @@
           :rows="rows"
           :columns="columns"
           row-key="name"
+          :loading="loading"
           v-model:pagination="pagination"
         />
       </div>
@@ -64,6 +65,7 @@ import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
+const loading = ref(false);
 
 let nameUnitMeasurement = ref("");
 let descriptionUnitMeasurement = ref("");
@@ -71,19 +73,27 @@ let disableSave = computed(() => {
   return nameUnitMeasurement.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -91,6 +101,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -98,6 +110,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -136,6 +150,7 @@ const postDataUnitMeasurement = async () => {
 };
 
 const getDataUnitMeasurement = async () => {
+  loading.value = true;
   const { unittypes } = await getTypeUnitsMeasurement();
   let count = 1;
   unittypes.forEach((item) => {
@@ -145,6 +160,7 @@ const getDataUnitMeasurement = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = unittypes;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -152,6 +168,9 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.title {
+  font-size: var(--font-title);
+}
 .text-required {
   display: inline-block;
   font-size: 12px;

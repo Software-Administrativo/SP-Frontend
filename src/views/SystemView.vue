@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">ACCESO AL SISTEMA</h6>
+    <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
@@ -121,6 +121,9 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.title{
+  font-size: var(--font-title);
+}
 .table-container {
   position: relative;
 }

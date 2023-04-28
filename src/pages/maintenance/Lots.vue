@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">LOTES</h6>
+    <h6 class="title q-my-lg">LOTES</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nuevo lote" />
@@ -12,6 +12,7 @@
           :rows="rows"
           :columns="columns"
           row-key="name"
+          :loading="loading"
           v-model:pagination="pagination"
         />
       </div>
@@ -112,6 +113,7 @@ import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
+const loading = ref(false);
 
 let model = ref(null);
 const options = ["1", "2", "3", "4", "5"];
@@ -127,19 +129,27 @@ let disableSave = computed(() => {
   return nameLots.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -147,6 +157,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "size",
@@ -154,6 +166,8 @@ const columns = ref([
     field: "size",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -161,6 +175,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "soilState",
@@ -168,6 +184,8 @@ const columns = ref([
     field: "soilState",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "class",
@@ -175,6 +193,8 @@ const columns = ref([
     field: "class",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "father",
@@ -182,6 +202,8 @@ const columns = ref([
     field: "father",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "plantingDensity",
@@ -189,6 +211,8 @@ const columns = ref([
     field: "plantingDensity",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "plantsNumber",
@@ -196,6 +220,8 @@ const columns = ref([
     field: "plantsNumber",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -269,6 +295,7 @@ const postDataLots = async () => {
 };
 
 const getDataLots = async () => {
+  loading.value = true;
   const { lots } = await getLots();
   let count = 1;
   lots.forEach((item) => {
@@ -278,6 +305,7 @@ const getDataLots = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = lots;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -298,6 +326,9 @@ onMounted(() => {
 .container-content {
   max-width: 900px;
   margin: 0 auto;
+}
+.title {
+  font-size: var(--font-title);
 }
 .container-table {
   border-radius: 15px;

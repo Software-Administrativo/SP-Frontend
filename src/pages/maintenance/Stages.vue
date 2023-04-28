@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">ETAPAS</h6>
+    <h6 class="title q-my-lg">ETAPAS</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva etapa" />
@@ -13,6 +13,7 @@
           :rows="rows"
           :columns="columns"
           row-key="name"
+          :loading="loading"
           v-model:pagination="pagination"
         />
       </div>
@@ -83,9 +84,10 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
 
-let model = ref(null);
 const options = ["1", "2", "3", "4", "5"];
+const loading = ref(false);
 
+let model = ref(null);
 let nameStages = ref("");
 let descriptionStages = ref("");
 let fatherStages = ref("");
@@ -93,19 +95,27 @@ let disableSave = computed(() => {
   return nameStages.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -113,6 +123,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "father",
@@ -120,6 +132,8 @@ const columns = ref([
     field: "father",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -127,6 +141,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -171,6 +187,7 @@ const postDataStages = async () => {
 };
 
 const getDataStages = async () => {
+  loading.value = true;
   const { stages } = await getStages();
   let count = 1;
   stages.forEach((item) => {
@@ -180,6 +197,7 @@ const getDataStages = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = stages;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -190,6 +208,9 @@ onMounted(() => {
 .text-required {
   display: inline-block;
   font-size: 12px;
+}
+.title {
+  font-size: var(--font-title);
 }
 .table-container {
   position: relative;

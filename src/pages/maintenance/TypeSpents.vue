@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">TIPOS DE GASTOS</h6>
+    <h6 class="title q-my-lg">TIPOS DE GASTOS</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear tipo de gasto" />
@@ -13,6 +13,7 @@
           :rows="rows"
           :columns="columns"
           row-key="name"
+          :loading="loading"
           v-model:pagination="pagination"
         />
       </div>
@@ -61,6 +62,7 @@ import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const modal = modalState();
+const loading = ref(false);
 
 let nameTypeSpents = ref("");
 let descriptionTypeSpents = ref("");
@@ -68,19 +70,27 @@ let disableSave = computed(() => {
   return nameTypeSpents.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -88,6 +98,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -95,6 +107,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -133,6 +147,7 @@ const postDataTypeSpents = async () => {
 };
 
 const getDataTypeSpents = async () => {
+  loading.value = true;
   const { spents } = await getTypeSpents();
   let count = 1;
   spents.forEach((item) => {
@@ -142,6 +157,7 @@ const getDataTypeSpents = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = spents;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -149,6 +165,9 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.title {
+  font-size: var(--font-title);
+}
 .text-required {
   display: inline-block;
   font-size: 12px;

@@ -44,7 +44,7 @@ const viewContainer = computed(() => {
   if (routeName.value == "sign-in") {
     return "width: 100vw; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else {
-    return "width: 80%; max-width: 1200px;";
+    return "width: 90%; max-width: 1500px;";
   }
 });
 

@@ -1,6 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">PERSONAS</h6>
+    <h6 class="title q-my-lg">PERSONAS</h6>
     <q-separator class="separator" />
     <ButtonAdd @onClick="clickButton" label="Crear nueva persona" />
     <div class="container-table q-mt-lg q-pa-md" rounded>
@@ -12,6 +12,7 @@
         :rows="rows"
         :columns="columns"
         row-key="name"
+        :loading="loading"
         v-model:pagination="pagination"
       />
     </div>
@@ -173,6 +174,7 @@ const optionsGender = ["M", "F", "I"];
 const optionsEps = ["1", "2", "3"];
 const optionsBloodType = ["a+", "a+", "ab+", "ab-", "b+", "b-", "o+", "o-"];
 const optionsPeopleType = ["1", "2", "3", "4", "5", "6"];
+const loading = ref(false);
 
 const typeDocument = ref("");
 let documentPeople = ref("");
@@ -196,13 +198,23 @@ const rules = [
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "typeDocument",
     label: "Tipo de Documento",
     field: "typeDocument",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "document",
@@ -210,6 +222,8 @@ const columns = ref([
     field: "document",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "name",
@@ -217,6 +231,8 @@ const columns = ref([
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "lastName",
@@ -224,6 +240,8 @@ const columns = ref([
     field: "lastName",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "birthDay",
@@ -231,6 +249,8 @@ const columns = ref([
     field: "birthDay",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "phone",
@@ -238,6 +258,8 @@ const columns = ref([
     field: "phone",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "gender",
@@ -245,6 +267,8 @@ const columns = ref([
     field: "gender",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "eps",
@@ -252,6 +276,8 @@ const columns = ref([
     field: "eps",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "bloodType",
@@ -259,6 +285,8 @@ const columns = ref([
     field: "bloodType",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "peopleType",
@@ -266,6 +294,8 @@ const columns = ref([
     field: "peopleType",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -273,6 +303,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -280,6 +312,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-large);",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -364,6 +398,7 @@ const postDataPeople = async () => {
 };
 
 const getDataPeople = async () => {
+  loading.value = true;
   const { people } = await getPeople();
   let count = 1;
   people.forEach((item) => {
@@ -373,6 +408,7 @@ const getDataPeople = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = people;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -380,6 +416,9 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.title {
+  font-size: var(--font-title);
+}
 .text-required {
   display: inline-block;
   font-size: 12px;
