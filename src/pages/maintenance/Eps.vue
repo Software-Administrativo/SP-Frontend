@@ -1,21 +1,36 @@
 <template>
-  <div class="q-py-md table-container">
-    <h6 class="q-my-lg">EPS</h6>
+  <div class="q-py-sm table-container">
+    <h6 class="title q-my-lg">EPS</h6>
     <q-separator class="separator" />
     <div class="container-content">
-    <ButtonAdd @onClick="clickButton" label="Crear nueva EPS" />
-    <div class="container-table q-mt-lg q-pa-md" rounded>
-      <q-table
-        class="my-sticky-header-table"
-        flat
-        bordered
-        title="EPS"
-        :rows="rows"
-        :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-      />
-    </div>
+      <ButtonAdd @onClick="clickButton" label="Crear nueva EPS" />
+      <div class="container-table q-mt-md q-pa-md" rounded>
+        <q-table
+          flat
+          bordered
+          title="EPS"
+          row-key="name"
+          :rows="rows"
+          :columns="columns"
+          :filter="filter"
+          :rows-per-page-options="[5, 10, 20]"
+          :loading="loading"
+        >
+          <template v-slot:top-right>
+            <q-input
+              borderless
+              dense
+              debounce="300"
+              v-model="filter"
+              placeholder="Search"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+        </q-table>
+      </div>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
@@ -60,36 +75,49 @@
   </template>
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue";
 import { getEps, postEps } from "@/api/maintenance/eps";
-import { modalState } from "@/stores/modal.js";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
-import ModalForm from "@/modules/global/ModalForm.vue";
-import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
+import Input from "@/commons/forms/Input.vue";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import { modalState } from "@/stores/modal.js";
+import { computed, onMounted, ref } from "vue";
 
 const modal = modalState();
+const loading = ref(false);
 
 let nameEps = ref("");
 let descriptionEps = ref("");
+<<<<<<< HEAD
 let observationEps = ref("");
+=======
+let filter = ref("");
+>>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 let disableSave = computed(() => {
   return nameEps.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -97,6 +125,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "observation",
@@ -111,6 +141,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
 ]);
 
@@ -155,6 +187,7 @@ const postDataEps = async () => {
 };
 
 const getDataEps = async () => {
+  loading.value = true;
   const { eps } = await getEps();
   let count = 1;
   eps.forEach((item) => {
@@ -166,6 +199,7 @@ const getDataEps = async () => {
       item.observation.trim() == "" ? "No registra" : item.observation;
   });
   rows.value = eps;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -184,8 +218,11 @@ onMounted(() => {
   border: 1.8px solid var(--color-gray);
 }
 .container-content {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+.title {
+  font-size: var(--font-title);
 }
 .container-table {
   border-radius: 15px;

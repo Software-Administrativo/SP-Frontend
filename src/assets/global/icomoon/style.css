@@ -1,10 +1,10 @@
 @font-face {
   font-family: "icomoon";
-  src: url("fonts/icomoon.eot?4ymxyy");
-  src: url("fonts/icomoon.eot?4ymxyy#iefix") format("embedded-opentype"),
-    url("fonts/icomoon.ttf?4ymxyy") format("truetype"),
-    url("fonts/icomoon.woff?4ymxyy") format("woff"),
-    url("fonts/icomoon.svg?4ymxyy#icomoon") format("svg");
+  src: url("fonts/icomoon.eot?9z4sq6");
+  src: url("fonts/icomoon.eot?9z4sq6#iefix") format("embedded-opentype"),
+    url("fonts/icomoon.ttf?9z4sq6") format("truetype"),
+    url("fonts/icomoon.woff?9z4sq6") format("woff"),
+    url("fonts/icomoon.svg?9z4sq6#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -26,75 +26,78 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-close:before {
+.icon-search:before {
   content: "\e900";
 }
-.icon-wineries:before {
+.icon-close:before {
   content: "\e901";
 }
-.icon-brands:before {
+.icon-wineries:before {
   content: "\e902";
 }
-.icon-categories:before {
+.icon-brands:before {
   content: "\e903";
 }
-.icon-product:before {
+.icon-categories:before {
   content: "\e904";
 }
-.icon-inventory-entries:before {
+.icon-product:before {
   content: "\e905";
 }
-.icon-inventory-adjust:before {
+.icon-inventory-entries:before {
   content: "\e906";
 }
-.icon-persons:before {
+.icon-inventory-adjust:before {
   content: "\e907";
 }
-.icon-tages:before {
+.icon-persons:before {
   content: "\e908";
 }
-.icon-type-document:before {
+.icon-tages:before {
   content: "\e909";
 }
-.icon-unit-extent:before {
+.icon-type-document:before {
   content: "\e90a";
 }
-.icon-type-labors:before {
+.icon-unit-extent:before {
   content: "\e90b";
 }
-.icon-create-estate:before {
+.icon-type-labors:before {
   content: "\e90c";
 }
-.icon-lots:before {
+.icon-create-estate:before {
   content: "\e90d";
 }
-.icon-eps:before {
+.icon-lots:before {
   content: "\e90e";
 }
-.icon-type-money:before {
+.icon-eps:before {
   content: "\e90f";
 }
-.icon-home:before {
+.icon-type-money:before {
   content: "\e910";
 }
-.icon-inventory:before {
+.icon-home:before {
   content: "\e911";
 }
-.icon-cost:before {
+.icon-inventory:before {
   content: "\e912";
 }
-.icon-transformation:before {
+.icon-cost:before {
   content: "\e913";
 }
-.icon-order:before {
+.icon-transformation:before {
   content: "\e914";
 }
-.icon-report:before {
+.icon-order:before {
   content: "\e915";
 }
-.icon-maintenance:before {
+.icon-report:before {
   content: "\e916";
 }
-.icon-system:before {
+.icon-maintenance:before {
   content: "\e917";
+}
+.icon-system:before {
+  content: "\e918";
 }

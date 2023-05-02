@@ -1,19 +1,34 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">PERSONAS</h6>
+    <h6 class="title q-my-lg">PERSONAS</h6>
     <q-separator class="separator" />
     <ButtonAdd @onClick="clickButton" label="Crear nueva persona" />
-    <div class="container-table q-mt-lg q-pa-md" rounded>
+    <div class="container-table q-mt-md q-pa-md" rounded>
       <q-table
-        class="my-sticky-header-table"
         flat
         bordered
         title="Personas"
+        row-key="name"
         :rows="rows"
         :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-      />
+        :filter="filter"
+        :loading="loading"
+        :rows-per-page-options="[5, 10, 20]"
+      >
+        <template v-slot:top-right>
+          <q-input
+            borderless
+            dense
+            debounce="300"
+            v-model="filter"
+            placeholder="Search"
+          >
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+      </q-table>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
@@ -158,14 +173,14 @@
   </template>
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue";
 import { getPeople, postPeople } from "@/api/maintenance/people";
-import { modalState } from "@/stores/modal.js";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
-import ModalForm from "@/modules/global/ModalForm.vue";
-import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
+import Input from "@/commons/forms/Input.vue";
 import Select from "@/commons/forms/Select.vue";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import { modalState } from "@/stores/modal.js";
+import { computed, onMounted, ref } from "vue";
 
 const modal = modalState();
 
@@ -173,10 +188,12 @@ const optionsGender = ["M", "F", "I"];
 const optionsEps = ["1", "2", "3"];
 const optionsBloodType = ["a+", "a+", "ab+", "ab-", "b+", "b-", "o+", "o-"];
 const optionsPeopleType = ["1", "2", "3", "4", "5", "6"];
+const loading = ref(false);
 
 const typeDocument = ref("");
 let documentPeople = ref("");
 let namePeople = ref("");
+let filter = ref("");
 let lastNamePeople = ref("");
 let birthDayPeople = ref("");
 let phonePeople = ref("");
@@ -189,27 +206,36 @@ let disableSave = computed(() => {
   return namePeople.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-  (v) => (v && v.length <= 10) || "El nombre debe tener menos de 10 caracteres",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "typeDocument",
-    label: "Tipo de Documento",
+    label: "Tipo",
     field: "typeDocument",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "document",
-    label: "Número de Documento",
+    label: "Número Documento",
     field: "document",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "name",
@@ -217,6 +243,8 @@ const columns = ref([
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "lastName",
@@ -224,6 +252,8 @@ const columns = ref([
     field: "lastName",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "birthDay",
@@ -231,6 +261,8 @@ const columns = ref([
     field: "birthDay",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "phone",
@@ -238,13 +270,8 @@ const columns = ref([
     field: "phone",
     align: "left",
     sortable: true,
-  },
-  {
-    name: "gender",
-    label: "Genero",
-    field: "gender",
-    align: "left",
-    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "eps",
@@ -252,6 +279,8 @@ const columns = ref([
     field: "eps",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "bloodType",
@@ -259,20 +288,8 @@ const columns = ref([
     field: "bloodType",
     align: "left",
     sortable: true,
-  },
-  {
-    name: "peopleType",
-    label: "Tipo de Persona",
-    field: "peopleType",
-    align: "left",
-    sortable: true,
-  },
-  {
-    name: "description",
-    label: "Descripción",
-    field: "description",
-    align: "left",
-    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -280,15 +297,10 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
 ]);
-
-const pagination = ref({
-  page: 1,
-  rowsPerPage: 10,
-  sortBy: "id",
-  descending: false,
-});
 
 const clickButton = () => {
   modal.toggleModal();
@@ -364,6 +376,7 @@ const postDataPeople = async () => {
 };
 
 const getDataPeople = async () => {
+  loading.value = true;
   const { people } = await getPeople();
   let count = 1;
   people.forEach((item) => {
@@ -373,6 +386,7 @@ const getDataPeople = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = people;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -380,6 +394,9 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.title {
+  font-size: var(--font-title);
+}
 .text-required {
   display: inline-block;
   font-size: 12px;
@@ -397,7 +414,7 @@ onMounted(() => {
 .container-table {
   border-radius: 15px;
   height: 80%;
-  max-height: 50vh;
+  max-height: 60vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
@@ -415,6 +432,16 @@ onMounted(() => {
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
+  }
+}
+@media (min-width: 621px) and (max-width: 920px) {
+  .container-table {
+    max-width: 710px;
+  }
+}
+@media (min-width: 920px) and (max-width: 1020px) {
+  .container-table {
+    max-width: 810px;
   }
 }
 </style>

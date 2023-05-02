@@ -110,7 +110,7 @@ const goToModule = (route) => {
   border: 1.8px solid var(--color-gray);
 }
 .enter-card {
-  font-size: var(--font-small);
+  font-size: var(--font-subtitle);
 }
 
 @media (max-width: 600px) {
