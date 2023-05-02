@@ -1,12 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import { useStorage } from "@/stores/localStorage.js";
-import SignInView from "@/views/SignInView.vue"
+import SignInView from "@/views/SignInView.vue";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/:catchAll(.*)", redirect: "/"
+      path: "/:catchAll(.*)",
+      redirect: "/",
     },
     {
       path: "/",
@@ -22,15 +23,15 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"),
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
-      }
+        rol: ["admin", "user"],
+      },
     },
     {
       path: "/cost",
       name: "cost",
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
+        rol: ["admin", "user"],
       },
       component: () => import("../views/CostView.vue"),
     },
@@ -40,7 +41,7 @@ const router = createRouter({
       component: () => import("../views/InventoryView.vue"),
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
+        rol: ["admin", "user"],
       },
       children: [
         {
@@ -80,7 +81,7 @@ const router = createRouter({
       name: "maintenance",
       meta: {
         requiresAuth: true,
-        rol: ['admin']
+        rol: ["admin"],
       },
       component: () => import("../views/MaintenanceView.vue"),
       children: [
@@ -120,8 +121,8 @@ const router = createRouter({
           component: () => import("../pages/maintenance/Stages.vue"),
         },
         {
-          path: 'farm',
-          name: 'maintenance-farm',
+          path: "farm",
+          name: "maintenance-farm",
           component: () => import("../pages/maintenance/Farm.vue"),
         },
         {
@@ -136,7 +137,7 @@ const router = createRouter({
       name: "order",
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
+        rol: ["admin", "user"],
       },
       component: () => import("../views/OrderView.vue"),
     },
@@ -145,7 +146,7 @@ const router = createRouter({
       name: "report",
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
+        rol: ["admin", "user"],
       },
       component: () => import("../views/ReportView.vue"),
     },
@@ -154,7 +155,7 @@ const router = createRouter({
       name: "system",
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
+        rol: ["admin", "user"],
       },
       component: () => import("../views/SystemView.vue"),
     },
@@ -163,7 +164,7 @@ const router = createRouter({
       name: "transformation",
       meta: {
         requiresAuth: true,
-        rol: ['admin', 'user']
+        rol: ["admin", "user"],
       },
       component: () => import("../views/TransformationView.vue"),
     },
@@ -181,13 +182,13 @@ router.beforeEach((to, from) => {
     } else {
       const validateToken = useStorage();
       const isValidateJWT = validateToken.decodeJwt();
-      if (!isValidateJWT){
+      if (!isValidateJWT) {
         return {
           path: "/",
-        }
+        };
       }
     }
   }
-})
+});
 
 export default router;

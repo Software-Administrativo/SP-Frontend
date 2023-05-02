@@ -36,7 +36,7 @@ const itemsListModules = ref([
   },
   {
     label: "Unidades de medida",
-    icon: "icon icon-unit-extent",
+    icon: "icon icon-search",
     name: "maintenance-units-measurement",
   },
   {

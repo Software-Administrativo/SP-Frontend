@@ -56,6 +56,7 @@ const goToModule = (route) => {
 .title {
   display: inline-block;
   margin-top: 40px;
+  font-size: var(--font-title);
 }
 .separator {
   border: 1.8px solid var(--color-gray);
@@ -64,7 +65,7 @@ const goToModule = (route) => {
 
 .icon {
   color: var(--color-blue);
-  font-size: var(--font-large);
+  font-size: var(--font-title);
   margin-left: 10px;
   padding-top: 10px;
 }

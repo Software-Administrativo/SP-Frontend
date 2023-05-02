@@ -1,20 +1,35 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="q-my-lg">UNIDADES DE MEDIDA</h6>
+    <h6 class="title q-my-lg">UNIDADES DE MEDIDA</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear unidad de medida" />
-      <div class="container-table q-mt-lg q-pa-md" rounded>
+      <div class="container-table q-mt-md q-pa-md" rounded>
         <q-table
-          class="my-sticky-header-table"
           flat
           bordered
           title="Usuarios"
+          row-key="name"
           :rows="rows"
           :columns="columns"
-          row-key="name"
-          v-model:pagination="pagination"
-        />
+          :filter="filter"
+          :loading="loading"
+          :rows-per-page-options="[5, 10, 20]"
+        >
+          <template v-slot:top-right>
+            <q-input
+              borderless
+              dense
+              debounce="300"
+              v-model="filter"
+              placeholder="Search"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+        </q-table>
       </div>
     </div>
   </div>
@@ -52,38 +67,48 @@
   </template>
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue";
 import {
   getTypeUnitsMeasurement,
   postTypeUnitsMeasurement,
 } from "@/api/maintenance/units-measurement";
-import { modalState } from "@/stores/modal.js";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
-import ModalForm from "@/modules/global/ModalForm.vue";
-import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
+import Input from "@/commons/forms/Input.vue";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import { modalState } from "@/stores/modal.js";
+import { computed, onMounted, ref } from "vue";
 
 const modal = modalState();
+const loading = ref(false);
 
 let nameUnitMeasurement = ref("");
 let descriptionUnitMeasurement = ref("");
+let filter = ref("");
 let disableSave = computed(() => {
   return nameUnitMeasurement.value == "";
 });
 
-const rules = [
-  (v) => !!v || "Este campo es requerido",
-];
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const rows = ref([]);
 const columns = ref([
-  { name: "id", label: "#", field: "id", align: "left", sortable: true },
+  {
+    name: "id",
+    label: "#",
+    field: "id",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
+  },
   {
     name: "name",
     label: "Nombre",
     field: "name",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "description",
@@ -91,6 +116,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -98,15 +125,10 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
 ]);
-
-const pagination = ref({
-  page: 1,
-  rowsPerPage: 10,
-  sortBy: "id",
-  descending: false,
-});
 
 const clickButton = () => {
   modal.toggleModal();
@@ -136,6 +158,7 @@ const postDataUnitMeasurement = async () => {
 };
 
 const getDataUnitMeasurement = async () => {
+  loading.value = true;
   const { unittypes } = await getTypeUnitsMeasurement();
   let count = 1;
   unittypes.forEach((item) => {
@@ -145,6 +168,7 @@ const getDataUnitMeasurement = async () => {
       item.description.trim() == "" ? "No registra" : item.description;
   });
   rows.value = unittypes;
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -152,6 +176,9 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.title {
+  font-size: var(--font-title);
+}
 .text-required {
   display: inline-block;
   font-size: 12px;
@@ -163,13 +190,13 @@ onMounted(() => {
   border: 1.8px solid var(--color-gray);
 }
 .container-content {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .container-table {
   border-radius: 15px;
   height: 80%;
-  max-height: 60vh;
+  max-height: 70vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;

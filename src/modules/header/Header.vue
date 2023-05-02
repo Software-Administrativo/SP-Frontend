@@ -25,7 +25,7 @@
 
 <script setup>
 import { menuState } from "@/stores/menu";
-import { useStorage } from "@/stores/localStorage"
+import { useStorage } from "@/stores/localStorage";
 
 const storage = useStorage();
 
@@ -39,7 +39,7 @@ const logoutSession = () => {
     menu.toggleMenu();
   }
   storage.deleteStorage();
-}
+};
 </script>
 
 <style scoped>

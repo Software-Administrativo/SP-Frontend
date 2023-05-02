@@ -1,4 +1,4 @@
 import { RESPONSES } from "./constants";
-import { getToken } from "./token.js"
+import { getToken } from "./token.js";
 
-export { RESPONSES, getToken }
+export { RESPONSES, getToken };

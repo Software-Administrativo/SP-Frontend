@@ -1,16 +1,24 @@
 <template>
   <div class="sidebar">
-    <img src="../../assets/sidebar/user-image.svg" class="icon-user q-pt-md" width="40" />
+    <img
+      src="../../assets/sidebar/user-image.svg"
+      class="icon-user q-pt-md"
+      width="40"
+    />
     <h6 class="name-user text-center q-ma-none q-pb-sm">Laura Susano</h6>
     <q-separator class="separator" />
     <div v-for="item in paths" :key="item.name" @click="clickRoute">
       <RouterLink class="item" :to="item.path">
-        <i v-bind:class="item.icon"></i>
+        <i class="icon-module" v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
       </RouterLink>
       <q-separator class="separator" />
     </div>
-    <img src="../../assets/global/project-logo.svg" alt="logo" class="logo-global" />
+    <img
+      src="../../assets/global/project-logo.svg"
+      alt="logo"
+      class="logo-global"
+    />
   </div>
 </template>
 
@@ -25,49 +33,49 @@ const paths = [
     name: "Inicio",
     path: "/home",
     icon: "icon icon-home",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Mantenimiento",
     path: "/maintenance",
     icon: "icon icon-maintenance",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Inventario",
     path: "/inventory",
     icon: "icon icon-inventory",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Costos",
     path: "/cost",
     icon: "icon icon-cost",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Pedidos",
     path: "/order",
     icon: "icon icon-order",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Transformación",
     path: "/transformation",
     icon: "icon icon-transformation",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Reportes",
     path: "/report",
     icon: "icon icon-report",
-    rol: ['admin', 'user'],
+    rol: ["admin", "user"],
   },
   {
     name: "Acceso al sistema",
     path: "/system",
     icon: "icon icon-system",
-    rol: ['admin'],
+    rol: ["admin"],
   },
 ];
 
@@ -115,7 +123,7 @@ const clickRoute = computed(() => {
 
 .name {
   margin-left: 20px !important;
-  font-size: var(--font-small);
+  font-size: 16px;
   margin: 3px;
 }
 
@@ -124,7 +132,7 @@ const clickRoute = computed(() => {
 }
 
 .name-user {
-  font-size: var(--font-small);
+  font-size: 15px;
 }
 
 .logo-global {
