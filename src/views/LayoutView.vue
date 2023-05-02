@@ -18,12 +18,11 @@
 </template>
 
 <script setup>
-import { RouterView } from "vue-router";
+import Header from "@/modules/header/Header.vue";
+import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import { menuState } from "@/stores/menu";
 import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
-import Sidebar from "@/modules/sidebar/Sidebar.vue";
-import Header from "@/modules/header/Header.vue";
+import { RouterView, useRoute } from "vue-router";
 
 const menu = menuState();
 const showRouter = ref();
@@ -48,14 +47,17 @@ const viewContainer = computed(() => {
   }
 });
 
-function clickButton(event){
-  menu.toggleMenu();
+function clickButton() {
+  if (window.screen.width < 680) {
+    if (menu.menuIsOpen) {
+      menu.toggleMenu();
+    }
+  }
 }
 
 const sidebar = computed(() => {
   if (window.screen.width < 680) {
     if (menu.menuIsOpen) {
-      showRouter.value = false;
       return "width: 100%";
     }
   }
@@ -66,6 +68,6 @@ const sidebar = computed(() => {
 .container-view {
   width: 100vw;
   height: 100vh;
-  overflow:hidden;
+  overflow: hidden;
 }
 </style>

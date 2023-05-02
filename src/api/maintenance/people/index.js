@@ -16,14 +16,14 @@ const getPeople = async () => {
 const postPeople = async (type) => {
   try {
     const { data } = await sugarAxios.post(`/maintenance/people/register`, {
-      document: type.document,  
+      document: type.document,
       name: type.name,
       lastName: type.lastName,
       description: type.description,
       birthDate: type.birthDate,
       phone: type.phone,
       bloodType: type.bloodType,
-      peopleType: type.peopleType
+      peopleType: type.peopleType,
     });
     return data;
   } catch (error) {

@@ -2,8 +2,8 @@
 import { createApp } from "vue";
 import { Quasar, Dialog } from "quasar";
 import { createPinia } from "pinia";
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-import quasarLang from 'quasar/lang/es';
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+import quasarLang from "quasar/lang/es";
 
 // Import Quasar css
 import "quasar/dist/quasar.css";
@@ -17,11 +17,11 @@ import router from "./routes";
 
 // Pinia para manejar el estado de la aplicación
 const pinia = createPinia();
-pinia.use(piniaPluginPersistedstate)
+pinia.use(piniaPluginPersistedstate);
 
 // Crear la instancia de Vue y pasarle el router y quasar
 const myApp = createApp(App)
-  .use(Quasar, { plugins: { Dialog }, lang: quasarLang }, )
+  .use(Quasar, { plugins: { Dialog }, lang: quasarLang })
   .use(router)
   .use(pinia);
 

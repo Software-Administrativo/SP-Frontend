@@ -121,7 +121,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.title{
+.title {
   font-size: var(--font-title);
 }
 .table-container {

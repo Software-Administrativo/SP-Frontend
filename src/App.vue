@@ -17,9 +17,10 @@ import Layout from "./views/LayoutView.vue";
 :root {
   --color-blue: #2766a9;
   --color-gray: #e9eaec;
+  --font-small: 12px;
   --font-medium: 16px;
   --font-large: 23px;
-  --font-subtitle: 20px;
+  --font-subtitle: 16px;
   --font-title: 28px;
 }
 

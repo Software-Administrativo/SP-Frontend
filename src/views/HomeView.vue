@@ -9,7 +9,7 @@
 import Cards from "@/modules/home/Cards.vue";
 </script>
 <style scoped>
-.title{
+.title {
   font-size: var(--font-title);
 }
 .separator {

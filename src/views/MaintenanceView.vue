@@ -37,7 +37,7 @@ const itemsListModules = ref([
   {
     label: "Unidades de medida",
     icon: "icon icon-search",
-    name: "maintenance-search",
+    name: "maintenance-units-measurement",
   },
   {
     label: "EPS",

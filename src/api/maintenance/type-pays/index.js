@@ -1,19 +1,17 @@
 import { sugarAxios } from "../../global";
-import { getToken } from '@/helpers'
+import { getToken } from "@/helpers";
 
 /**
  * data: data type pays
  * @returns API Response, with the data of the type pays
  */
 
-
 const getTypePays = async () => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.get(`/maintenance/pays`, {
       headers: {
-        token:
-          tokenExist,
+        token: tokenExist,
       },
     });
     return data;
