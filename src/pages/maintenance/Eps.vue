@@ -39,7 +39,6 @@
       <div class="row q-px-xl">
         <div class="col-12">
           <Input
-            class="q-pb-xs"
             label="Nombre"
             :required="true"
             type="text"
@@ -48,13 +47,20 @@
             @onWrite="getInputName"
           />
           <Input
-            class="q-pb-xs"
+            class="q-mb-md"
             label="Descripción"
             type="text"
             :required="false"
-            :ruless="rules"
             v-model="descriptionEps"
             @onWrite="getInputDescription"
+          />
+          <Input
+            class="q-pb-xs"
+            label="Observación"
+            type="text"
+            :required="false"
+            v-model="observationEps"
+            @onWrite="getInputObservation"
           />
           <span class="text-required q-pb-sm"
             >Todos los campos con <span class="text-red">*</span> son
@@ -82,7 +88,11 @@ const loading = ref(false);
 
 let nameEps = ref("");
 let descriptionEps = ref("");
+<<<<<<< HEAD
+let observationEps = ref("");
+=======
 let filter = ref("");
+>>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 let disableSave = computed(() => {
   return nameEps.value == "";
 });
@@ -119,6 +129,13 @@ const columns = ref([
     style: "font-size: var(--font-medium);",
   },
   {
+    name: "observation",
+    label: "Observación",
+    field: "observation",
+    align: "left",
+    sortable: true,
+  },
+  {
     name: "status",
     label: "Estado",
     field: "status",
@@ -151,16 +168,20 @@ const getInputDescription = (value) => {
   descriptionEps.value = value;
 };
 
+const getInputObservation = (value) => {
+  observationEps.value = value;
+}
+
 const saveInfo = () => {
   postDataEps();
   modal.toggleModal();
 };
 
 const postDataEps = async () => {
-  //falta peticion del backend
   const { eps } = await postEps({
     name: nameEps.value,
     description: descriptionEps.value,
+    observation: observationEps.value
   });
   getDataEps();
 };
@@ -174,6 +195,8 @@ const getDataEps = async () => {
     item.id = count++;
     item.description =
       item.description.trim() == "" ? "No registra" : item.description;
+    item.observation =
+      item.observation.trim() == "" ? "No registra" : item.observation;
   });
   rows.value = eps;
   loading.value = false;

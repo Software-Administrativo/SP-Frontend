@@ -44,15 +44,16 @@
             :required="true"
             type="text"
             :ruless="rules"
-            v-model="nameUnitMeasurement"
+            v-model="nameUnitsMeasurement"
             @onWrite="getInputName"
           />
           <Input
-            label="Descripción"
+            label="Tipo de Unidad"   
+            :required="true"
             type="text"
-            :required="false"
-            v-model="descriptionUnitMeasurement"
-            @onWrite="getInputDescription"
+            :ruless="rules"
+            v-model="unittypeUnitsMeasurement"
+            @onWrite="getInputunittype"
           />
           <span class="text-required q-pb-sm"
             >Todos los campos con <span class="text-red">*</span> son
@@ -81,11 +82,16 @@ import { computed, onMounted, ref } from "vue";
 const modal = modalState();
 const loading = ref(false);
 
+<<<<<<< HEAD
+let nameUnitsMeasurement = ref("");
+let unittypeUnitsMeasurement = ref("");
+=======
 let nameUnitMeasurement = ref("");
 let descriptionUnitMeasurement = ref("");
 let filter = ref("");
+>>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 let disableSave = computed(() => {
-  return nameUnitMeasurement.value == "";
+  return (nameUnitsMeasurement.value == "" || unittypeUnitsMeasurement.value == "");
 });
 
 const rules = [(v) => !!v || "Este campo es requerido"];
@@ -111,9 +117,9 @@ const columns = ref([
     style: "font-size: var(--font-medium);",
   },
   {
-    name: "description",
-    label: "Descripción",
-    field: "description",
+    name: "unittype",
+    label: "Tipo de unidad",
+    field: "unittype",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-medium); font-weight: bold;",
@@ -132,47 +138,55 @@ const columns = ref([
 
 const clickButton = () => {
   modal.toggleModal();
-  nameUnitMeasurement.value = "";
-  descriptionUnitMeasurement.value = "";
+  nameUnitsMeasurement.value = "";
+  unittypeUnitsMeasurement.value = "";
 };
 
 const getInputName = (value) => {
-  nameUnitMeasurement.value = value;
+  nameUnitsMeasurement.value = value;
 };
 
-const getInputDescription = (value) => {
-  descriptionUnitMeasurement.value = value;
+const getInputunittype = (value) => {
+  unittypeUnitsMeasurement.value = value;
 };
 
 const saveInfo = () => {
-  postDataUnitMeasurement();
+  postDataUnitsMeasurement();
   modal.toggleModal();
 };
 
-const postDataUnitMeasurement = async () => {
-  const { unittypes } = await postTypeUnitsMeasurement({
-    name: nameUnitMeasurement.value,
-    description: descriptionUnitMeasurement.value,
+const postDataUnitsMeasurement = async () => {
+  const { unitType } = await postTypeUnitsMeasurement({
+    name: nameUnitsMeasurement.value,
+    unittype: unittypeUnitsMeasurement.value,
   });
-  getDataUnitMeasurement();
+  getDataUnitsMeasurement();
 };
 
+<<<<<<< HEAD
+const getDataUnitsMeasurement = async () => {
+  const { unitType } = await getTypeUnitsMeasurement();
+=======
 const getDataUnitMeasurement = async () => {
   loading.value = true;
   const { unittypes } = await getTypeUnitsMeasurement();
+>>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
   let count = 1;
-  unittypes.forEach((item) => {
+  console.log(unitType);
+  unitType.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
-    item.description =
-      item.description.trim() == "" ? "No registra" : item.description;
   });
+<<<<<<< HEAD
+  rows.value = unitType;
+=======
   rows.value = unittypes;
   loading.value = false;
+>>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 };
 
 onMounted(() => {
-  getDataUnitMeasurement();
+  getDataUnitsMeasurement();
 });
 </script>
 <style scoped>
