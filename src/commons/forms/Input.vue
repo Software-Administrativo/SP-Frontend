@@ -19,8 +19,13 @@
 import { ref, watch } from "vue";
 
 // Data
-const data = ref("");
+const data = ref(props.value);
 
+watch(() => props.value, (newValue) => {
+  data.value = newValue;
+});
+
+// Props
 const props = defineProps({
   type: {
     type: String,
@@ -44,12 +49,19 @@ const props = defineProps({
     required: false,
     default: () => [],
   },
+  value: {
+    type: String,
+    required: false,
+    default: "",
+  },
 });
 
+// Emits
 const emits = defineEmits({
   onWrite: null,
 });
 
+// Watchers
 watch(data, () => {
   emits("onWrite", data.value);
 });

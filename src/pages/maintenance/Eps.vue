@@ -143,14 +143,7 @@ const columns = ref([
     headerStyle: "font-size: var(--font-medium); font-weight: bold;",
     style: "font-size: var(--font-medium);",
   },
-]);
-
-const pagination = ref({
-  page: 1,
-  rowsPerPage: 10,
-  sortBy: "id",
-  descending: false,
-});
+]);s
 
 const clickButton = () => {
   modal.toggleModal();

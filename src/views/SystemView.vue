@@ -97,7 +97,7 @@
                     <template v-slot:append>
                       <q-icon name="search" />
                     </template>
-                  </q-input>
+                  </q-input>´
                 </template>
                 <template v-slot:body-cell-Acciones="props">
                   <td
@@ -130,7 +130,10 @@
 <script setup>
 import { activeUser, getUsers, inactiveUser } from "@/api/system";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
-import { onMounted, ref, watch } from "vue";
+import { useQuasar } from "quasar";
+import { onMounted, ref } from "vue";
+
+const $q = useQuasar();
 
 let filter = ref("");
 
@@ -138,16 +141,6 @@ const rows = ref([]);
 const inactiveRows = ref([]);
 const loading = ref(false);
 let tab = ref("active");
-
-watch(tab, (newTab, oldTab) => {
-  if (newTab === "active") {
-    rows.value = [];
-    getDataUsers();
-  } else if (newTab === "inactive") {
-    inactiveRows.value = [];
-    getDataUsers();
-  }
-});
 
 const columns = ref([
   {
@@ -215,6 +208,16 @@ const columns = ref([
   },
 ]);
 
+// watch(tab, (newTab, oldTab) => {
+//   if (newTab === "active") {
+//     rows.value = [];
+//     getDataUsers();
+//   } else if (newTab === "inactive") {
+//     inactiveRows.value = [];
+//     getDataUsers();
+//   }
+// });
+
 const clickButton = (event) => {
   console.log(event);
 };
@@ -242,11 +245,42 @@ function editSystemUser(id) {
 }
 
 function inactiveSystemUser(id) {
-  inactiveUser(id);
+  try {
+    inactiveUser(id);
+    $q.notify({
+      type: "positive",
+      message: "Usuario inactivado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataUsers();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+      position: "top",
+    });
+  }
 }
 
 function activeSystemUser(id) {
-  activeUser(id);
+  try {
+    activeUser(id);
+    $q.notify({
+      type: "positive",
+      message: "Usuario activado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataUsers();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+    });
+  }
 }
 
 onMounted(() => {

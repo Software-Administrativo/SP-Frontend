@@ -1,5 +1,5 @@
-import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
+import { sugarAxios } from "../../global";
 
 /**
  * data: data type pays
@@ -41,4 +41,64 @@ const postTypePays = async (type) => {
   }
 };
 
-export { getTypePays, postTypePays };
+const updateTypePay = async (item) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/pays/update/${item.id}`,
+      {
+        name: item.name,
+        description: item.description,
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const inactiveTypePay = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/pays/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activeTypePay = async (id) => {
+  console.log(id);
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/pays/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+export { getTypePays, postTypePays, inactiveTypePay, activeTypePay, updateTypePay };
+
