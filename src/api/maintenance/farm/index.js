@@ -1,5 +1,5 @@
 import { sugarAxios } from "../../global";
-import { getToken } from '@/helpers'
+import { getToken } from "@/helpers";
 
 /**
  * data: data farm
@@ -8,10 +8,9 @@ import { getToken } from '@/helpers'
 const getFarm = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/maintenance/farm`,{
+    const { data } = await sugarAxios.get(`/maintenance/farm`, {
       headers: {
-        token:
-          tokenExist,
+        token: tokenExist,
       },
     });
     return data;
@@ -23,18 +22,21 @@ const getFarm = async () => {
 const postFarm = async (type) => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.post(`/maintenance/farm/register`, {
-      name: type.name,
-      description: type.description,
-      nit: type.nit,
-      ubication: type.ubication,
-      miniumExistence: type.miniumExistence
-    },{
-      headers: {
-        token:
-          tokenExist,
+    const { data } = await sugarAxios.post(
+      `/maintenance/farm/register`,
+      {
+        name: type.name,
+        description: type.description,
+        nit: type.nit,
+        ubication: type.ubication,
+        miniumExistence: type.miniumExistence,
       },
-    });
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
     return data;
   } catch (error) {
     console.error(error);

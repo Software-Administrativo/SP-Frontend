@@ -1,3 +1,4 @@
+import { getToken } from "@/helpers";
 import { sugarAxios } from "../global";
 
 /**
@@ -6,10 +7,10 @@ import { sugarAxios } from "../global";
  */
 const getUsers = async () => {
   try {
+    const tokenExist = getToken();
     const { data } = await sugarAxios.get(`/users`, {
       headers: {
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NDU5MTllODFkMjcxMjk4MGUyYmZmZCIsInJvbCI6IkFETUlOIiwiaWF0IjoxNjgyNDM0NTA1LCJleHAiOjE2ODUwMjY1MDV9.epJzUa97YpVVH1CAJkNj5I9G1zowY5YqwlIiaJGN_HI",
+        token: tokenExist,
       },
     });
     return data;
@@ -18,4 +19,41 @@ const getUsers = async () => {
   }
 };
 
-export { getUsers };
+const inactiveUser = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/users/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activeUser = async (id) => {
+  console.log(id);
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/users/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getUsers, inactiveUser, activeUser };

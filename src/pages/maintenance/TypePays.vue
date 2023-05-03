@@ -5,37 +5,130 @@
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear tipo de pago" />
       <div class="container-table q-mt-md q-pa-md" rounded>
-        <q-table
-          flat
-          bordered
-          title="Pagos"
-          row-key="name"
-          :rows="rows"
-          :columns="columns"
-          :filter="filter"
-          :loading="loading"
-          :rows-per-page-options="[5, 10, 20]"
-        >
-          <template v-slot:top-right>
-            <q-input
-              borderless
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Search"
-            >
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-        </q-table>
+        <q-card>
+          <q-tabs
+            v-model="tab"
+            dense
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator
+          >
+            <q-tab name="active" label="Activos" />
+            <q-tab name="inactive" label="Inactivos" />
+          </q-tabs>
+
+          <q-separator />
+
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel name="active">
+              <q-table
+                flat
+                bordered
+                title="Pagos"
+                row-key="name"
+                :rows="rows"
+                :columns="columns"
+                :filter="filter"
+                :loading="loading"
+                :rows-per-page-options="[5, 10, 20]"
+              >
+                <template v-slot:top-right>
+                  <q-input
+                    borderless
+                    dense
+                    debounce="300"
+                    v-model="filter"
+                    placeholder="Search"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </template>
+                <template v-slot:body-cell-Acciones="props">
+                  <td
+                    style="
+                      padding: 0px;
+                      margin: 0px;
+                      min-width: 100px;
+                      max-width: 100px;
+                    "
+                  >
+                    <q-btn-group class="full-width full-height" outline square>
+                      <q-btn
+                        icon="edit_note"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none"
+                        @click="editPayMaintenance(props.row)"
+                      />
+                      <q-btn
+                        icon="highlight_off"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none"
+                        @click="inactivePayMaintenance(props.row._id)"
+                      />
+                    </q-btn-group>
+                  </td>
+                </template>
+              </q-table>
+            </q-tab-panel>
+            <q-tab-panel name="inactive">
+              <q-table
+                flat
+                bordered
+                title="Pagos"
+                row-key="name"
+                :rows="inactiveRows"
+                :columns="columns"
+                :filter="filter"
+                :loading="loading"
+                :rows-per-page-options="[5, 10, 20]"
+              >
+                <template v-slot:top-right>
+                  <q-input
+                    borderless
+                    dense
+                    debounce="300"
+                    v-model="filter"
+                    placeholder="Search"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </template>
+                <template v-slot:body-cell-Acciones="props">
+                  <td
+                    style="
+                      padding: 0px;
+                      margin: 0px;
+                      min-width: 100px;
+                      max-width: 20px;
+                    "
+                  >
+                    <q-btn-group class="full-width full-height" outline square>
+                      <q-btn
+                        text-color="blue-10"
+                        class="col q-pa-none"
+                        @click="activePayMaintenance(props.row._id)"
+                      >
+                        <i class="icon icon-check"></i>
+                      </q-btn>
+                    </q-btn-group>
+                  </td>
+                </template>
+              </q-table>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card>
       </div>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm>
-      <h6 class="q-my-md text-center">REGISTRAR PAGO</h6>
+      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
       <div class="row q-px-xl">
         <div class="col-12">
           <Input
@@ -44,6 +137,7 @@
             :required="true"
             type="text"
             :ruless="rules"
+            :value="valueInputName"
             v-model="nameTypePays"
             @onWrite="getInputName"
           />
@@ -51,6 +145,7 @@
             label="Descripción"
             type="text"
             :required="false"
+            :value="valueInputDescription"
             v-model="descriptionTypePays"
             @onWrite="getInputDescription"
           />
@@ -59,7 +154,16 @@
             obligatorios</span
           >
           <div class="row justify-center">
-            <ButtonSave :disable="disableSave" @onClick="saveInfo" />
+            <ButtonSave
+              v-if="typeAction"
+              :disable="disableSave"
+              @onClick="postDataTypePays"
+            />
+            <ButtonSave
+              v-else
+              :disable="disableSave"
+              @onClick="updateDataTypePays"
+            />
           </div>
         </div>
       </div>
@@ -67,27 +171,43 @@
   </template>
 </template>
 <script setup>
-import { getTypePays, postTypePays } from "@/api/maintenance/type-pays";
+import {
+activeTypePay,
+getTypePays,
+inactiveTypePay,
+postTypePays,
+updateTypePay,
+} from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
+import { useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
 const modal = modalState();
+const titleModal = ref("");
 const loading = ref(false);
+const typeAction = ref(true);
+const rows = ref([]);
+const inactiveRows = ref([]);
+const idTypePays = ref();
 
-let nameTypePays = ref("");
-let descriptionTypePays = ref("");
-let filter = ref("");
-let disableSave = computed(() => {
+const disableSave = computed(() => {
   return nameTypePays.value == "";
 });
-
 const rules = [(v) => !!v || "Este campo es requerido"];
 
-const rows = ref([]);
+let filter = ref("");
+let nameTypePays = ref("");
+let descriptionTypePays = ref("");
+let valueInputName = ref("");
+let valueInputDescription = ref("");
+let tab = ref("active");
+
+const $q = useQuasar();
+
 const columns = ref([
   {
     name: "id",
@@ -125,9 +245,22 @@ const columns = ref([
     headerStyle: "font-size: var(--font-medium); font-weight: bold;",
     style: "font-size: var(--font-medium);",
   },
+  {
+    name: "Acciones",
+    label: "Acciones",
+    field: "acciones",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
+  },
 ]);
 
 const clickButton = () => {
+  titleModal.value = "REGISTRAR TIPO DE PAGO";
+  valueInputDescription.value = "";
+  valueInputName.value = "";
+  typeAction.value = true;
   modal.toggleModal();
   nameTypePays.value = "";
   descriptionTypePays.value = "";
@@ -141,32 +274,129 @@ const getInputDescription = (value) => {
   descriptionTypePays.value = value;
 };
 
-const saveInfo = () => {
-  postDataTypePays();
+const editPayMaintenance = (item) => {
+  titleModal.value = "EDITAR TIPO DE PAGO";
+  typeAction.value = false;
+  idTypePays.value = item._id;
+  valueInputDescription.value = item.description;
+  valueInputName.value = item.name;
+
   modal.toggleModal();
 };
 
-const postDataTypePays = async () => {
-  const { pays } = await postTypePays({
-    name: nameTypePays.value,
-    description: descriptionTypePays.value,
-  });
-  getDataTypePays();
-};
+async function inactivePayMaintenance(id) {
+  try {
+    const inactive = await inactiveTypePay(id);
+    $q.notify({
+      type: "positive",
+      message: "Tipo de pago inactivado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataTypePays();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "No se pudo inactivar el tipo de pago",
+      position: "top",
+    });
+  }
+}
 
-const getDataTypePays = async () => {
+async function postDataTypePays() {
+  modal.toggleModal();
+  try {
+    const pays = await postTypePays({
+      name: nameTypePays.value,
+      description: descriptionTypePays.value,
+    });
+    $q.notify({
+      type: "positive",
+      message: "Tipo de pago registrado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    getDataTypePays();
+  } catch {
+    $q.notify({
+      type: "negative",
+      message: "No se pudo registrar el tipo de pago",
+      position: "top",
+    });
+  }
+}
+
+async function getDataTypePays() {
   loading.value = true;
-  const { pays } = await getTypePays();
-  let count = 1;
-  pays.forEach((item) => {
-    item.status = item.status ? "Inactivo" : "Activo";
-    item.id = count++;
-    item.description =
-      item.description.trim() == "" ? "No registra" : item.description;
-  });
-  rows.value = pays;
-  loading.value = false;
-};
+  try {
+    const { pays } = await getTypePays();
+    let countActive = 1;
+    let countInactive = 1;
+    pays.forEach((item) => {
+      item.status = item.status ? "Inactivo" : "Activo";
+      if (item.status == "Activo") {
+        item.id = countActive++;
+        rows.value.push(item);
+      } else {
+        item.id = countInactive++;
+        inactiveRows.value.push(item);
+      }
+      item.description =
+        item.description.trim() == "" ? "No registra" : item.description;
+    });
+    loading.value = false;
+  } catch {
+    $q.notify({
+      type: "negative",
+      message: "No se pudo obtener los tipos de pago",
+      position: "top",
+    });
+  }
+}
+
+async function updateDataTypePays() {
+  try {
+    const response = await updateTypePay({
+      id: idTypePays.value,
+      name: nameTypePays.value,
+      description: descriptionTypePays.value,
+    });
+    $q.notify({
+      type: "positive",
+      position: "top",
+      message: "Tipo de pago actualizado correctamente",
+    });
+    modal.toggleModal();
+    rows.value = [];
+    getDataTypePays();
+  } catch {
+    $q.notify({
+      type: "negative",
+      position: "top",
+      message: "No se pudo actualizar el tipo de pago",
+    });
+  }
+}
+
+async function activePayMaintenance(id) {
+  try {
+    const active = await activeTypePay(id);
+    $q.notify({
+      type: "positive",
+      message: "Tipo de pago activado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataTypePays();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+    });
+  }
+}
 
 onMounted(() => {
   getDataTypePays();
@@ -189,6 +419,9 @@ onMounted(() => {
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
+}
+.icon {
+  font-size: 1.5rem;
 }
 .container-table {
   border-radius: 15px;

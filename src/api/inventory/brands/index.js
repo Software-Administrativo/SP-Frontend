@@ -1,5 +1,5 @@
 import { sugarAxios } from "../../global";
-import { getToken } from '@/helpers'
+import { getToken } from "@/helpers";
 
 /**
  * data: data type brands
@@ -10,8 +10,7 @@ const getBrands = async () => {
     const tokenExist = getToken();
     const { data } = await sugarAxios.get(`/inventory/brands`, {
       headers: {
-        token:
-          tokenExist,
+        token: tokenExist,
       },
     });
     return data;
@@ -23,15 +22,18 @@ const getBrands = async () => {
 const postBrands = async (type) => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.post(`/inventory/brands/register`, {
-      name: type.name,
-      description: type.description
-    },{
-      headers: {
-        token:
-          tokenExist,
+    const { data } = await sugarAxios.post(
+      `/inventory/brands/register`,
+      {
+        name: type.name,
+        description: type.description,
       },
-    });
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
     return data;
   } catch (error) {
     console.error(error);
