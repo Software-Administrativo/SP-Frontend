@@ -88,11 +88,8 @@ const loading = ref(false);
 
 let nameEps = ref("");
 let descriptionEps = ref("");
-<<<<<<< HEAD
 let observationEps = ref("");
-=======
 let filter = ref("");
->>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 let disableSave = computed(() => {
   return nameEps.value == "";
 });
@@ -134,6 +131,8 @@ const columns = ref([
     field: "observation",
     align: "left",
     sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
   },
   {
     name: "status",
@@ -170,7 +169,7 @@ const getInputDescription = (value) => {
 
 const getInputObservation = (value) => {
   observationEps.value = value;
-}
+};
 
 const saveInfo = () => {
   postDataEps();
@@ -181,7 +180,7 @@ const postDataEps = async () => {
   const { eps } = await postEps({
     name: nameEps.value,
     description: descriptionEps.value,
-    observation: observationEps.value
+    observation: observationEps.value,
   });
   getDataEps();
 };

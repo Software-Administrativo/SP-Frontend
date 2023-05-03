@@ -1,5 +1,5 @@
 import { sugarAxios } from "../../global";
-import { getToken } from '@/helpers'
+import { getToken } from "@/helpers";
 
 /**
  * data: data units measurement
@@ -8,10 +8,9 @@ import { getToken } from '@/helpers'
 const getTypeUnitsMeasurement = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/maintenance/unittypes`,{
+    const { data } = await sugarAxios.get(`/maintenance/unittypes`, {
       headers: {
-        token:
-          tokenExist,
+        token: tokenExist,
       },
     });
     return data;
@@ -23,15 +22,18 @@ const getTypeUnitsMeasurement = async () => {
 const postTypeUnitsMeasurement = async (type) => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.post(`/maintenance/unittypes/register`, {
-      name: type.name,
-      unittype: type.unittype
-    },{
-      headers: {
-        token:
-          tokenExist,
+    const { data } = await sugarAxios.post(
+      `/maintenance/unittypes/register`,
+      {
+        name: type.name,
+        unittype: type.unittype,
       },
-    });
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
     return data;
   } catch (error) {
     console.error(error);

@@ -48,11 +48,11 @@
             @onWrite="getInputName"
           />
           <Input
-            label="Tipo de Unidad"   
+            label="Tipo de Unidad"
             :required="true"
             type="text"
             :ruless="rules"
-            v-model="unittypeUnitsMeasurement"
+            v-model="unitTypeUnitsMeasurement"
             @onWrite="getInputunittype"
           />
           <span class="text-required q-pb-sm"
@@ -82,16 +82,13 @@ import { computed, onMounted, ref } from "vue";
 const modal = modalState();
 const loading = ref(false);
 
-<<<<<<< HEAD
 let nameUnitsMeasurement = ref("");
-let unittypeUnitsMeasurement = ref("");
-=======
-let nameUnitMeasurement = ref("");
-let descriptionUnitMeasurement = ref("");
+let unitTypeUnitsMeasurement = ref("");
 let filter = ref("");
->>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 let disableSave = computed(() => {
-  return (nameUnitsMeasurement.value == "" || unittypeUnitsMeasurement.value == "");
+  return (
+    nameUnitsMeasurement.value == "" || unitTypeUnitsMeasurement.value == ""
+  );
 });
 
 const rules = [(v) => !!v || "Este campo es requerido"];
@@ -139,7 +136,7 @@ const columns = ref([
 const clickButton = () => {
   modal.toggleModal();
   nameUnitsMeasurement.value = "";
-  unittypeUnitsMeasurement.value = "";
+  unitTypeUnitsMeasurement.value = "";
 };
 
 const getInputName = (value) => {
@@ -147,7 +144,7 @@ const getInputName = (value) => {
 };
 
 const getInputunittype = (value) => {
-  unittypeUnitsMeasurement.value = value;
+  unitTypeUnitsMeasurement.value = value;
 };
 
 const saveInfo = () => {
@@ -158,31 +155,21 @@ const saveInfo = () => {
 const postDataUnitsMeasurement = async () => {
   const { unitType } = await postTypeUnitsMeasurement({
     name: nameUnitsMeasurement.value,
-    unittype: unittypeUnitsMeasurement.value,
+    unittype: unitTypeUnitsMeasurement.value,
   });
   getDataUnitsMeasurement();
 };
 
-<<<<<<< HEAD
 const getDataUnitsMeasurement = async () => {
-  const { unitType } = await getTypeUnitsMeasurement();
-=======
-const getDataUnitMeasurement = async () => {
   loading.value = true;
-  const { unittypes } = await getTypeUnitsMeasurement();
->>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
+  const { unitType } = await getTypeUnitsMeasurement();
   let count = 1;
-  console.log(unitType);
   unitType.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
     item.id = count++;
   });
-<<<<<<< HEAD
   rows.value = unitType;
-=======
-  rows.value = unittypes;
   loading.value = false;
->>>>>>> c578c1e4546632a48fe4643d6f866ce7f05e47eb
 };
 
 onMounted(() => {
