@@ -1,6 +1,9 @@
 <template>
   <div :style="props.styles">
-    <label for="type">{{ props.label }}</label>
+    <label for="type"
+      >{{ props.label
+      }}<span class="text-red">{{ props.required ? "*" : "" }}</span></label
+    >
     <q-select
       class="q-pa-none"
       dense
@@ -33,6 +36,16 @@ const props = defineProps({
     type: Object,
     required: false,
   },
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  ruler: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
 });
 
 const emits = defineEmits({
@@ -50,8 +63,8 @@ onMounted(() => {
     // AQUI HACEMOS LA PETICION AL BACKEND PARA TRAER LOS DOCUMENTOS
     // types.value = await getAllDocuments()
     types.value = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
-  } else if (props.type === "pays") {
-    types.value = ["debito", "credito"].map((item) => {
+  } else if (props.type === "roles") {
+    types.value = ["ADMIN"].map((item) => {
       return `${item[0].toUpperCase()}${item.slice(1)}`;
     });
   }

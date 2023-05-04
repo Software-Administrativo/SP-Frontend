@@ -19,6 +19,31 @@ const getUsers = async () => {
   }
 };
 
+const postUser = async (type) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.post(
+      `/users/register`,
+      {
+        name: type.name,
+        tpdocument: type.tpdocument,
+        numdocument: type.numdocument,
+        role: type.role,
+        password: type.password
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
 const inactiveUser = async (id) => {
   try {
     const tokenExist = getToken();
@@ -38,7 +63,6 @@ const inactiveUser = async (id) => {
 };
 
 const activeUser = async (id) => {
-  console.log(id);
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
@@ -56,4 +80,4 @@ const activeUser = async (id) => {
   }
 };
 
-export { getUsers, inactiveUser, activeUser };
+export { getUsers, inactiveUser, activeUser, postUser };

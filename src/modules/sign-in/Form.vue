@@ -4,17 +4,18 @@
       <Select
         @onSelect="getSelectData"
         :style="selectStyles"
+        :required=true
         type="documents"
         label="Tipo"
       ></Select>
     </div>
     <div class="col">
-      <Input @onWrite="getInputData" label="Número documento" type="number" />
+      <Input @onWrite="getInputData" label="Número documento" type="number" :required=true />
     </div>
   </div>
   <div class="row q-mt-md">
     <div class="col-12">
-      <Password @onPassword="getPasswordData" label="Contraseña" />
+      <Password @onPassword="getPasswordData" label="Contraseña" :required=true />
     </div>
   </div>
   <span class="invalidateData" v-if="props.error"
@@ -39,10 +40,10 @@
 
 <script setup>
 // Imports
-import { computed, ref } from "vue";
-import Select from "@/commons/forms/Select.vue";
 import Input from "@/commons/forms/Input.vue";
 import Password from "@/commons/forms/Password.vue";
+import Select from "@/commons/forms/Select.vue";
+import { computed, ref } from "vue";
 
 // Data - mocked data just for testing routes and its permissions
 const typeDocument = ref("");

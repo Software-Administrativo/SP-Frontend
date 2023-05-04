@@ -256,6 +256,14 @@ const columns = ref([
   },
 ]);
 
+const getInputName = (value) => {
+  nameTypePays.value = value;
+};
+
+const getInputDescription = (value) => {
+  descriptionTypePays.value = value;
+};
+
 const clickButton = () => {
   titleModal.value = "REGISTRAR TIPO DE PAGO";
   valueInputDescription.value = "";
@@ -264,14 +272,6 @@ const clickButton = () => {
   modal.toggleModal();
   nameTypePays.value = "";
   descriptionTypePays.value = "";
-};
-
-const getInputName = (value) => {
-  nameTypePays.value = value;
-};
-
-const getInputDescription = (value) => {
-  descriptionTypePays.value = value;
 };
 
 const editPayMaintenance = (item) => {
@@ -298,7 +298,7 @@ async function inactivePayMaintenance(id) {
   } catch (error) {
     $q.notify({
       type: "negative",
-      message: "No se pudo inactivar el tipo de pago",
+      message: "Ocurrió un error",
       position: "top",
     });
   }
@@ -321,7 +321,7 @@ async function postDataTypePays() {
   } catch {
     $q.notify({
       type: "negative",
-      message: "No se pudo registrar el tipo de pago",
+      message: "Ocurrió un error",
       position: "top",
     });
   }
@@ -349,7 +349,7 @@ async function getDataTypePays() {
   } catch {
     $q.notify({
       type: "negative",
-      message: "No se pudo obtener los tipos de pago",
+      message: "Ocurrió un error",
       position: "top",
     });
   }
@@ -374,7 +374,7 @@ async function updateDataTypePays() {
     $q.notify({
       type: "negative",
       position: "top",
-      message: "No se pudo actualizar el tipo de pago",
+      message: "Ocurrió un error",
     });
   }
 }

@@ -96,8 +96,8 @@
                   >
                     <template v-slot:append>
                       <q-icon name="search" />
-                    </template>
-                  </q-input>´
+                    </template> </q-input
+                  >´
                 </template>
                 <template v-slot:body-cell-Acciones="props">
                   <td
@@ -126,21 +126,126 @@
       </div>
     </div>
   </div>
+  <template v-if="modal.modalIsOpen">
+    <ModalForm>
+      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+      <div class="row q-px-xl">
+        <div class="col-12">
+          <Input
+            label="Nombre"
+            type="text"
+            :required="true"
+            :ruless="rules"
+            :value="valueInputName"
+            v-model="nameUserSystem"
+            @onWrite="getInputName"
+          />
+          <Select
+            class="q-pb-xs q-mb-md"
+            type="documents"
+            label="Tipo de documento"
+            :required="true"
+            :ruless="rules"
+            :value="valueInputTypeDocument"
+            v-model="typeDocumentUserSystem"
+            @onSelect="getSelectDataTypeDocument"
+          />
+          <Input
+            label="Número documento"
+            type="number"
+            :required="true"
+            :ruless="rules"
+            :value="valueInputNumberDocument"
+            v-model="numberDocumentUserSystem"
+            @onWrite="getInputNumberDocument"
+          />
+          <Select
+            class="q-pb-xs q-mb-md"
+            type="roles"
+            label="Rol"
+            :required="true"
+            :value="valueInputRole"
+            v-model="roleUserSystem"
+            @onSelect="getSelectDataRole"
+          ></Select>
+
+          <Password
+            label="Contraseña"
+            :required="true"
+            :ruless="rules"
+            :value="valueInputPassword"
+            v-model="passwordUserSystem"
+            @onPassword="getPasswordData"
+          />
+
+          <span class="text-required q-py-sm"
+            >Todos los campos con <span class="text-red">*</span> son
+            obligatorios</span
+          >
+          <div class="row justify-center q-mt-sm">
+            <ButtonSave
+              v-if="typeAction"
+              :disable="disableSave"
+              @onClick="postDataUserSystem"
+            />
+            <ButtonSave
+              v-else
+              :disable="disableSave"
+              @onClick="updateDataUserSystem"
+            />
+          </div>
+        </div>
+      </div>
+    </ModalForm>
+  </template>
 </template>
 <script setup>
-import { activeUser, getUsers, inactiveUser } from "@/api/system";
+import { activeUser, getUsers, inactiveUser, postUser } from "@/api/system";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
+import ButtonSave from "@/commons/forms/ButtonSave.vue";
+import Input from "@/commons/forms/Input.vue";
+import Password from "@/commons/forms/Password.vue";
+import Select from "@/commons/forms/Select.vue";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const $q = useQuasar();
 
-let filter = ref("");
-
+const modal = modalState();
+const titleModal = ref("");
+const loading = ref(false);
+const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const loading = ref(false);
+const idTypePays = ref();
+
+let valueInputName = ref("");
+let valueInputTypeDocument = ref("");
+let valueInputNumberDocument = ref("");
+let valueInputRole = ref("");
+let valueInputPassword = ref("");
+
+let nameUserSystem = ref("");
+let typeDocumentUserSystem = ref("");
+let numberDocumentUserSystem = ref("");
+let roleUserSystem = ref("");
+let passwordUserSystem = ref("");
+
+let filter = ref("");
 let tab = ref("active");
+
+const disableSave = computed(() => {
+  return (
+    !nameUserSystem.value ||
+    !typeDocumentUserSystem.value ||
+    !numberDocumentUserSystem.value ||
+    !roleUserSystem.value ||
+    !passwordUserSystem.value
+  );
+});
+const rules = [(v) => !!v || "Este campo es requerido"];
 
 const columns = ref([
   {
@@ -208,45 +313,109 @@ const columns = ref([
   },
 ]);
 
-// watch(tab, (newTab, oldTab) => {
-//   if (newTab === "active") {
-//     rows.value = [];
-//     getDataUsers();
-//   } else if (newTab === "inactive") {
-//     inactiveRows.value = [];
-//     getDataUsers();
-//   }
-// });
+const getInputName = (value) => {
+  nameUserSystem.value = value;
+};
+
+const getSelectDataTypeDocument = (value) => {
+  typeDocumentUserSystem.value = value;
+};
+
+const getInputNumberDocument = (value) => {
+  numberDocumentUserSystem.value = value;
+};
+
+const getSelectDataRole = (value) => {
+  roleUserSystem.value = value;
+};
+
+const getPasswordData = (value) => {
+  passwordUserSystem.value = value;
+};
 
 const clickButton = (event) => {
-  console.log(event);
+  titleModal.value = "REGISTRAR ACCESO";
+  resetValuesForm();
+  typeAction.value = true;
+  modal.toggleModal();
 };
 
-const getDataUsers = async () => {
-  loading.value = true;
-  const data = await getUsers();
-  let countActive = 1;
-  let countInactive = 1;
-  data.forEach((item) => {
-    item.status = item.status ? "Inactivo" : "Activo";
-    if (item.status == "Activo") {
-      item.id = countActive++;
-      rows.value.push(item);
-    } else {
-      item.id = countInactive++;
-      inactiveRows.value.push(item);
-    }
-  });
-  loading.value = false;
+const resetValuesForm = () => {
+  valueInputName.value = "";
+  valueInputTypeDocument.value = "";
+  valueInputNumberDocument.value = "";
+  valueInputRole.value = "";
+  valueInputPassword.value = "";
+  nameUserSystem.value = "";
+  typeDocumentUserSystem.value = "";
+  numberDocumentUserSystem.value = "";
+  roleUserSystem.value = "";
+  passwordUserSystem.value = "";
 };
 
-function editSystemUser(id) {
-  console.log(id);
+const editSystemUser = (item) => {
+  titleModal.value = "EDITAR TIPO DE PAGO";
+  typeAction.value = false;
+  idTypePays.value = item._id;
+  // valueInputTypeDocument.value = item.description;
+  valueInputName.value = item.name;
+
+  modal.toggleModal();
+};
+
+async function updateDataUserSystem() {
+  try {
+    const response = await updateUserSystem({
+      id: idTypePays.value,
+      name: nameUserSystem.value,
+      // description: descriptionUserSystem.value,
+    });
+    $q.notify({
+      type: "positive",
+      position: "top",
+      message: "Tipo de pago actualizado correctamente",
+    });
+    modal.toggleModal();
+    rows.value = [];
+    getDataUsers();
+  } catch {
+    $q.notify({
+      type: "negative",
+      position: "top",
+      message: "Ocurrió un error",
+    });
+  }
 }
 
-function inactiveSystemUser(id) {
+async function getDataUsers() {
+  loading.value = true;
   try {
-    inactiveUser(id);
+    const data = await getUsers();
+    let countActive = 1;
+    let countInactive = 1;
+    data.forEach((item) => {
+      item.status = item.status ? "Inactivo" : "Activo";
+      if (item.status == "Activo") {
+        item.id = countActive++;
+        rows.value.push(item);
+      } else {
+        item.id = countInactive++;
+        inactiveRows.value.push(item);
+      }
+    });
+    loading.value = false;
+  } catch {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+      position: "top",
+    });
+  }
+}
+
+async function inactiveSystemUser(id) {
+  try {
+    const inactive = await inactiveUser(id);
     $q.notify({
       type: "positive",
       message: "Usuario inactivado correctamente",
@@ -264,9 +433,9 @@ function inactiveSystemUser(id) {
   }
 }
 
-function activeSystemUser(id) {
+async function activeSystemUser(id) {
   try {
-    activeUser(id);
+    const active = await activeUser(id);
     $q.notify({
       type: "positive",
       message: "Usuario activado correctamente",
@@ -279,6 +448,32 @@ function activeSystemUser(id) {
     $q.notify({
       type: "negative",
       message: "Ocurrió un error",
+    });
+  }
+}
+
+async function postDataUserSystem() {
+  try {
+    const { data } = await postUser({
+      name: nameUserSystem.value,
+      tpdocument: typeDocumentUserSystem.value,
+      numdocument: numberDocumentUserSystem.value,
+      role: roleUserSystem.value,
+      password: passwordUserSystem.value
+    });
+    $q.notify({
+      type: "positive",
+      message: "Usuario registrado correctamente",
+      position: "top",
+    });
+    modal.toggleModal();
+    rows.value = [];
+    getDataUsers();
+  } catch {
+    $q.notify({
+      type: "negative",
+      message: "No se pudo registrar el tipo de pago",
+      position: "top",
     });
   }
 }

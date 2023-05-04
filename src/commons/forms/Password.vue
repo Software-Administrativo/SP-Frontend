@@ -1,6 +1,9 @@
 <template>
   <div :style="props.styles">
-    <label>{{ props.label }}</label>
+    <label
+      >{{ props.label
+      }}<span class="text-red">{{ props.required ? "*" : "" }}</span></label
+    >
     <q-input
       v-model="password"
       dense
@@ -34,6 +37,11 @@ const props = defineProps({
   styles: {
     type: Object,
     required: false,
+  },
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
   },
 });
 
