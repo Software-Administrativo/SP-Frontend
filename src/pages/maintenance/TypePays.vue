@@ -48,13 +48,8 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    style="
-                      padding: 0px;
-                      margin: 0px;
-                      min-width: 100px;
-                      max-width: 100px;
-                    "
+                  <td 
+                  class="accions-td"
                   >
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
@@ -101,12 +96,7 @@
                 </template>
                 <template v-slot:body-cell-Acciones="props">
                   <td
-                    style="
-                      padding: 0px;
-                      margin: 0px;
-                      min-width: 100px;
-                      max-width: 20px;
-                    "
+                    class="accions-td"
                   >
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
@@ -403,6 +393,12 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.accions-td{
+  padding: 0px;
+  margin: 0px;
+  min-width: 100px;
+  max-width: 100px;
+}
 .text-required {
   display: inline-block;
   font-size: var(--font-small);
