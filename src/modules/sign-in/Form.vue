@@ -4,18 +4,27 @@
       <Select
         @onSelect="getSelectData"
         :style="selectStyles"
-        :required=true
+        :required="true"
         type="documents"
         label="Tipo"
       ></Select>
     </div>
     <div class="col">
-      <Input @onWrite="getInputData" label="Número documento" type="number" :required=true />
+      <Input
+        @onWrite="getInputData"
+        label="Número documento"
+        type="number"
+        :required="true"
+      />
     </div>
   </div>
   <div class="row q-mt-md">
     <div class="col-12">
-      <Password @onPassword="getPasswordData" label="Contraseña" :required=true />
+      <Password
+        @onPassword="getPasswordData"
+        label="Contraseña"
+        :required="true"
+      />
     </div>
   </div>
   <span class="invalidateData" v-if="props.error"

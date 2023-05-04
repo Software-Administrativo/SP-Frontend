@@ -143,7 +143,8 @@ const columns = ref([
     headerStyle: "font-size: var(--font-medium); font-weight: bold;",
     style: "font-size: var(--font-medium);",
   },
-]);s
+]);
+s;
 
 const clickButton = () => {
   modal.toggleModal();

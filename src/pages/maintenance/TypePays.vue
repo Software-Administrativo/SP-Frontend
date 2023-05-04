@@ -146,7 +146,7 @@
             type="text"
             :required="false"
             :value="valueInputDescription"
-            v-model="descriptionTypePays"
+            :v-model="descriptionTypePays"
             @onWrite="getInputDescription"
           />
           <span class="text-required q-py-sm"
@@ -172,11 +172,11 @@
 </template>
 <script setup>
 import {
-activeTypePay,
-getTypePays,
-inactiveTypePay,
-postTypePays,
-updateTypePay,
+  activeTypePay,
+  getTypePays,
+  inactiveTypePay,
+  postTypePays,
+  updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -280,7 +280,8 @@ const editPayMaintenance = (item) => {
   idTypePays.value = item._id;
   valueInputDescription.value = item.description;
   valueInputName.value = item.name;
-
+  nameTypePays.value = item.name;
+  descriptionTypePays.value = item.description;
   modal.toggleModal();
 };
 
@@ -377,6 +378,8 @@ async function updateDataTypePays() {
       message: "Ocurrió un error",
     });
   }
+  nameTypePays.value = "";
+  descriptionTypePays.value = "";
 }
 
 async function activePayMaintenance(id) {
