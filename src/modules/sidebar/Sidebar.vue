@@ -1,11 +1,12 @@
 <template>
   <div class="sidebar">
-    <img
-      src="../../assets/sidebar/user-image.svg"
-      class="icon-user q-pt-md"
-      width="40"
-    />
-    <h6 class="name-user text-center q-ma-none q-pb-sm">Laura Susano</h6>
+    <div class="user-sidebar">
+      <div class="q-py-sm">
+        <i class="icon-type-document icon-user"
+        />
+        <h6 class="name-user text-center q-ma-none q-pb-sm">{{ nameUser }}</h6>
+      </div>
+    </div>
     <q-separator class="separator" />
     <div v-for="item in paths" :key="item.name" @click="clickRoute">
       <RouterLink class="item" :to="item.path">
@@ -23,9 +24,15 @@
 </template>
 
 <script setup>
+import { useStorage } from "@/stores/localStorage.js";
 import { menuState } from "@/stores/menu";
 import { event } from "quasar";
-import { computed, onUpdated } from "vue";
+import { computed, onMounted, ref } from "vue";
+
+const nameUser = ref("Hola");
+const token = useStorage();
+
+const isValidateJWT = token.decodeJwt();
 
 const paths = [
   {
@@ -80,8 +87,8 @@ const paths = [
 
 const menu = menuState();
 
-onUpdated(() => {
-  menu.value = false;
+onMounted(() => {
+  nameUser.value = isValidateJWT.name
 });
 
 const emits = defineEmits({
@@ -100,10 +107,15 @@ const clickRoute = computed(() => {
 
 .sidebar {
   height: calc(100vh - 50px);
-  width: 200px;
+  width: 220px;
   background-color: white;
   border-right: 3px solid var(--color-gray);
   position: relative;
+}
+.user-sidebar{
+  background-image: url(../../assets/sidebar/background.png);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .separator {
@@ -114,6 +126,11 @@ const clickRoute = computed(() => {
   text-decoration: none;
   display: flex;
   color: black;
+}
+.icon-user{
+  font-size: 50px;
+  margin-left: calc(50% - 20px);
+  color: white;
 }
 
 .item:hover {
@@ -126,12 +143,9 @@ const clickRoute = computed(() => {
   margin: 7px;
 }
 
-.icon-user {
-  margin-left: calc(50% - 20px);
-}
-
 .name-user {
   font-size: var(--font-large);
+  color: white;
 }
 
 .logo-global {

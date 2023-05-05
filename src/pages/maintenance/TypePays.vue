@@ -186,6 +186,8 @@ import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
+const $q = useQuasar();
+
 const modal = modalState();
 const titleModal = ref("");
 const loading = ref(false);
@@ -200,13 +202,13 @@ const disableSave = computed(() => {
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
-let nameTypePays = ref("");
-let descriptionTypePays = ref("");
-let valueInputName = ref("");
-let valueInputDescription = ref("");
 let tab = ref("active");
 
-const $q = useQuasar();
+let nameTypePays = ref("");
+let descriptionTypePays = ref("");
+
+let valueInputName = ref("");
+let valueInputDescription = ref("");
 
 const columns = ref([
   {
@@ -266,13 +268,17 @@ const getInputDescription = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR TIPO DE PAGO";
-  valueInputDescription.value = "";
-  valueInputName.value = "";
+  resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
+};
+
+const resetValuesForm = () => {
+  valueInputDescription.value = "";
+  valueInputName.value = "";
   nameTypePays.value = "";
   descriptionTypePays.value = "";
-};
+}
 
 const editPayMaintenance = (item) => {
   titleModal.value = "EDITAR TIPO DE PAGO";
@@ -329,6 +335,8 @@ async function postDataTypePays() {
 }
 
 async function getDataTypePays() {
+  rows.value = [];
+  inactiveRows.value = [];
   loading.value = true;
   try {
     const { pays } = await getTypePays();

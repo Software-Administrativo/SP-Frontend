@@ -19,17 +19,17 @@ const getUsers = async () => {
   }
 };
 
-const postUser = async (type) => {
+const postUser = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
       `/users/register`,
       {
-        name: type.name,
-        tpdocument: type.tpdocument,
-        numdocument: type.numdocument,
-        role: type.role,
-        password: type.password,
+        name: item.name,
+        tpdocument: item.tpdocument,
+        numdocument: item.numdocument,
+        role: item.role,
+        password: item.password,
       },
       {
         headers: {
@@ -37,11 +37,35 @@ const postUser = async (type) => {
         },
       }
     );
-    console.log(data);
     return data;
   } catch (error) {
     return error;
   }
+};
+
+const updateUserSystem = async (item) => {
+  console.log(item);
+  // try {
+  //   const tokenExist = getToken();
+  //   const { data } = await sugarAxios.put(
+  //     `/maintenance/pays/update/${item.id}`,
+  //     {
+  //       name: item.nameUserSystem,
+  //       tpdocument: item.typeDocumentUserSystem,
+  //       numdocument: item.numberDocumentUserSystem,
+  //       role: item.roleUserSystem,
+  //       password: item.passwordUserSystem,
+  //     },
+  //     {
+  //       headers: {
+  //         token: tokenExist,
+  //       },
+  //     }
+  //   );
+  //   return data;
+  // } catch (error) {
+  //   console.error(error);
+  // }
 };
 
 const inactiveUser = async (id) => {
@@ -80,4 +104,4 @@ const activeUser = async (id) => {
   }
 };
 
-export { getUsers, inactiveUser, activeUser, postUser };
+export { getUsers, inactiveUser, activeUser, postUser, updateUserSystem };

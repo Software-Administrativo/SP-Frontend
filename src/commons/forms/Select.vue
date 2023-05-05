@@ -20,7 +20,7 @@
 import { onMounted, ref, watch } from "vue";
 
 // Data
-const typeDocument = ref("");
+const typeDocument = ref(props.value);
 const types = ref([]);
 
 const props = defineProps({
@@ -41,10 +41,15 @@ const props = defineProps({
     required: false,
     default: false,
   },
-  ruler: {
+  ruless: {
     type: Array,
     required: false,
     default: () => [],
+  },
+  value: {
+    type: String,
+    required: false,
+    default: "",
   },
 });
 

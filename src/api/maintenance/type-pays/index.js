@@ -81,7 +81,6 @@ const inactiveTypePay = async (id) => {
 };
 
 const activeTypePay = async (id) => {
-  console.log(id);
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
