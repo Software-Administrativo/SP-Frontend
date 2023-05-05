@@ -29,7 +29,7 @@ const postUser = async (type) => {
         tpdocument: type.tpdocument,
         numdocument: type.numdocument,
         role: type.role,
-        password: type.password
+        password: type.password,
       },
       {
         headers: {

@@ -21,10 +21,6 @@ import { ref, watch } from "vue";
 // Data
 const data = ref(props.value);
 
-watch(() => props.value, (newValue) => {
-  data.value = newValue;
-});
-
 // Props
 const props = defineProps({
   type: {

@@ -459,7 +459,7 @@ async function postDataUserSystem() {
       tpdocument: typeDocumentUserSystem.value,
       numdocument: numberDocumentUserSystem.value,
       role: roleUserSystem.value,
-      password: passwordUserSystem.value
+      password: passwordUserSystem.value,
     });
     $q.notify({
       type: "positive",

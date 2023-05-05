@@ -60,7 +60,7 @@ const updateTypePay = async (item) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const inactiveTypePay = async (id) => {
   try {
@@ -99,6 +99,10 @@ const activeTypePay = async (id) => {
   }
 };
 
-
-export { getTypePays, postTypePays, inactiveTypePay, activeTypePay, updateTypePay };
-
+export {
+  getTypePays,
+  postTypePays,
+  inactiveTypePay,
+  activeTypePay,
+  updateTypePay,
+};
