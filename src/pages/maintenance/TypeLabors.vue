@@ -165,7 +165,7 @@ import {
 activeTypeLabor,
 getTypeLabors,
 inactiveTypeLabor,
-postTypeLabors,
+postTypeLabor,
 updateTypeLabor,
 } from "@/api/maintenance/type-labors";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
@@ -270,7 +270,8 @@ const editLaborMaintenance = (item) => {
   idTypeLabors.value = item._id;
   valueInputDescription.value = item.description;
   valueInputName.value = item.name;
-
+  nameTypeLabors.value = item.name;
+  descriptionTypeLabors.value = item.description;
   modal.toggleModal();
 };
 
@@ -279,7 +280,7 @@ async function inactiveLaborMaintenance(id) {
     const inactive = await inactiveTypeLabor(id);
     $q.notify({
       type: "positive",
-      message: "Tipo de labor inactivado correctamente",
+      message: "Tipo de labor desactivado correctamente",
       position: "top",
     });
     rows.value = [];
@@ -298,7 +299,7 @@ async function postDataTypeLabors() {
   modal.toggleModal();
   try {
     console.log(nameTypeLabors.value, descriptionTypeLabors.value);
-    const works = await postTypeLabors({
+    const works = await postTypeLabor({
       name: nameTypeLabors.value,
       description: descriptionTypeLabors.value,
     });
@@ -319,6 +320,8 @@ async function postDataTypeLabors() {
 }
 
 const getDataTypeLabors = async () => {
+  rows.value = [];
+  inactiveRows.value = [];
   loading.value = true;
   try {
   const { works } = await getTypeLabors();
@@ -368,6 +371,8 @@ async function updateDataTypeLabors() {
       message: "Ocurrió un error",
     });
   }
+  nameTypeLabors.value = "";
+  descriptionTypeLabors.value = "";
 }
 
 async function activeLaborMaintenance(id) {
@@ -394,7 +399,6 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-
 .accions-td{
   padding: 0px;
   margin: 0px;
@@ -413,6 +417,9 @@ onMounted(() => {
 }
 .separator {
   border: 1.8px solid var(--color-gray);
+}
+.icon {
+  font-size: 1.5rem;
 }
 .container-content {
   max-width: 1200px;

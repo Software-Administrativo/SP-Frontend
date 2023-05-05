@@ -19,7 +19,7 @@ const getTypeLabors = async () => {
   }
 };
 
-const postTypeLabors = async (type) => {
+const postTypeLabor = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
@@ -97,4 +97,4 @@ const activeTypeLabor = async (id) => {
   }
 };
 
-export { getTypeLabors, postTypeLabors, activeTypeLabor, inactiveTypeLabor, updateTypeLabor};
+export { getTypeLabors, postTypeLabor, activeTypeLabor, inactiveTypeLabor, updateTypeLabor};

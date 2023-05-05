@@ -165,7 +165,7 @@ import {
   activeTypePay,
   getTypePays,
   inactiveTypePay,
-  postTypePays,
+  postTypePay,
   updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
@@ -280,7 +280,7 @@ async function inactivePayMaintenance(id) {
     const inactive = await inactiveTypePay(id);
     $q.notify({
       type: "positive",
-      message: "Tipo de pago inactivado correctamente",
+      message: "Tipo de pago desactivado correctamente",
       position: "top",
     });
     rows.value = [];
@@ -298,7 +298,7 @@ async function inactivePayMaintenance(id) {
 async function postDataTypePays() {
   modal.toggleModal();
   try {
-    const pays = await postTypePays({
+    const pays = await postTypePay({
       name: nameTypePays.value,
       description: descriptionTypePays.value,
     });

@@ -20,7 +20,7 @@ const getTypePays = async () => {
   }
 };
 
-const postTypePays = async (type) => {
+const postTypePay = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
@@ -101,7 +101,7 @@ const activeTypePay = async (id) => {
 
 export {
   getTypePays,
-  postTypePays,
+  postTypePay,
   inactiveTypePay,
   activeTypePay,
   updateTypePay,
