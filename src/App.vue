@@ -19,9 +19,10 @@ import Layout from "./views/LayoutView.vue";
   --color-gray: #e9eaec;
   --font-small: 12px;
   --font-medium: 16px;
-  --font-large: 23px;
-  --font-subtitle: 16px;
-  --font-title: 28px;
+  --font-large: 20px;
+  --font-subtitle: 25px;
+  --font-title: 30px;
+  --font-icon: 35px;
 }
 
 /* Set border box for all elements, delete padding and margin */

@@ -23,10 +23,9 @@
 </template>
 
 <script setup>
-import { onUpdated } from "vue";
 import { menuState } from "@/stores/menu";
 import { event } from "quasar";
-import { computed } from "vue";
+import { computed, onUpdated } from "vue";
 
 const paths = [
   {
@@ -123,8 +122,8 @@ const clickRoute = computed(() => {
 
 .name {
   margin-left: 20px !important;
-  font-size: 16px;
-  margin: 3px;
+  font-size: var(--font-large);
+  margin: 7px;
 }
 
 .icon-user {
@@ -132,7 +131,7 @@ const clickRoute = computed(() => {
 }
 
 .name-user {
-  font-size: 15px;
+  font-size: var(--font-large);
 }
 
 .logo-global {

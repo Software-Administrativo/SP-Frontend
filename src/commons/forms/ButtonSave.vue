@@ -15,6 +15,6 @@ const handleClick = (event) => {
   background-color: var(--color-blue);
   border-radius: 5px;
   color: white;
-  font-size: var(--font-medium);
+  font-size: var(--font-large);
 }
 </style>

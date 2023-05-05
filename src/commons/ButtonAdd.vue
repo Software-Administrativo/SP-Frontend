@@ -25,6 +25,6 @@ const handleClick = (event) => {
 <style scoped>
 .fix-margin {
   margin-left: 3px;
-  font-size: var(--font-medium);
+  font-size: var(--font-large);
 }
 </style>

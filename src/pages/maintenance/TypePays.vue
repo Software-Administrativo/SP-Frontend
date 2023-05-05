@@ -40,7 +40,7 @@
                     dense
                     debounce="300"
                     v-model="filter"
-                    placeholder="Search"
+                    placeholder="Buscar"
                   >
                     <template v-slot:append>
                       <q-icon name="search" />
@@ -60,13 +60,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editPayMaintenance(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactivePayMaintenance(props.row._id)"
                       />
                     </q-btn-group>
@@ -92,7 +92,7 @@
                     dense
                     debounce="300"
                     v-model="filter"
-                    placeholder="Search"
+                    placeholder="Buscar"
                   >
                     <template v-slot:append>
                       <q-icon name="search" />
@@ -172,11 +172,11 @@
 </template>
 <script setup>
 import {
-  activeTypePay,
-  getTypePays,
-  inactiveTypePay,
-  postTypePays,
-  updateTypePay,
+activeTypePay,
+getTypePays,
+inactiveTypePay,
+postTypePays,
+updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -215,8 +215,8 @@ const columns = ref([
     field: "id",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "name",
@@ -224,8 +224,8 @@ const columns = ref([
     field: "name",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "description",
@@ -233,8 +233,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "status",
@@ -242,8 +242,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "Acciones",
@@ -251,8 +251,8 @@ const columns = ref([
     field: "acciones",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
 ]);
 
@@ -423,8 +423,11 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-.icon {
-  font-size: 1.5rem;
+.icon-table {
+  font-size: 18px;
+}
+.icon-check{
+  font-size: 25px;
 }
 .container-table {
   border-radius: 15px;

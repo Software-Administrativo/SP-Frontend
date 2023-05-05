@@ -69,8 +69,8 @@
 </template>
 <script setup>
 import {
-  getTypeUnitsMeasurement,
-  postTypeUnitsMeasurement,
+getTypeUnitsMeasurement,
+postTypeUnitsMeasurement,
 } from "@/api/maintenance/units-measurement";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -101,8 +101,8 @@ const columns = ref([
     field: "id",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "name",
@@ -110,8 +110,8 @@ const columns = ref([
     field: "name",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "unittype",
@@ -119,8 +119,8 @@ const columns = ref([
     field: "unittype",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "status",
@@ -128,8 +128,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
 ]);
 

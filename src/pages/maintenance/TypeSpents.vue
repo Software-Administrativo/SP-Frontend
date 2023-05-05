@@ -95,8 +95,8 @@ const columns = ref([
     field: "id",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "name",
@@ -104,8 +104,8 @@ const columns = ref([
     field: "name",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "description",
@@ -113,8 +113,8 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "status",
@@ -122,8 +122,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
 ]);
 

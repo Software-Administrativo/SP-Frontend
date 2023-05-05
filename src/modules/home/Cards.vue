@@ -2,7 +2,7 @@
   <div class="container-view">
     <div class="item-card-module">
       <div class="q-mt-lg" v-for="item in infoModules">
-        <p class="title-module">{{ item.name }}</p>
+        <p class="title-module text-center">{{ item.name }}</p>
         <q-card class="my-card" @click="goToModule(item.path)">
           <q-card-section class="icon-section-card">
             <i v-bind:class="item.icon" />
@@ -68,13 +68,13 @@ const goToModule = (route) => {
 
 <style scoped>
 .container-view {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding-top: 20px;
 }
 .item-card-module {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-gap: 20px;
   width: 100%;
   max-height: 70vh;
@@ -90,7 +90,7 @@ const goToModule = (route) => {
   padding-bottom: 23px;
 }
 .my-card {
-  width: 230px;
+  width: 280px;
   border-radius: 10px;
   border: 1.8px solid var(--color-gray);
 }
@@ -99,18 +99,18 @@ const goToModule = (route) => {
   background-color: var(--color-gray);
 }
 .title-module {
-  font-size: var(--font-large);
+  font-size: var(--font-subtitle);
 }
 .icon {
   color: var(--color-blue);
-  font-size: 30px;
-  margin: calc(50% - 15px);
+  font-size: 50px;
+  margin: calc(50% - 25px);
 }
 .separator {
   border: 1.8px solid var(--color-gray);
 }
 .enter-card {
-  font-size: var(--font-subtitle);
+  font-size: var(--font-large);
 }
 
 @media (max-width: 600px) {

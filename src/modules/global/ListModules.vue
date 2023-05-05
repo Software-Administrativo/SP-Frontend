@@ -42,12 +42,12 @@ const goToModule = (route) => {
   display: grid;
   grid-template-columns: repeat(2, minmax(105px, 1fr));
   border-radius: 15px;
-  padding: 10px 20px;
+  padding: 10px 50px;
   padding-bottom: 35px;
   height: 100%;
   max-height: 80vh;
   margin-top: 0px;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
@@ -65,16 +65,16 @@ const goToModule = (route) => {
 
 .icon {
   color: var(--color-blue);
-  font-size: var(--font-title);
+  font-size: var(--font-icon);
   margin-left: 10px;
-  padding-top: 10px;
+  padding-top: 5px;
 }
 
 .item-list {
   display: flex;
   align-items: left;
   gap: 15px;
-  padding: 10px;
+  padding: 20px;
   padding-bottom: 0px;
   border-bottom: 2px solid var(--color-gray);
 }
@@ -85,7 +85,7 @@ const goToModule = (route) => {
 }
 
 .item-name {
-  font-size: var(--font-medium);
+  font-size: var(--font-large);
   margin-left: 10px;
   padding-top: 8px;
 }
