@@ -130,7 +130,7 @@
             class="q-mb-md"
             label="Descripción"
             type="text"
-            :required="false"
+            :required="false" 
             :value="valueInputDescription"
             v-model="descriptionEps"
             @onWrite="getInputDescription"
@@ -329,7 +329,7 @@ async function postDataEps() {
     });
     $q.notify({
       type: "positive",
-      message: "Unidad de medida registrada correctamente",
+      message: "Eps registrada correctamente",
       position: "top",
     });
     rows.value = [];

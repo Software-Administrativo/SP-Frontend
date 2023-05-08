@@ -44,7 +44,7 @@ const postEps = async (type) => {
 const updateEps = async (item) => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.post(
+    const { data } = await sugarAxios.put(
       `/maintenance/eps/update/${item.id}`,
       {
         name: item.name,
