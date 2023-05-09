@@ -104,9 +104,6 @@ const goToModule = (route) => {
   font-size: 50px;
   margin: calc(50% - 25px);
 }
-.separator {
-  /* border: 1.8px solid var(--color-gray); */
-}
 .enter-card {
   font-size: var(--font-large);
 }
