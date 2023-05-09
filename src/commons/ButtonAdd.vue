@@ -24,7 +24,11 @@ const handleClick = (event) => {
 </script>
 <style scoped>
 .fix-margin {
+  background-color: white;
+  border-radius: 10px;
+  padding-top: 6px;
   margin-left: 3px;
+  padding-right: 15px;
   font-size: var(--font-large);
 }
 </style>

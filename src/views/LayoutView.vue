@@ -65,6 +65,7 @@ const sidebar = computed(() => {
 
 <style scoped>
 .container-view {
+  background-color: #f3f1f785;
   width: 100vw;
   height: 100vh;
   overflow: hidden;

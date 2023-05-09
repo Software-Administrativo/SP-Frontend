@@ -64,6 +64,7 @@
                         @click="editSystemUser(props.row)"
                       />
                       <q-btn
+                        v-if="props.row.role == 'ADMIN'"
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
@@ -219,6 +220,7 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idUserSystem = ref();
+const isSuperUser = ref(true);
 
 let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
@@ -398,6 +400,7 @@ async function getDataUsers() {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
+
   try {
     const data = await getUsers();
     let countActive = 1;
@@ -427,7 +430,7 @@ async function inactiveSystemUser(id) {
     const inactive = await inactiveUser(id);
     $q.notify({
       type: "positive",
-      message: "Usuario inactivado correctamente",
+      message: "Usuario desactivado correctamente",
       position: "top",
     });
     rows.value = [];
@@ -462,7 +465,7 @@ async function activeSystemUser(id) {
 }
 
 async function postDataUserSystem() {
-  try {
+  try{
     const { data } = await postUser({
       name: nameUserSystem.value,
       tpdocument: typeDocumentUserSystem.value,
@@ -470,18 +473,18 @@ async function postDataUserSystem() {
       role: roleUserSystem.value,
       password: passwordUserSystem.value,
     });
+    modal.toggleModal();
+    rows.value = [];
     $q.notify({
       type: "positive",
       message: "Usuario registrado correctamente",
       position: "top",
     });
-    modal.toggleModal();
-    rows.value = [];
     getDataUsers();
   } catch {
     $q.notify({
       type: "negative",
-      message: "No se pudo registrar el tipo de pago",
+      message: "Ocurrió un error",
       position: "top",
     });
   }
@@ -505,7 +508,7 @@ onMounted(() => {
   font-size: 18px;
 }
 .container-content {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .icon-check {
@@ -515,6 +518,7 @@ onMounted(() => {
   border-radius: 15px;
   height: 80%;
   max-height: 60vh;
+  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;

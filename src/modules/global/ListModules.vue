@@ -49,9 +49,13 @@ const goToModule = (route) => {
   margin-top: 0px;
   max-width: 1200px;
   margin: 0 auto;
-  border: 2px solid var(--color-gray);
+  background-color: white;
+  /* border: 2px solid var(--color-gray); */
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: scroll;
+}
+.container-list::-webkit-scrollbar {
+  display: none;
 }
 .title {
   display: inline-block;
@@ -94,11 +98,6 @@ const goToModule = (route) => {
   .container-list {
     grid-template-columns: repeat(1, minmax(100px, 1fr));
     max-height: 70vh !important;
-    overflow-y: scroll;
   }
-}
-
-.container-list::-webkit-scrollbar {
-  display: none;
 }
 </style>

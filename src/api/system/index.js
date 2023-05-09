@@ -15,7 +15,7 @@ const getUsers = async () => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -37,7 +37,7 @@ const postUser = async (item) => {
         },
       }
     );
-    return data;
+    console.log(data);
   } catch (error) {
     return error;
   }
@@ -82,7 +82,7 @@ const inactiveUser = async (id) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -100,7 +100,7 @@ const activeUser = async (id) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

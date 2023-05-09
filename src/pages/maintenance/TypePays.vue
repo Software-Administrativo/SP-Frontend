@@ -296,7 +296,7 @@ async function inactivePayMaintenance(id) {
     const inactive = await inactiveTypePay(id);
     $q.notify({
       type: "positive",
-      message: "Tipo de pago inactivado correctamente",
+      message: "Tipo de pago desactivado correctamente",
       position: "top",
     });
     rows.value = [];
@@ -439,6 +439,7 @@ onMounted(() => {
 }
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
   border: 2px solid var(--color-gray);

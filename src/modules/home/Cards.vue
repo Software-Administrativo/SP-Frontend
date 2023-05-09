@@ -92,7 +92,7 @@ const goToModule = (route) => {
 .my-card {
   width: 280px;
   border-radius: 10px;
-  border: 1.8px solid var(--color-gray);
+  /* border: 1.8px solid var(--color-gray); */
 }
 .my-card:hover {
   cursor: pointer;
@@ -107,7 +107,7 @@ const goToModule = (route) => {
   margin: calc(50% - 25px);
 }
 .separator {
-  border: 1.8px solid var(--color-gray);
+  /* border: 1.8px solid var(--color-gray); */
 }
 .enter-card {
   font-size: var(--font-large);
@@ -117,7 +117,7 @@ const goToModule = (route) => {
   .my-card {
     width: 200px;
     border-radius: 10px;
-    border: 1.8px solid var(--color-gray);
+    /* border: 1.8px solid var(--color-gray); */
   }
 }
 </style>
