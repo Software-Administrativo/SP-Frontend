@@ -19,7 +19,7 @@ import Layout from "./views/LayoutView.vue";
   --color-gray: #e9eaec;
   --font-small: 12px;
   --font-medium: 16px;
-  --font-large: 20px;
+  --font-large: 18px;
   --font-subtitle: 25px;
   --font-title: 30px;
   --font-icon: 35px;

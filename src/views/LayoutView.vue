@@ -21,11 +21,10 @@
 import Header from "@/modules/header/Header.vue";
 import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import { menuState } from "@/stores/menu";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { RouterView, useRoute } from "vue-router";
 
 const menu = menuState();
-const showRouter = ref();
 
 const routeName = computed(() => {
   return useRoute().name;
@@ -33,7 +32,7 @@ const routeName = computed(() => {
 
 const viewRouter = computed(() => {
   if (menu.menuIsOpen) {
-    return "width: calc(100% - 200px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
+    return "width: calc(100% - 220px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else {
     return "width: 100%; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   }
@@ -66,6 +65,7 @@ const sidebar = computed(() => {
 
 <style scoped>
 .container-view {
+  background-color: #f3f1f785;
   width: 100vw;
   height: 100vh;
   overflow: hidden;

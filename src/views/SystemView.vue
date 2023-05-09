@@ -61,9 +61,10 @@
                         icon="edit_note"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="editSystemUser(props.row._id)"
+                        @click="editSystemUser(props.row)"
                       />
                       <q-btn
+                        v-if="props.row.role == 'ADMIN'"
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
@@ -173,7 +174,6 @@
             label="Contraseña"
             :required="true"
             :ruless="rules"
-            :value="valueInputPassword"
             v-model="passwordUserSystem"
             @onPassword="getPasswordData"
           />
@@ -219,13 +219,12 @@ const loading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idTypePays = ref();
+const idUserSystem = ref();
 
 let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
 let valueInputNumberDocument = ref("");
 let valueInputRole = ref("");
-let valueInputPassword = ref("");
 
 let nameUserSystem = ref("");
 let typeDocumentUserSystem = ref("");
@@ -245,6 +244,7 @@ const disableSave = computed(() => {
     !passwordUserSystem.value
   );
 });
+
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 const columns = ref([
@@ -345,7 +345,6 @@ const resetValuesForm = () => {
   valueInputTypeDocument.value = "";
   valueInputNumberDocument.value = "";
   valueInputRole.value = "";
-  valueInputPassword.value = "";
   nameUserSystem.value = "";
   typeDocumentUserSystem.value = "";
   numberDocumentUserSystem.value = "";
@@ -356,39 +355,51 @@ const resetValuesForm = () => {
 const editSystemUser = (item) => {
   titleModal.value = "EDITAR TIPO DE PAGO";
   typeAction.value = false;
-  idTypePays.value = item._id;
-  // valueInputTypeDocument.value = item.description;
+  idUserSystem.value = item._id;
   valueInputName.value = item.name;
-
+  valueInputTypeDocument.value = item.tpdocument;
+  valueInputNumberDocument.value = item.numdocument;
+  valueInputRole.value = item.role;
+  nameUserSystem.value = item.name;
+  typeDocumentUserSystem.value = item.tpdocument;
+  numberDocumentUserSystem.value = item.numdocument;
+  roleUserSystem.value = item.role;
   modal.toggleModal();
 };
 
 async function updateDataUserSystem() {
-  try {
-    const response = await updateUserSystem({
-      id: idTypePays.value,
-      name: nameUserSystem.value,
-      // description: descriptionUserSystem.value,
-    });
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Tipo de pago actualizado correctamente",
-    });
-    modal.toggleModal();
-    rows.value = [];
-    getDataUsers();
-  } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
-  }
+  console.log(passwordUserSystem.value);
+  // try {
+  //   const response = await updateUserSystem({
+  //     id: idUserSystem.value,
+  //     name: nameUserSystem.value,
+  //     tpdocument: typeDocumentUserSystem.value,
+  //     numdocument: numberDocumentUserSystem.value,
+  //     role: roleUserSystem.value,
+  //     password: passwordUserSystem.value,
+  //   });
+  //   $q.notify({
+  //     type: "positive",
+  //     position: "top",
+  //     message: "Tipo de pago actualizado correctamente",
+  //   });
+  //   modal.toggleModal();
+  //   rows.value = [];
+  //   getDataUsers();
+  // } catch {
+  //   $q.notify({
+  //     type: "negative",
+  //     position: "top",
+  //     message: "Ocurrió un error",
+  //   });
+  // }
 }
 
 async function getDataUsers() {
+  rows.value = [];
+  inactiveRows.value = [];
   loading.value = true;
+
   try {
     const data = await getUsers();
     let countActive = 1;
@@ -418,7 +429,7 @@ async function inactiveSystemUser(id) {
     const inactive = await inactiveUser(id);
     $q.notify({
       type: "positive",
-      message: "Usuario inactivado correctamente",
+      message: "Usuario desactivado correctamente",
       position: "top",
     });
     rows.value = [];
@@ -461,18 +472,18 @@ async function postDataUserSystem() {
       role: roleUserSystem.value,
       password: passwordUserSystem.value,
     });
+    modal.toggleModal();
+    rows.value = [];
     $q.notify({
       type: "positive",
       message: "Usuario registrado correctamente",
       position: "top",
     });
-    modal.toggleModal();
-    rows.value = [];
     getDataUsers();
   } catch {
     $q.notify({
       type: "negative",
-      message: "No se pudo registrar el tipo de pago",
+      message: "Ocurrió un error",
       position: "top",
     });
   }
@@ -496,16 +507,17 @@ onMounted(() => {
   font-size: 18px;
 }
 .container-content {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
-.icon-check{
+.icon-check {
   font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
   height: 80%;
   max-height: 60vh;
+  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;

@@ -186,6 +186,8 @@ import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
+const $q = useQuasar();
+
 const modal = modalState();
 const titleModal = ref("");
 const loading = ref(false);
@@ -200,13 +202,13 @@ const disableSave = computed(() => {
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
-let nameTypePays = ref("");
-let descriptionTypePays = ref("");
-let valueInputName = ref("");
-let valueInputDescription = ref("");
 let tab = ref("active");
 
-const $q = useQuasar();
+let nameTypePays = ref("");
+let descriptionTypePays = ref("");
+
+let valueInputName = ref("");
+let valueInputDescription = ref("");
 
 const columns = ref([
   {
@@ -266,10 +268,14 @@ const getInputDescription = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR TIPO DE PAGO";
-  valueInputDescription.value = "";
-  valueInputName.value = "";
+  resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
+};
+
+const resetValuesForm = () => {
+  valueInputDescription.value = "";
+  valueInputName.value = "";
   nameTypePays.value = "";
   descriptionTypePays.value = "";
 };
@@ -290,7 +296,7 @@ async function inactivePayMaintenance(id) {
     const inactive = await inactiveTypePay(id);
     $q.notify({
       type: "positive",
-      message: "Tipo de pago inactivado correctamente",
+      message: "Tipo de pago desactivado correctamente",
       position: "top",
     });
     rows.value = [];
@@ -329,6 +335,8 @@ async function postDataTypePays() {
 }
 
 async function getDataTypePays() {
+  rows.value = [];
+  inactiveRows.value = [];
   loading.value = true;
   try {
     const { pays } = await getTypePays();
@@ -426,11 +434,12 @@ onMounted(() => {
 .icon-table {
   font-size: 18px;
 }
-.icon-check{
+.icon-check {
   font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
   border: 2px solid var(--color-gray);

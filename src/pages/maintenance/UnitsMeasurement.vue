@@ -69,8 +69,8 @@
 </template>
 <script setup>
 import {
-getTypeUnitsMeasurement,
-postTypeUnitsMeasurement,
+  getTypeUnitsMeasurement,
+  postTypeUnitsMeasurement,
 } from "@/api/maintenance/units-measurement";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
