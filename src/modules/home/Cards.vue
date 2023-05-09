@@ -70,12 +70,11 @@ const goToModule = (route) => {
 .container-view {
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 20px;
 }
 .item-card-module {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
+  grid-gap: 10px;
   width: 100%;
   max-height: 70vh;
   padding-bottom: 20px;
@@ -92,7 +91,6 @@ const goToModule = (route) => {
 .my-card {
   width: 280px;
   border-radius: 10px;
-  /* border: 1.8px solid var(--color-gray); */
 }
 .my-card:hover {
   cursor: pointer;

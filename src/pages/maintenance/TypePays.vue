@@ -278,7 +278,7 @@ const resetValuesForm = () => {
   valueInputName.value = "";
   nameTypePays.value = "";
   descriptionTypePays.value = "";
-}
+};
 
 const editPayMaintenance = (item) => {
   titleModal.value = "EDITAR TIPO DE PAGO";
@@ -434,7 +434,7 @@ onMounted(() => {
 .icon-table {
   font-size: 18px;
 }
-.icon-check{
+.icon-check {
   font-size: 25px;
 }
 .container-table {

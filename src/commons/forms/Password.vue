@@ -48,7 +48,7 @@ const rules = [
     }
     return true;
   },
-]
+];
 
 const props = defineProps({
   label: {

@@ -220,7 +220,6 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idUserSystem = ref();
-const isSuperUser = ref(true);
 
 let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
@@ -465,7 +464,7 @@ async function activeSystemUser(id) {
 }
 
 async function postDataUserSystem() {
-  try{
+  try {
     const { data } = await postUser({
       name: nameUserSystem.value,
       tpdocument: typeDocumentUserSystem.value,
