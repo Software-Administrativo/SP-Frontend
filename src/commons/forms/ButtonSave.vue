@@ -1,5 +1,5 @@
 <template>
-  <q-btn class="q-px-sm button-save" label="Guardar" @click="handleClick" />
+  <q-btn class="q-px-sm q-pt-sm button-save" label="Guardar" @click="handleClick" />
 </template>
 <script setup>
 const emits = defineEmits({

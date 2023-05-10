@@ -25,12 +25,12 @@
 
 <script setup>
 // Imports
+import { validateUser } from "@/api/sign-in";
+import { RESPONSES } from "@/helpers";
+import Form from "@/modules/sign-in/Form.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { validateUser } from "@/api/sign-in";
-import { useStorage } from "@/stores/localStorage.js";
-import Form from "@/modules/sign-in/Form.vue";
-import { RESPONSES } from "@/helpers";
 
 // Data
 const router = useRouter();

@@ -128,71 +128,80 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameUserSystem"
-            @onWrite="getInputName"
-          />
-          <Select
-            class="q-pb-xs q-mb-md"
-            type="documents"
-            label="Tipo de documento"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputTypeDocument"
-            v-model="typeDocumentUserSystem"
-            @onSelect="getSelectDataTypeDocument"
-          />
-          <Input
-            label="Número documento"
-            type="number"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputNumberDocument"
-            v-model="numberDocumentUserSystem"
-            @onWrite="getInputNumberDocument"
-          />
-          <Select
-            class="q-pb-xs q-mb-md"
-            type="roles"
-            label="Rol"
-            :required="true"
-            :value="valueInputRole"
-            v-model="roleUserSystem"
-            @onSelect="getSelectDataRole"
-          ></Select>
-
-          <Password
-            label="Contraseña"
-            :required="true"
-            :ruless="rules"
-            v-model="passwordUserSystem"
-            @onPassword="getPasswordData"
-          />
-
-          <span class="text-required q-py-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center q-mt-sm">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataUserSystem"
+    <ModalForm class="modal">
+      <div class="modalSystem">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              type="text"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameUserSystem"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataUserSystem"
+            <div class="row justify-between">
+              <Select
+                class="q-pb-xs q-mb-md"
+                type="documents"
+                label="Tipo de documento"
+                :required="true"
+                :ruless="rules"
+                :value="valueInputTypeDocument"
+                v-model="typeDocumentUserSystem"
+                @onSelect="getSelectDataTypeDocument"
+              />
+              <Input
+                label="Número documento"
+                type="number"
+                :required="true"
+                :ruless="rules"
+                :value="valueInputNumberDocument"
+                v-model="numberDocumentUserSystem"
+                @onWrite="getInputNumberDocument"
+              />
+            </div>
+            <Select
+              v-if="valueInputRole != 'SUPER'"
+              class="q-pb-xs q-mb-md"
+              type="roles"
+              label="Rol"
+              :required="true"
+              :value="valueInputRole"
+              v-model="roleUserSystem"
+              @onSelect="getSelectDataRole"
+            ></Select>
+
+            <Password
+              v-if="valueInputRole != 'SUPER'"
+              label="Contraseña"
+              :required="true"
+              :ruless="rules"
+              v-model="passwordUserSystem"
+              @onPassword="getPasswordData"
             />
+
+            <span class="text-required q-py-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center q-mt-sm">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataUserSystem"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataUserSystem"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -206,6 +215,7 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import Password from "@/commons/forms/Password.vue";
 import Select from "@/commons/forms/Select.vue";
+import { RESPONSES } from "@/helpers";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
@@ -214,12 +224,13 @@ import { computed, onMounted, ref } from "vue";
 const $q = useQuasar();
 
 const modal = modalState();
+const idUserSystem = ref();
 const titleModal = ref("");
 const loading = ref(false);
+const isLoading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idUserSystem = ref();
 
 let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
@@ -236,13 +247,19 @@ let filter = ref("");
 let tab = ref("active");
 
 const disableSave = computed(() => {
-  return (
+  if(
     !nameUserSystem.value ||
     !typeDocumentUserSystem.value ||
     !numberDocumentUserSystem.value ||
     !roleUserSystem.value ||
     !passwordUserSystem.value
-  );
+  ){
+    return true;
+  } else if (isLoading.value == true){
+    return true
+  } else {
+    return false;
+  }
 });
 
 const rules = [(v) => !!v || "Este campo es requerido"];
@@ -368,6 +385,8 @@ const editSystemUser = (item) => {
 };
 
 async function updateDataUserSystem() {
+  loading.value = true;
+  isLoading.value = true;
   console.log(passwordUserSystem.value);
   // try {
   //   const response = await updateUserSystem({
@@ -378,6 +397,7 @@ async function updateDataUserSystem() {
   //     role: roleUserSystem.value,
   //     password: passwordUserSystem.value,
   //   });
+  //   isLoading.value = false;
   //   $q.notify({
   //     type: "positive",
   //     position: "top",
@@ -416,77 +436,78 @@ async function getDataUsers() {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    showNotification("negative", "Ocurrió un error al obtener los usuarios");
   }
 }
 
 async function inactiveSystemUser(id) {
   try {
     const inactive = await inactiveUser(id);
-    $q.notify({
-      type: "positive",
-      message: "Usuario desactivado correctamente",
-      position: "top",
-    });
+    showNotification("positive", "Usuario desactivado correctamente");
     rows.value = [];
     inactiveRows.value = [];
     getDataUsers();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    showNotification("negative", "Ocurrió un error al desactivar el usuario");
   }
 }
 
 async function activeSystemUser(id) {
   try {
     const active = await activeUser(id);
-    $q.notify({
-      type: "positive",
-      message: "Usuario activado correctamente",
-      position: "top",
-    });
+    showNotification("positive", "Usuario activado correctamente");
     rows.value = [];
     inactiveRows.value = [];
     getDataUsers();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-    });
+    showNotification("negative", "Ocurrió un error al activar el usuario");
   }
 }
 
 async function postDataUserSystem() {
+  isLoading.value = true;
   try {
-    const { data } = await postUser({
+    const data = await postUser({
       name: nameUserSystem.value,
       tpdocument: typeDocumentUserSystem.value,
       numdocument: numberDocumentUserSystem.value,
       role: roleUserSystem.value,
       password: passwordUserSystem.value,
     });
-    modal.toggleModal();
-    rows.value = [];
-    $q.notify({
-      type: "positive",
-      message: "Usuario registrado correctamente",
-      position: "top",
-    });
-    getDataUsers();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+
+    isLoading.value = false;
+
+    let response = data.response.data.errors[0].msg;
+
+    if (response == RESPONSES.USEREXIST) {
+      showNotification("negative", "El usuario ya existe");
+    } else if (response == RESPONSES.LENGTHPASSWORD) {
+      showNotification(
+        "negative",
+        "La contraseña debe tener de 6 a 20 carácteres"
+      );
+    } else if (response == RESPONSES.RULESPASSWORD) {
+      showNotification(
+        "negative",
+        "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
+      );
+    } else {
+      modal.toggleModal();
+      rows.value = [];
+      showNotification("positive", "Usuario registrado correctamente");
+      getDataUsers();
+    }
+  } catch (error) {
+    showNotification("negative", "Ocurrió un error");
   }
+}
+
+function showNotification(type, message) {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
 }
 
 onMounted(() => {
@@ -494,6 +515,23 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.spinner{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
+.modalSystem {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modalSystem::-webkit-scrollbar {
+  display: none;
+}
 .title {
   font-size: var(--font-title);
 }

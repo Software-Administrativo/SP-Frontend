@@ -1,6 +1,6 @@
-import { createRouter, createWebHashHistory } from "vue-router";
 import { useStorage } from "@/stores/localStorage.js";
 import SignInView from "@/views/SignInView.vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -16,6 +16,14 @@ const router = createRouter({
       meta: {
         requiresAuth: false,
       },
+      beforeEnter: (to, from, next) => {
+        const { token } = useStorage();
+        if (token) {
+          next("/home");
+        } else {
+          next();
+        }
+      }
     },
     {
       path: "/home",
