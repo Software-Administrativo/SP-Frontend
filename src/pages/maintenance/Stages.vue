@@ -277,10 +277,10 @@ const getInputDescription = (value) => {
 };
 
 const clickButton = () => {
-  titleModal.value = "REGISTRAR LOTE";
+  titleModal.value = "REGISTRAR ETAPA";
   valueInputName.value = "";
-  valueInputDescription = "";
-  valueInputLot = "";
+  valueInputDescription.value = "";
+  valueInputLot.value = "";
   typeAction.value = true;
   modal.toggleModal();
   nameStages.value = "";
@@ -289,12 +289,12 @@ const clickButton = () => {
 };
 
 const editStageMaintenance = (item) => {
-  titleModal.value = "EDITAR LOTE";
+  titleModal.value = "EDITAR ETAPA";
   typeAction.value = false;
   idStage.value = item._id;
   valueInputName.value = item.name;
-  valueInputLot = item.lot;
-  valueInputDescription = item.description;
+  valueInputLot.value = item.lot;
+  valueInputDescription.value = item.description;
   nameStages.value = item.name;
   lotStages.value = item.lot;
   descriptionStages.value = item.description;

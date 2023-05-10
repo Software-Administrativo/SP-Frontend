@@ -281,8 +281,8 @@ const getInputOwner = (value) => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR FINCA";
   valueInputName.value = "";
-  valueInputAddress = "";
-  valueInputOwner = "";
+  valueInputAddress.value = "";
+  valueInputOwner.value = "";
   typeAction.value = true;
   modal.toggleModal();
   nameFarm.value = "";

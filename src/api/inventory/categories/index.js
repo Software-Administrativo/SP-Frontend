@@ -2,13 +2,13 @@ import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
 
 /**
- * data: data type brands
- * @returns API Response, with the data of the type brands
+ * data: data categories
+ * @returns API Response, with the data of the categories
  */
-const getBrands = async () => {
+const getCategories = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/inventory/brands`, {
+    const { data } = await sugarAxios.get(`/maintenance/categories`, {
       headers: {
         token: tokenExist,
       },
@@ -19,14 +19,13 @@ const getBrands = async () => {
   }
 };
 
-const postBrand = async (type) => {
+const postCategorie = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/inventory/brands/register`,
+      `/maintenance/categories/register`,
       {
         name: type.name,
-        farm: type.farm,
         description: type.description,
       },
       {
@@ -41,14 +40,13 @@ const postBrand = async (type) => {
   }
 };
 
-const updateBrand = async (item) => {
+const updateCategorie = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/brands/update/${item.id}`,
+      `/maintenance/categories/update/${item.id}`,
       {
         name: item.name,
-        farm: item.farm,
         description: item.description,
       },
       {
@@ -63,11 +61,11 @@ const updateBrand = async (item) => {
   }
 };
 
-const inactiveBrand = async (id) => {
+const inactiveCategorie = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/brands/inactive/${id}`,
+      `/maintenance/categories/inactive/${id}`,
       {},
       {
         headers: {
@@ -81,11 +79,11 @@ const inactiveBrand = async (id) => {
   }
 };
 
-const activeBrand = async (id) => {
+const activeCategorie = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/brands/active/${id}`,
+      `/maintenance/categories/active/${id}`,
       {},
       {
         headers: {
@@ -99,4 +97,4 @@ const activeBrand = async (id) => {
   }
 };
 
-export { getBrands, postBrand, inactiveBrand, activeBrand, updateBrand};
+export { getCategories, postCategorie, inactiveCategorie, activeCategorie, updateCategorie};

@@ -277,8 +277,8 @@ const getInputObservation = (value) => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR EPS";
   valueInputName.value = "";
-  valueInputDescription = "";
-  valueInputObservation = "";
+  valueInputDescription.value = "";
+  valueInputObservation.value = "";
   typeAction.value = true;
   modal.toggleModal();
   nameEps.value = "";
