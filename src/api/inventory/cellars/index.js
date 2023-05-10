@@ -2,13 +2,13 @@ import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
 
 /**
- * data: data type labors
- * @returns API Response, with the data of the type labors
+ * data: data cellars
+ * @returns API Response, with the data of the cellars
  */
-const getTypeLabors = async () => {
+const getCellars = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/maintenance/works`, {
+    const { data } = await sugarAxios.get(`/maintenance/cellars`, {
       headers: {
         token: tokenExist,
       },
@@ -19,14 +19,17 @@ const getTypeLabors = async () => {
   }
 };
 
-const postTypeLabor = async (type) => {
+const postCellar = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/maintenance/works/register`,
+      `/maintenance/cellars/register`,
       {
         name: type.name,
+        farm: type.farm,
+        typecontract: type.typecontract,
         description: type.description,
+        value: type.value,
       },
       {
         headers: {
@@ -40,14 +43,17 @@ const postTypeLabor = async (type) => {
   }
 };
 
-const updateTypeLabor = async (item) => {
+const updateCellar = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/works/update/${item.id}`,
+      `/maintenance/cellars/update/${item.id}`,
       {
         name: item.name,
+        farm: item.farm,
+        typecontract: item.typecontract,
         description: item.description,
+        value: item.value,
       },
       {
         headers: {
@@ -59,13 +65,13 @@ const updateTypeLabor = async (item) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
-const inactiveTypeLabor = async (id) => {
+const inactiveCellar = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/works/inactive/${id}`,
+      `/maintenance/cellars/inactive/${id}`,
       {},
       {
         headers: {
@@ -79,11 +85,11 @@ const inactiveTypeLabor = async (id) => {
   }
 };
 
-const activeTypeLabor = async (id) => {
+const activeCellar = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/works/active/${id}`,
+      `/maintenance/cellars/active/${id}`,
       {},
       {
         headers: {
@@ -97,4 +103,4 @@ const activeTypeLabor = async (id) => {
   }
 };
 
-export { getTypeLabors, postTypeLabor, activeTypeLabor, inactiveTypeLabor, updateTypeLabor};
+export { getCellars, postCellar, inactiveCellar, activeCellar, updateCellar};

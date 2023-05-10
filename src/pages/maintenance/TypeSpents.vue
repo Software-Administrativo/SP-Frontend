@@ -5,37 +5,120 @@
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear tipo de gasto" />
       <div class="container-table q-mt-md q-pa-md" rounded>
-        <q-table
-          flat
-          bordered
-          title="Gastos"
-          row-key="name"
-          :rows="rows"
-          :columns="columns"
-          :filter="filter"
-          :loading="loading"
-          :rows-per-page-options="[5, 10, 20]"
-        >
-          <template v-slot:top-right>
-            <q-input
-              borderless
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Search"
-            >
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-        </q-table>
+        <q-card>
+          <q-tabs
+            v-model="tab"
+            dense
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator
+          >
+            <q-tab name="active" label="Activos" />
+            <q-tab name="inactive" label="Inactivos" />
+          </q-tabs>
+
+          <q-separator />
+
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel name="active">
+              <q-table
+                flat
+                bordered
+                title="Gastos"
+                row-key="name"
+                :rows="rows"
+                :columns="columns"
+                :filter="filter"
+                :loading="loading"
+                :rows-per-page-options="[5, 10, 20]"
+              >
+                <template v-slot:top-right>
+                  <q-input
+                    borderless
+                    dense
+                    debounce="300"
+                    v-model="filter"
+                    placeholder="Search"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </template>
+                <template v-slot:body-cell-Acciones="props">
+                  <td 
+                  class="accions-td"
+                  >
+                    <q-btn-group class="full-width full-height" outline square>
+                      <q-btn
+                        icon="edit_note"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none"
+                        @click="editPayMaintenance(props.row)"
+                      />
+                      <q-btn
+                        icon="highlight_off"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none"
+                        @click="inactiveSpentMaintenance(props.row._id)"
+                      />
+                    </q-btn-group>
+                  </td>
+                </template>
+              </q-table>
+            </q-tab-panel>
+            <q-tab-panel name="inactive">
+              <q-table
+                flat
+                bordered
+                title="Gastos"
+                row-key="name"
+                :rows="inactiveRows"
+                :columns="columns"
+                :filter="filter"
+                :loading="loading"
+                :rows-per-page-options="[5, 10, 20]"
+              >
+                <template v-slot:top-right>
+                  <q-input
+                    borderless
+                    dense
+                    debounce="300"
+                    v-model="filter"
+                    placeholder="Search"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </template>
+                <template v-slot:body-cell-Acciones="props">
+                  <td
+                    class="accions-td"
+                  >
+                    <q-btn-group class="full-width full-height" outline square>
+                      <q-btn
+                        text-color="blue-10"
+                        class="col q-pa-none"
+                        @click="activeSpentMaintenance(props.row._id)"
+                      >
+                        <i class="icon icon-check"></i>
+                      </q-btn>
+                    </q-btn-group>
+                  </td>
+                </template>
+              </q-table>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card>
       </div>
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm>
-      <h6 class="q-my-md text-center">REGISTRAR GASTO</h6>
+      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
       <div class="row q-px-xl">
         <div class="col-12">
           <Input
@@ -44,6 +127,7 @@
             :required="true"
             type="text"
             :ruless="rules"
+            :value="valueInputName"
             v-model="nameTypeSpents"
             @onWrite="getInputName"
           />
@@ -51,6 +135,7 @@
             label="Descripción"
             type="text"
             :required="false"
+            :value="valueInputDescription"
             v-model="descriptionTypeSpents"
             @onWrite="getInputDescription"
           />
@@ -59,7 +144,16 @@
             obligatorios</span
           >
           <div class="row justify-center">
-            <ButtonSave :disable="disableSave" @onClick="saveInfo" />
+            <ButtonSave
+              v-if="typeAction"
+              :disable="disableSave"
+              @onClick="postDataTypeSpents"
+            />
+            <ButtonSave
+              v-else
+              :disable="disableSave"
+              @onClick="updateDataTypeSpents"
+            />
           </div>
         </div>
       </div>
@@ -67,27 +161,42 @@
   </template>
 </template>
 <script setup>
-import { getTypeSpents, postTypeSpents } from "@/api/maintenance/type-spents";
+import {
+activeTypeSpent,
+getTypeSpents,
+inactiveTypeSpent, 
+postTypeSpent,
+updateTypeSpent, } from "@/api/maintenance/type-spents";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
+import { useQuasar } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
 const modal = modalState();
+const titleModal = ref("");
 const loading = ref(false);
+const typeAction = ref(true);
+const rows = ref([]);
+const inactiveRows = ref([]);
+const idTypeSpents = ref();
 
-let nameTypeSpents = ref("");
-let filter = ref("");
-let descriptionTypeSpents = ref("");
-let disableSave = computed(() => {
+const disableSave = computed(() => {
   return nameTypeSpents.value == "";
 });
-
 const rules = [(v) => !!v || "Este campo es requerido"];
 
-const rows = ref([]);
+let filter = ref("");
+let nameTypeSpents = ref("");
+let descriptionTypeSpents = ref("");
+let valueInputName = ref("");
+let valueInputDescription = ref("");
+let tab = ref("active");
+
+const $q = useQuasar();
+
 const columns = ref([
   {
     name: "id",
@@ -125,13 +234,16 @@ const columns = ref([
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
     style: "font-size: var(--font-large);",
   },
+  {
+    name: "Acciones",
+    label: "Acciones",
+    field: "acciones",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
+    style: "font-size: var(--font-medium);",
+  },
 ]);
-
-const clickButton = () => {
-  modal.toggleModal();
-  nameTypeSpents.value = "";
-  descriptionTypeSpents.value = "";
-};
 
 const getInputName = (value) => {
   nameTypeSpents.value = value;
@@ -141,38 +253,157 @@ const getInputDescription = (value) => {
   descriptionTypeSpents.value = value;
 };
 
-const saveInfo = () => {
-  postDataTypeSpents();
+const clickButton = () => {
+  titleModal.value = "REGISTRAR TIPO DE GASTO";
+  valueInputDescription.value = "";
+  valueInputName.value = "";
+  typeAction.value = true;
+  modal.toggleModal();
+  nameTypeSpents.value = "";
+  descriptionTypeSpents.value = "";
+};
+
+const editPayMaintenance = (item) => {
+  titleModal.value = "EDITAR TIPO DE GASTO";
+  typeAction.value = false;
+  idTypeSpents.value = item._id;
+  valueInputDescription.value = item.description;
+  valueInputName.value = item.name;
+  nameTypeSpents.value = item.name;
+  descriptionTypeSpents.value = item.description;
   modal.toggleModal();
 };
 
-const postDataTypeSpents = async () => {
-  const { spents } = await postTypeSpents({
-    name: nameTypeSpents.value,
-    description: descriptionTypeSpents.value,
-  });
-  getDataTypeSpents();
-};
+async function inactiveSpentMaintenance(id) {
+  try {
+    const inactive = await inactiveTypeSpent(id);
+    $q.notify({
+      type: "positive",
+      message: "Tipo de gasto desactivado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataTypeSpents();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+      position: "top",
+    });
+  }
+}
+
+async function postDataTypeSpents() {
+  modal.toggleModal();
+  try {
+    const spents = await postTypeSpent({
+      name: nameTypeSpents.value,
+      description: descriptionTypeSpents.value,
+    });
+    $q.notify({
+      type: "positive",
+      message: "Tipo de gasto registrado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    getDataTypeSpents();
+  } catch {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+      position: "top",
+    });
+  }
+}
+
 
 const getDataTypeSpents = async () => {
+  rows.value = [];
+  inactiveRows.value = [];
   loading.value = true;
+  try{
   const { spents } = await getTypeSpents();
-  let count = 1;
+  let countActive = 1;
+  let countInactive = 1;
   spents.forEach((item) => {
     item.status = item.status ? "Inactivo" : "Activo";
-    item.id = count++;
+    if(item.status == "Activo"){
+    item.id = countActive++;
+    rows.value.push(item);
+    } else {
+      item.id = countInactive++;
+      inactiveRows.value.push(item);
+    }
     item.description =
       item.description.trim() == "" ? "No registra" : item.description;
-  });
-  rows.value = spents;
-  loading.value = false;
-};
+    });
+    loading.value = false;
+  } catch {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+      position: "top",
+    });
+  };
+}
+
+async function updateDataTypeSpents() {
+  try {
+    const response = await updateTypeSpent({
+      id: idTypeSpents.value,
+      name: nameTypeSpents.value,
+      description: descriptionTypeSpents.value,
+    });
+    $q.notify({
+      type: "positive",
+      position: "top",
+      message: "Tipo de gasto actualizado correctamente",
+    });
+    modal.toggleModal();
+    rows.value = [];
+    getDataTypeSpents();
+  } catch {
+    $q.notify({
+      type: "negative",
+      position: "top",
+      message: "Ocurrió un error",
+    });
+  }
+  nameTypeSpents.value = "";
+  descriptionTypeSpents.value = "";
+}
+
+async function activeSpentMaintenance(id) {
+  try {
+    const active = await activeTypeSpent(id);
+    $q.notify({
+      type: "positive",
+      message: "Tipo de gasto activado correctamente",
+      position: "top",
+    });
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataTypeSpents();
+  } catch (error) {
+    $q.notify({
+      type: "negative",
+      message: "Ocurrió un error",
+    });
+  }
+}
 
 onMounted(() => {
   getDataTypeSpents();
 });
 </script>
 <style scoped>
+.accions-td{
+  padding: 0px;
+  margin: 0px;
+  min-width: 100px;
+  max-width: 100px;
+}
 .title {
   font-size: var(--font-title);
 }
@@ -185,6 +416,9 @@ onMounted(() => {
 }
 .separator {
   border: 1.8px solid var(--color-gray);
+}
+.icon {
+  font-size: 1.5rem;
 }
 .container-content {
   max-width: 1200px;

@@ -41,4 +41,62 @@ const postEps = async (type) => {
   }
 };
 
-export { getEps, postEps };
+const updateEps = async (item) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/eps/update/${item.id}`,
+      {
+        name: item.name,
+        description: item.description,
+        observation: item.observation,
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const inactiveEps = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/eps/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activeEps = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/eps/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getEps, postEps, inactiveEps, activeEps, updateEps};
