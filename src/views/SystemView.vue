@@ -247,16 +247,16 @@ let filter = ref("");
 let tab = ref("active");
 
 const disableSave = computed(() => {
-  if(
+  if (
     !nameUserSystem.value ||
     !typeDocumentUserSystem.value ||
     !numberDocumentUserSystem.value ||
     !roleUserSystem.value ||
     !passwordUserSystem.value
-  ){
+  ) {
     return true;
-  } else if (isLoading.value == true){
-    return true
+  } else if (isLoading.value == true) {
+    return true;
   } else {
     return false;
   }
@@ -515,7 +515,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.spinner{
+.spinner {
   position: absolute;
   top: 50%;
   left: 50%;

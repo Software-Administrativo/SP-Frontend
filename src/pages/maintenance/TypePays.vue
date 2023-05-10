@@ -172,11 +172,11 @@
 </template>
 <script setup>
 import {
-activeTypePay,
-getTypePays,
-inactiveTypePay,
-postTypePays,
-updateTypePay,
+  activeTypePay,
+  getTypePays,
+  inactiveTypePay,
+  postTypePays,
+  updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

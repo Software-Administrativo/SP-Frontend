@@ -23,7 +23,7 @@ const router = createRouter({
         } else {
           next();
         }
-      }
+      },
     },
     {
       path: "/home",
