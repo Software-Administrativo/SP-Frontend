@@ -48,13 +48,8 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    style="
-                      padding: 0px;
-                      margin: 0px;
-                      min-width: 100px;
-                      max-width: 100px;
-                    "
+                  <td 
+                  class="accions-td"
                   >
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
@@ -101,12 +96,7 @@
                 </template>
                 <template v-slot:body-cell-Acciones="props">
                   <td
-                    style="
-                      padding: 0px;
-                      margin: 0px;
-                      min-width: 100px;
-                      max-width: 20px;
-                    "
+                    class="accions-td"
                   >
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
@@ -172,11 +162,11 @@
 </template>
 <script setup>
 import {
-activeTypePay,
-getTypePays,
-inactiveTypePay,
-postTypePays,
-updateTypePay,
+  activeTypePay,
+  getTypePays,
+  inactiveTypePay,
+  postTypePay,
+  updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -314,7 +304,7 @@ async function inactivePayMaintenance(id) {
 async function postDataTypePays() {
   modal.toggleModal();
   try {
-    const pays = await postTypePays({
+    const pays = await postTypePay({
       name: nameTypePays.value,
       description: descriptionTypePays.value,
     });
@@ -414,6 +404,12 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.accions-td{
+  padding: 0px;
+  margin: 0px;
+  min-width: 100px;
+  max-width: 100px;
+}
 .text-required {
   display: inline-block;
   font-size: var(--font-small);

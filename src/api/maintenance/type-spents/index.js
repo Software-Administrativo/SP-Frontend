@@ -19,7 +19,7 @@ const getTypeSpents = async () => {
   }
 };
 
-const postTypeSpents = async (type) => {
+const postTypeSpent = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
@@ -40,4 +40,61 @@ const postTypeSpents = async (type) => {
   }
 };
 
-export { getTypeSpents, postTypeSpents };
+const updateTypeSpent = async (item) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/spents/update/${item.id}`,
+      {
+        name: item.name,
+        description: item.description,
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const inactiveTypeSpent = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/spents/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activeTypeSpent = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/spents/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getTypeSpents, postTypeSpent, activeTypeSpent, inactiveTypeSpent, updateTypeSpent};

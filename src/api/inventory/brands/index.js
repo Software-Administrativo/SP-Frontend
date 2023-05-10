@@ -19,13 +19,14 @@ const getBrands = async () => {
   }
 };
 
-const postBrands = async (type) => {
+const postBrand = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
       `/inventory/brands/register`,
       {
         name: type.name,
+        farm: type.farm,
         description: type.description,
       },
       {
@@ -40,4 +41,62 @@ const postBrands = async (type) => {
   }
 };
 
-export { getBrands, postBrands };
+const updateBrand = async (item) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/brands/update/${item.id}`,
+      {
+        name: item.name,
+        farm: item.farm,
+        description: item.description,
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const inactiveBrand = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/brands/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activeBrand = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/brands/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getBrands, postBrand, inactiveBrand, activeBrand, updateBrand};

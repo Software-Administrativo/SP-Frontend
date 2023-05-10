@@ -8,7 +8,7 @@ import { getToken } from "@/helpers";
 const getStages = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/maintenance/stages`, {
+    const { data } = await sugarAxios.get(`/maintenance/stage`, {
       headers: {
         token: tokenExist,
       },
@@ -19,15 +19,15 @@ const getStages = async () => {
   }
 };
 
-const postStages = async (type) => {
+const postStage = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/maintenance/stages/register`,
+      `/maintenance/stage/register`,
       {
         name: type.name,
+        lot: type.lot,
         description: type.description,
-        father: type.father,
       },
       {
         headers: {
@@ -41,4 +41,67 @@ const postStages = async (type) => {
   }
 };
 
-export { getStages, postStages };
+const updateStage = async (item) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/stage/update/${item.id}`,
+      {
+        name: item.name,
+        lot: item.lot,
+        description: item.description,
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const inactiveStage = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/stage/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activeStage = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/stage/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
+
+
+
+export { getStages, postStage, inactiveStage, activeStage, updateStage};
