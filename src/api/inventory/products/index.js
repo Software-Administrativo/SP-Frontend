@@ -2,13 +2,13 @@ import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
 
 /**
- * data: data type brands
- * @returns API Response, with the data of the type brands
+ * data: data products
+ * @returns API Response, with the data of the products
  */
-const getBrands = async () => {
+const getProducts = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/inventory/brands`, {
+    const { data } = await sugarAxios.get(`/inventory/products`, {
       headers: {
         token: tokenExist,
       },
@@ -17,17 +17,18 @@ const getBrands = async () => {
   } catch (error) {
     console.error(error);
   }
-};
+};  
 
-const postBrand = async (type) => {
+const postProduct = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/inventory/brands/register`,
+      `/inventory/products/register`,
       {
         name: type.name,
-        farm: type.farm,
-        description: type.description,
+        categories: type.categories,
+        brand: type.brand,
+        amount: type.amount,
       },
       {
         headers: {
@@ -41,15 +42,16 @@ const postBrand = async (type) => {
   }
 };
 
-const updateBrand = async (item) => {
+const updateProduct = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/brands/update/${item.id}`,
+      `/inventory/products/update/${item.id}`,
       {
         name: item.name,
-        farm: item.farm,
-        description: item.description,
+        categories: item.categories,
+        brand: item.brand,
+        amount: item.amount,
       },
       {
         headers: {
@@ -63,11 +65,11 @@ const updateBrand = async (item) => {
   }
 };
 
-const inactiveBrand = async (id) => {
+const inactiveProduct = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/brands/inactive/${id}`,
+      `/inventory/products/inactive/${id}`,
       {},
       {
         headers: {
@@ -81,11 +83,11 @@ const inactiveBrand = async (id) => {
   }
 };
 
-const activeBrand = async (id) => {
+const activeProduct = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/brands/active/${id}`,
+      `/inventory/products/active/${id}`,
       {},
       {
         headers: {
@@ -99,4 +101,4 @@ const activeBrand = async (id) => {
   }
 };
 
-export { getBrands, postBrand, inactiveBrand, activeBrand, updateBrand};
+export { getproducts, postProduct, inactiveProduct, activeProduct, updateProduct};
