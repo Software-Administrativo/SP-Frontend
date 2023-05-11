@@ -7,7 +7,7 @@
       </div>
     </div>
     <q-separator class="separator" />
-    <div v-for="item in paths" :key="item.name" @click="clickRoute">
+    <div v-for="item in pathsRender" :key="item.name" @click="clickRoute">
       <RouterLink class="item" :to="item.path">
         <i class="icon-module" v-bind:class="item.icon"></i>
         <h5 class="name">{{ item.name }}</h5>
@@ -27,59 +27,67 @@ import { menuState } from "@/stores/menu";
 import { event } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
-const nameUser = ref("Hola");
-const token = useStorage();
+const nameUser = ref("");
 
-const isValidateJWT = token.decodeJwt();
+const validateToken = useStorage();
+const isValidateJWT = validateToken.decodeJwt();
+const pathsRender = ref([]);
+
+function validatePaths() {
+  const pathsValidate = paths.filter((item) => {
+    return item.rol.includes(isValidateJWT.rol);
+  });
+  pathsRender.value = pathsValidate;
+}
 
 const paths = [
   {
     name: "Inicio",
     path: "/home",
     icon: "icon icon-home",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Mantenimiento",
     path: "/maintenance",
     icon: "icon icon-maintenance",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Inventario",
     path: "/inventory",
     icon: "icon icon-inventory",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Costos",
     path: "/cost",
     icon: "icon icon-cost",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Pedidos",
     path: "/order",
     icon: "icon icon-order",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Transformación",
     path: "/transformation",
     icon: "icon icon-transformation",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Reportes",
     path: "/report",
     icon: "icon icon-report",
-    rol: ["admin", "user"],
+    rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Acceso al sistema",
     path: "/system",
     icon: "icon icon-system",
-    rol: ["admin"],
+    rol: ["SUPER"],
   },
 ];
 
@@ -87,6 +95,7 @@ const menu = menuState();
 
 onMounted(() => {
   nameUser.value = isValidateJWT.name;
+  validatePaths();
 });
 
 const emits = defineEmits({
