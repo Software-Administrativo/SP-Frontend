@@ -31,7 +31,7 @@ const router = createRouter({
       component: () => import("../views/HomeView.vue"),
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["ADMIN", "SUPER"],
       },
     },
     {
@@ -39,7 +39,7 @@ const router = createRouter({
       name: "cost",
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/CostView.vue"),
     },
@@ -49,7 +49,7 @@ const router = createRouter({
       component: () => import("../views/InventoryView.vue"),
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["ADMIN", "SUPER"],
       },
       children: [
         {
@@ -89,7 +89,7 @@ const router = createRouter({
       name: "maintenance",
       meta: {
         requiresAuth: true,
-        rol: ["admin"],
+        rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/MaintenanceView.vue"),
       children: [
@@ -145,7 +145,7 @@ const router = createRouter({
       name: "order",
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/OrderView.vue"),
     },
@@ -154,7 +154,7 @@ const router = createRouter({
       name: "report",
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/ReportView.vue"),
     },
@@ -163,7 +163,7 @@ const router = createRouter({
       name: "system",
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["SUPER"],
       },
       component: () => import("../views/SystemView.vue"),
     },
@@ -172,14 +172,14 @@ const router = createRouter({
       name: "transformation",
       meta: {
         requiresAuth: true,
-        rol: ["admin", "user"],
+        rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/TransformationView.vue"),
     },
   ],
 });
 
-// Validate if user can access to route / obtener el rol del usuario, validar el token
+// Validate if USER can access to route / obtener el rol del usuario, validar el token
 router.beforeEach((to, from) => {
   if (to.meta.requiresAuth) {
     const { token } = useStorage();
@@ -190,10 +190,21 @@ router.beforeEach((to, from) => {
     } else {
       const validateToken = useStorage();
       const isValidateJWT = validateToken.decodeJwt();
+      const userRole = isValidateJWT.rol;
+      const allowedRoles = to.meta.rol; // obtener los roles permitidos para la ruta actual
+      if (!allowedRoles.includes(userRole)) { 
+        // si el rol del usuario no está incluido en los permitidos
+        // redirigir al usuario a una ruta de la página de inicio
+        return {
+          path: "/:catchAll(.*)",
+        };
+      }
       if (!isValidateJWT) {
         return {
           path: "/",
         };
+      } else if (isValidateJWT.rol == 'ADMIN') {
+
       }
     }
   }
