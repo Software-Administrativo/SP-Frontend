@@ -1,1 +1,0 @@
-import{f as e,o as s,c as t,a}from"./index-dd023763.js";const o={class:"q-pa-md"},c=a("div",{class:"q-gutter-y-md",style:{"max-width":"600px"}},null,-1),_=[c],l={__name:"ReportView",setup(r){return e("mails"),(n,d)=>(s(),t("div",o,_))}};export{l as default};
