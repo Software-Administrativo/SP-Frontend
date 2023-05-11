@@ -63,13 +63,13 @@
   </template>
 </template>
 <script setup>
-import { ref, onMounted, computed } from "vue";
-import { getBrands, postBrands } from "@/api/inventory/brands";
-import { modalState } from "@/stores/modal.js";
+import { getBrands, postBrand } from "@/api/inventory/brands";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
-import ModalForm from "@/modules/global/ModalForm.vue";
-import Input from "@/commons/forms/Input.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
+import Input from "@/commons/forms/Input.vue";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import { modalState } from "@/stores/modal.js";
+import { computed, onMounted, ref } from "vue";
 
 const modal = modalState();
 
@@ -149,7 +149,7 @@ const saveInfo = () => {
 };
 
 const postDataBrands = async () => {
-  const { brands } = await postBrands({
+  const { brands } = await postBrand({
     name: nameBrands.value,
     description: descriptionBrands.value,
   });
