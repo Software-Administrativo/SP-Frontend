@@ -10,7 +10,7 @@
       class="select-farm"
       @onSelect="getSelectData"
       type="farms"
-      label="Fincas"
+      label="Finca"
       message="Finca requerida"
     ></Select>
     <q-separator class="separator" />
@@ -45,6 +45,10 @@ function validatePaths() {
     return item.rol.includes(isValidateJWT.rol);
   });
   pathsRender.value = pathsValidate;
+}
+
+function getSelectData(){
+  console.log("select")
 }
 
 const paths = [

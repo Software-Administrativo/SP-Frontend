@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.push('/home')"/>
+      <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
@@ -515,6 +518,10 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
 .spinner {
   position: absolute;
   top: 50%;

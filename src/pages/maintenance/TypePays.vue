@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">TIPOS DE PAGO</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()"/>
+      <h6 class="title q-my-lg">TIPOS DE PAGO</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear tipo de pago" />
@@ -48,9 +51,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td 
-                  class="accions-td"
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         icon="edit_note"
@@ -95,9 +96,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    class="accions-td"
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         text-color="blue-10"
@@ -404,7 +403,11 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.accions-td{
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
