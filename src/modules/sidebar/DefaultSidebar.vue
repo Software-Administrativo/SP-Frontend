@@ -1,13 +1,13 @@
 <template>
-  <div class="sidebar-close">
+  <div class="sidebar">
     <div
       v-for="item in pathsRender"
       :key="item.name"
       @click="clickRoute"
-      class="hola"
+      class="container-item"
     >
-      <RouterLink class="item-close" :to="item.path">
-        <i class="icon-module-close" v-bind:class="item.icon"></i>
+      <RouterLink class="item" :to="item.path">
+        <i class="icon-module" v-bind:class="item.icon"></i>
       </RouterLink>
     </div>
   </div>
@@ -100,39 +100,22 @@ const clickRoute = computed(() => {
 </script>
 
 <style scoped>
-.hola {
+.container-item {
   margin-top: 5.5px;
 }
 .router-link-active {
   background-color: var(--color-gray);
 }
-
 .sidebar {
-  height: calc(100vh - 50px);
-  width: 230px;
-  min-height: 610px;
-  background-color: white;
-  overflow-y: scroll;
-  position: relative;
-}
-
-.sidebar-close {
   width: 70px;
   padding-top: 92px;
   height: calc(100vh - 50px);
   background-color: white;
 }
-
 .sidebar::-webkit-scrollbar {
   display: none;
 }
-
-.user-sidebar {
-  background-image: url(../../assets/sidebar/background.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.icon-module-close {
+.icon-module {
   padding: 0 !important;
   margin: 14px;
 }
@@ -140,43 +123,12 @@ const clickRoute = computed(() => {
   text-decoration: none;
   display: flex;
   color: black;
-  margin: 5px 15px;
-  border-radius: 10px;
-}
-.item-close {
-  text-decoration: none;
-  display: flex;
-  color: black;
   border-radius: 10px;
   margin: 0px 15px;
 }
-.icon-user {
-  font-size: 50px;
-  margin-left: calc(50% - 20px);
-  color: white;
-}
-
 .item:hover {
   background-color: var(--color-gray);
 }
-
-.name {
-  margin-left: 20px !important;
-  font-size: 18px;
-  margin: 7px;
-}
-
-.name-user {
-  font-size: var(--font-large);
-  color: white;
-}
-.logo-global {
-  position: absolute;
-  bottom: 20px;
-  width: 60px;
-  left: calc(50% - 30px);
-}
-
 .icon {
   font-size: var(--font-large);
   color: var(--color-blue);
