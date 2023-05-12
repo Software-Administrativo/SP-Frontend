@@ -1,23 +1,15 @@
 <template>
-  <div class="sidebar">
-    <div class="user-sidebar">
-      <div class="q-py-xs">
-        <i class="icon-type-document icon-user" />
-        <h6 class="name-user text-center q-ma-none">{{ nameUser }}</h6>
-      </div>
-    </div>
-    <q-separator class="separator" />
-    <div v-for="item in pathsRender" :key="item.name" @click="clickRoute">
-      <RouterLink class="item" :to="item.path">
-        <i class="icon-module" v-bind:class="item.icon"></i>
-        <h5 class="name">{{ item.name }}</h5>
+  <div class="sidebar-close">
+    <div
+      v-for="item in pathsRender"
+      :key="item.name"
+      @click="clickRoute"
+      class="hola"
+    >
+      <RouterLink class="item-close" :to="item.path">
+        <i class="icon-module-close" v-bind:class="item.icon"></i>
       </RouterLink>
     </div>
-    <img
-      src="../../assets/global/project-logo.svg"
-      alt="logo"
-      class="logo-global"
-    />
   </div>
 </template>
 
@@ -108,6 +100,9 @@ const clickRoute = computed(() => {
 </script>
 
 <style scoped>
+.hola {
+  margin-top: 5.5px;
+}
 .router-link-active {
   background-color: var(--color-gray);
 }
@@ -120,13 +115,26 @@ const clickRoute = computed(() => {
   overflow-y: scroll;
   position: relative;
 }
+
+.sidebar-close {
+  width: 70px;
+  padding-top: 92px;
+  height: calc(100vh - 50px);
+  background-color: white;
+}
+
 .sidebar::-webkit-scrollbar {
   display: none;
 }
+
 .user-sidebar {
   background-image: url(../../assets/sidebar/background.png);
   background-repeat: no-repeat;
   background-size: cover;
+}
+.icon-module-close {
+  padding: 0 !important;
+  margin: 14px;
 }
 .item {
   text-decoration: none;
@@ -134,6 +142,13 @@ const clickRoute = computed(() => {
   color: black;
   margin: 5px 15px;
   border-radius: 10px;
+}
+.item-close {
+  text-decoration: none;
+  display: flex;
+  color: black;
+  border-radius: 10px;
+  margin: 0px 15px;
 }
 .icon-user {
   font-size: 50px;

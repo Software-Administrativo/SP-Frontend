@@ -8,6 +8,7 @@
         :style="sidebar"
         v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
       ></Sidebar>
+      <DefaultSidebar v-if="menu.menuIsOpen == false && routeName != 'sign-in'"></DefaultSidebar>
       <div :style="viewRouter">
         <div :style="viewContainer">
           <router-view></router-view>
@@ -23,6 +24,7 @@ import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import { menuState } from "@/stores/menu";
 import { computed } from "vue";
 import { RouterView, useRoute } from "vue-router";
+import DefaultSidebar from "../modules/sidebar/DefaultSidebar.vue";
 
 const menu = menuState();
 
@@ -32,9 +34,9 @@ const routeName = computed(() => {
 
 const viewRouter = computed(() => {
   if (menu.menuIsOpen) {
-    return "width: calc(100% - 220px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
+    return "width: calc(100% - 230px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else {
-    return "width: 100%; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
+    return "width: calc(100% - 70px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   }
 });
 
