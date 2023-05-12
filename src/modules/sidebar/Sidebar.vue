@@ -6,6 +6,13 @@
         <h6 class="name-user text-center q-ma-none">{{ nameUser }}</h6>
       </div>
     </div>
+    <Select
+      class="select-farm"
+      @onSelect="getSelectData"
+      type="farms"
+      label="Fincas"
+      message="Finca requerida"
+    ></Select>
     <q-separator class="separator" />
     <div v-for="item in pathsRender" :key="item.name" @click="clickRoute">
       <RouterLink class="item" :to="item.path">
@@ -22,8 +29,8 @@
 </template>
 
 <script setup>
+import Select from "@/commons/forms/Select.vue";
 import { useStorage } from "@/stores/localStorage.js";
-import { menuState } from "@/stores/menu";
 import { event } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
@@ -91,8 +98,6 @@ const paths = [
   },
 ];
 
-const menu = menuState();
-
 onMounted(() => {
   nameUser.value = isValidateJWT.name;
   validatePaths();
@@ -108,10 +113,12 @@ const clickRoute = computed(() => {
 </script>
 
 <style scoped>
+.select-farm{
+  margin: 15px;
+}
 .router-link-active {
   background-color: var(--color-gray);
 }
-
 .sidebar {
   height: calc(100vh - 50px);
   width: 230px;

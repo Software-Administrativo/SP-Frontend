@@ -11,7 +11,7 @@
       name="type"
       v-model="typeDocument"
       :options="types"
-      :rules="[(val) => !!val || 'Tipo requerido']"
+      :rules="[(val) => !!val || props.message]"
     />
   </div>
 </template>
@@ -51,6 +51,11 @@ const props = defineProps({
     required: false,
     default: "",
   },
+  message: {
+    type: String,
+    required: false,
+    default: "Tipo requerido",
+  },
 });
 
 const emits = defineEmits({
@@ -65,13 +70,13 @@ watch(typeDocument, () => {
 // onMounted(async () => {
 onMounted(() => {
   if (props.type === "documents") {
-    // AQUI HACEMOS LA PETICION AL BACKEND PARA TRAER LOS DOCUMENTOS
-    // types.value = await getAllDocuments()
     types.value = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
   } else if (props.type === "roles") {
     types.value = ["ADMIN"].map((item) => {
       return `${item[0].toUpperCase()}${item.slice(1)}`;
     });
+  } else if (props.type === "farms"){
+    types.value = ["Agricultura", "Comercial", "Industrial", "Otros", "Servicios"];
   }
 });
 </script>

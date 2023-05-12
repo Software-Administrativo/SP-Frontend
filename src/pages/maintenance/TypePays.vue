@@ -460,4 +460,24 @@ onMounted(() => {
     max-width: 510px;
   }
 }
+@media (min-width: 621px) and (max-width: 720px) {
+  .container-table {
+    max-width: 610px;
+  }
+}
+@media (min-width: 721px) and (max-width: 920px) {
+  .container-table {
+    max-width: 710px;
+  }
+}
+@media (min-width: 921px) and (max-width: 1020px) {
+  .container-table {
+    max-width: 810px;
+  }
+}
+@media (min-width: 1021px) and (max-width: 1320px) {
+  .container-table {
+    max-width: 1010px;
+  }
+}
 </style>

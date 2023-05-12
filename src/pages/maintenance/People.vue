@@ -415,6 +415,7 @@ onMounted(() => {
   border-radius: 15px;
   height: 80%;
   max-height: 60vh;
+  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
