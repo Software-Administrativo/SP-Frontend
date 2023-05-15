@@ -101,4 +101,4 @@ const activeProduct = async (id) => {
   }
 };
 
-export { getproducts, postProduct, inactiveProduct, activeProduct, updateProduct};
+export { getProducts, postProduct, inactiveProduct, activeProduct, updateProduct};

@@ -1,9 +1,9 @@
 <template>
   <div class="q-py-sm table-container">
-    <h6 class="title q-my-lg">Bodegas</h6>
+    <h6 class="title q-my-lg">Productos</h6>
     <q-separator class="separator" />
     <div class="container-content">
-      <ButtonAdd @onClick="clickButton" label="Crear nueva bodega" />
+      <ButtonAdd @onClick="clickButton" label="Crear nuevo producto" />
       <div class="container-table q-mt-md q-pa-md" rounded>
         <q-card>
           <q-tabs
@@ -128,7 +128,7 @@
           />
           <Input
             class="q-pb-xs"
-            label="Finca"
+            label="Categoria"
             :required="true"
             type="text"
             :ruless="rules"
@@ -138,7 +138,7 @@
           />
           <Input
             class="q-pb-xs"
-            label="Tipo Contrato"
+            label="Marca"
             :required="true"
             type="text"
             :ruless="rules"
@@ -415,7 +415,7 @@ async function updateDataProduct() {
     $q.notify({
       type: "positive",
       position: "top",
-      message: "Bodega actualizada correctamente",
+      message: "Producto actualizado correctamente",
     });
     modal.toggleModal();
     rows.value = [];
