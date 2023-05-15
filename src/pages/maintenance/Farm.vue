@@ -192,7 +192,9 @@ const inactiveRows = ref([]);
 const idFarm = ref();
 
 const disableSave = computed(() => {
-  return nameFarm.value == "";
+  return (
+    nameFarm.value == "" || addressFarm.value == "" || ownerFarm.value == ""
+  );
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
@@ -263,15 +265,6 @@ const columns = ref([
     headerStyle: "font-size: var(--font-medium); font-weight: bold;",
     style: "font-size: var(--font-medium);",
   },
-  {
-    name: "Acciones",
-    label: "Acciones",
-    field: "acciones",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
-  }
 ]);
 
 const getInputName = (value) => {
