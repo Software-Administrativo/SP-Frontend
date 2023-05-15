@@ -260,15 +260,6 @@ const columns = ref([
     headerStyle: "font-size: var(--font-medium); font-weight: bold;",
     style: "font-size: var(--font-medium);",
   },
-  {
-    name: "Acciones",
-    label: "Acciones",
-    field: "acciones",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
-  },
 ]);
 
 const getInputName = (value) => {

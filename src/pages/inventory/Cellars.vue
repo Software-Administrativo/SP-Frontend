@@ -1,9 +1,9 @@
 <template>
-  <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">LOTES</h6>
+  <div class="q-py-sm table-container">
+    <h6 class="title q-my-lg">Bodegas</h6>
     <q-separator class="separator" />
     <div class="container-content">
-      <ButtonAdd @onClick="clickButton" label="Crear nuevo lote" />
+      <ButtonAdd @onClick="clickButton" label="Crear nueva bodega" />
       <div class="container-table q-mt-md q-pa-md" rounded>
         <q-card>
           <q-tabs
@@ -26,7 +26,7 @@
               <q-table
                 flat
                 bordered
-                title="Etapas"
+                title="Bodegas"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -54,13 +54,13 @@
                         icon="edit_note"
                         text-color="blue-10"
                         class="col text-bold q-pa-none"
-                        @click="editLotMaintenance(props.row)"
+                        @click="editCellarsInventory(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none"
-                        @click="inactiveLotMaintenance(props.row._id)"
+                        @click="inactiveCellarInventory(props.row._id)"
                       />
                     </q-btn-group>
                   </td>
@@ -71,7 +71,7 @@
               <q-table
                 flat
                 bordered
-                title="Etapas"
+                title="Bodegas"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -98,7 +98,7 @@
                       <q-btn
                         text-color="blue-10"
                         class="col q-pa-none"
-                        @click="activeLotMaintenance(props.row._id)"
+                        @click="activeCellarInventory(props.row._id)"
                       >
                         <i class="icon icon-check"></i>
                       </q-btn>
@@ -118,73 +118,52 @@
       <div class="row q-px-xl">
         <div class="col-12">
           <Input
-            class="q-pb-xs"
             label="Nombre"
             :required="true"
             type="text"
             :ruless="rules"
             :value="valueInputName"
-            v-model="nameLots"
+            v-model="nameCellars"
             @onWrite="getInputName"
           />
           <Input
             class="q-pb-xs"
-            label="Tamaño"
-            type="text"
+            label="Finca"
             :required="true"
+            type="text"
             :ruless="rules"
-            :value="valueInputAreaSize"
-            v-model="areaSizeLots"
-            @onWrite="getInputAreaSize"
+            :value="valueInputFarm"
+            v-model="farmCellars"
+            @onWrite="getInputFarm"
           />
           <Input
             class="q-pb-xs"
-            label="Estado del lote"
-            type="text"
+            label="Tipo Contrato"
             :required="true"
+            type="text"
             :ruless="rules"
-            :value="valueInputLoteState"
-            v-model="lotStateLots"
-            @onWrite="getInputLoteState"
+            :value="valueInputTypeContract"
+            v-model="typeContractCellars"
+            @onWrite="getInputTypeContract"
           />
           <Input
-            class="q-pb-xs"
-            label="Estado del suelo"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputSoildState"
-            v-model="soildStateLots"
-            @onWrite="getInputSoildState"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Clase"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputClass"
-            v-model="classLots"
-            @onWrite="getInputClass"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Densidad de siembra"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputSowingDensity"
-            v-model="sowingDensityLots"
-            @onWrite="getInputSowingDensity"
-          />
-          <Input
-            class="q-pb-xs"
+            class="q-mb-md"
             label="Descripción"
             type="text"
-            :required="false"
+            :required="false" 
             :value="valueInputDescription"
-            v-model="descriptionLots"
+            v-model="descriptionCellars"
             @onWrite="getInputDescription"
+          />
+          <Input
+            class="q-pb-xs"
+            label="Valor"
+            :required="true"
+            type="text"
+            :ruless="rules"
+            :value="valueInputValue"
+            v-model="valueCellars"
+            @onWrite="getInputValue"
           />
           <span class="text-required q-pb-sm"
             >Todos los campos con <span class="text-red">*</span> son
@@ -194,12 +173,12 @@
             <ButtonSave
               v-if="typeAction"
               :disable="disableSave"
-              @onClick="postDataLot"
+              @onClick="postDataCellar"
             />
             <ButtonSave
               v-else
               :disable="disableSave"
-              @onClick="updateDataLot"
+              @onClick="updateDataCellar"
             />
           </div>
         </div>
@@ -209,12 +188,12 @@
 </template>
 <script setup>
 import {
-  activeLot,
-  getLots,
-  inactiveLot,
-  postLot,
-  updateLot,
-} from "@/api/maintenance/lots";
+  activeCellar,
+  getCellars,
+  inactiveCellar,
+  postCellar,
+  updateCellar,
+} from "@/api/inventory/cellars";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
@@ -229,28 +208,24 @@ const loading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idLot = ref();
+const idCellars = ref();
 
 const disableSave = computed(() => {
-  return nameLots.value == "";
+  return nameCellars.value == "";
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
-let nameLots = ref("");
-let areaSizeLots = ref("");
-let lotStateLots = ref("");
-let soildStateLots = ref("");
-let classLots = ref("");
-let sowingDensityLots = ref("");
-let descriptionLots = ref("");
+let nameCellars = ref("");
+let farmCellars = ref("");
+let typeContractCellars = ref("");
+let descriptionCellars = ref("");
+let valueCellars = ref("");
 let valueInputName = ref("");
-let valueInputAreaSize = ref("");
-let valueInputLoteState = ref("");
-let valueInputSoildState = ref("");
-let valueInputClass = ref("");
-let valueInputSowingDensity = ref("");
+let valueInputFarm = ref("");
+let valueInputTypeContract = ref("");
 let valueInputDescription = ref("");
+let valueInputValue = ref("");
 let tab = ref("active");
 
 const $q = useQuasar();
@@ -262,8 +237,8 @@ const columns = ref([
     field: "id",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "name",
@@ -271,8 +246,8 @@ const columns = ref([
     field: "name",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "farm",
@@ -280,17 +255,17 @@ const columns = ref([
     field: "farm",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "typecontract",
-    label: "Typo contrato",
+    label: "Tipo Contrato",
     field: "typecontract",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "description",
@@ -298,17 +273,17 @@ const columns = ref([
     field: "description",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
-    name: "price",
+    name: "value",
     label: "Valor",
-    field: "price",
+    field: "value",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "status",
@@ -316,8 +291,8 @@ const columns = ref([
     field: "status",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
   {
     name: "Acciones",
@@ -331,86 +306,69 @@ const columns = ref([
 ]);
 
 const getInputName = (value) => {
-  nameLots.value = value;
+  nameCellars.value = value;
 };
 
-const getInputAreaSize = (value) => {
-  areaSizeLots.value = value;
+const getInputFarm = (value) => {
+  farmCellars.value = value;
 };
 
-const getInputLoteState = (value) => {
-  lotStateLots.value = value;
-};
-
-const getInputSoildState = (value) => {
-  soildStateLots.value = value;
-};
-
-const getInputClass = (value) => {
-  classLots.value = value;
-};
-
-const getInputSowingDensity = (value) => {
-  sowingDensityLots.value = value;
+const getInputTypeContract = (value) => {
+  typeContractCellars.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionLots.value = value;
+  descriptionCellars.value = value;
 };
 
+const getInputValue = (value) => {
+  valueCellars.value = value;
+};
 
 const clickButton = () => {
-  titleModal.value = "REGISTRAR LOTE";
+  titleModal.value = "REGISTRAR BODEGAS";
   valueInputName.value = "";
-  valueInputAreaSize.value = "";
-  valueInputLoteState.value = "";
-  valueInputSoildState.value = "";
-  valueInputClass.value = "";
-  valueInputSowingDensity.value = "";
+  valueInputFarm.value = "";
+  valueInputTypeContract.value = "";
   valueInputDescription.value = "";
+  valueInputValue.value = "";
   typeAction.value = true;
   modal.toggleModal();
-  nameLots.value = "";
-  areaSizeLots.value = "";
-  lotStateLots.value = "";
-  soildStateLots.value = "";
-  classLots.value = "";
-  sowingDensityLots.value = "";
-  descriptionLots.value = "";
+  nameCellars.value = "";
+  farmCellars.value = "";
+  typeContractCellars.value = "";
+  descriptionCellars.value = "";
+  valueCellars.value = "";
 };
 
-const editLotMaintenance = (item) => {
-  titleModal.value = "EDITAR LOTE";
+const editCellarsInventory = (item) => {
+  titleModal.value = "EDITAR BODEGAS";
   typeAction.value = false;
-  idLot.value = item._id;
+  idCellars.value = item._id;
   valueInputName.value = item.name;
-  valueInputAreaSize = item.areasize;
-  valueInputLoteState = item.lotestate;
-  valueInputSoildState = item.soildstate;
-  valueInputClass = item.classlot;
-  valueInputSowingDensity = item.sowingdensity;
-  valueInputDescription = item.description;
-  nameStages.value = item.name;
-  areaSizeLots.value = item.areasize;
-  lotStateLots.value = item.lotestate;
-  soildStateLots.value = item.soildstate;
-  classLots.value = item.classlot;
-  sowingDensityLots.value = item.sowingdensity;
-  descriptionLots.value = item.description;
+  valueInputFarm.value = item.farm;
+  valueInputTypeContract.value = item.typecontract;
+  valueInputDescription.value = item.description;
+  valueInputValue.value = item.value;
+  nameCellars.value = item.name;
+  farmCellars.value = item.farm;
+  typeContractCellars.value = item.typecontract;
+  descriptionCellars.value = item.description;  
+  valueCellars.value = item.value;
   modal.toggleModal();
 };
 
-async function inactiveLotMaintenance(id) {
+async function inactiveCellarInventory(id) {
   try {
-    const inactive = await inactiveLot(id);
+    const inactive = await inactiveCellar(id);
     $q.notify({
       type: "positive",
-      message: "Lote desactivado correctamente",
+      message: "Bodega desactivada correctamente",
       position: "top",
     });
     rows.value = [];
     inactiveRows.value = [];
-    getDataLots();
+    getDataCellars();
   } catch (error) {
     $q.notify({
       type: "negative",
@@ -420,26 +378,23 @@ async function inactiveLotMaintenance(id) {
   }
 }
 
-
-async function postDataLot() {
+async function postDataCellar() {
   modal.toggleModal();
   try {
-    const lots = await postLot({
-      name: nameLots.value,
-      areasize: areaSizeLots.value,
-      lotestate: lotStateLots.value,
-      soildstate: soildStateLots.value,
-      classlot: classLots.value,
-      sowingdensity: sowingDensityLots.value,
-      description: descriptionLots.value,
+    const Cellars = await postCellar({
+      name: nameCellars.value,
+      farm: farmCellars.value,
+      typecontract: typeContractCellars.value,
+      description: descriptionCellars.value,
+      value: valueCellars.value,
     });
     $q.notify({
       type: "positive",
-      message: "Lote registrado correctamente",
+      message: "Bodega registrada correctamente",
       position: "top",
     });
     rows.value = [];
-    getDataLots();
+    getDataCellars();
   } catch {
     $q.notify({
       type: "negative",
@@ -449,15 +404,15 @@ async function postDataLot() {
   }
 }
 
-const getDataLots = async () => {
+const getDataCellars = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { lots } = await getLots();
+    const { cellars } = await getCellars();
     let countActive = 1;
     let countInactive = 1;
-    lots.forEach((item) => {
+    cellars.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       if (item.status == "Activo") {
         item.id = countActive++;
@@ -470,7 +425,7 @@ const getDataLots = async () => {
         item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
-} catch {
+  } catch {
     $q.notify({
       type: "negative",
       message: "Ocurrió un error",
@@ -479,26 +434,24 @@ const getDataLots = async () => {
   }
 };
 
-async function updateDataLot() {
+async function updateDataCellar() {
   try {
-    const response = await updateLot({
-      id: idLot.value,
-      name: nameLots.value,
-      areasize: areaSizeLots.value,
-      lotestate: lotStateLots.value,
-      soildstate: soildStateLots.value,
-      classlot: classLots.value,
-      sowingdensity: sowingDensityLots.value,
-      description: descriptionLots.value,
+    const response = await updateCellar({
+      id: idCellars.value,
+      name: nameCellars.value,
+      farm: farmCellars.value,
+      typecontract: typeContractCellars.value,
+      description: descriptionCellars.value,
+      value: valueCellars.value,
     });
     $q.notify({
       type: "positive",
       position: "top",
-      message: "Lote actualizado correctamente",
+      message: "Bodega actualizada correctamente",
     });
     modal.toggleModal();
     rows.value = [];
-    getDataLots();
+    getDataCellars();
   } catch {
     $q.notify({
       type: "negative",
@@ -506,26 +459,22 @@ async function updateDataLot() {
       message: "Ocurrió un error",
     });
   }
-  nameLots.value = "";
-  areaSizeLots.value = "";
-  lotStateLots.value = "";
-  soildStateLots.value = "";
-  classLots.value = "";
-  sowingDensityLots.value = "";
-  descriptionLots.value = "";
+  nameCellars.value = "";
+  descriptionCellars.value = "";
+  farmCellars.value = "";
 }
 
-async function activeLotMaintenance(id) {
+async function activeCellarInventory(id) {
   try {
-    const active = await activeLot(id);
+    const active = await activeCellar(id);
     $q.notify({
       type: "positive",
-      message: "Lote activado correctamente",
+      message: "Bodega activada correctamente",
       position: "top",
     });
     rows.value = [];
     inactiveRows.value = [];
-    getDataLots();
+    getDataCellars();
   } catch (error) {
     $q.notify({
       type: "negative",
@@ -536,7 +485,7 @@ async function activeLotMaintenance(id) {
 }
 
 onMounted(() => {
-  getDataLots();
+  getDataCellars();
 });
 </script>
 <style scoped>
@@ -570,6 +519,7 @@ onMounted(() => {
   border-radius: 15px;
   height: 80%;
   max-height: 60vh;
+  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
