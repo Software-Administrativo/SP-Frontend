@@ -7,14 +7,17 @@ export const useStorage = defineStore(
   () => {
     // State
     const token = ref();
+    const loggedIn = ref(false);
 
     // Functions
     const addStorage = (value) => {
       token.value = value;
+      loggedIn.value = true;
     };
 
     const deleteStorage = () => {
       token.value = "";
+      loggedIn.value = false;
     };
 
     const decodeJwt = () => {
@@ -22,7 +25,7 @@ export const useStorage = defineStore(
       return decoded;
     };
 
-    return { token, addStorage, deleteStorage, decodeJwt };
+    return { token, loggedIn, addStorage, deleteStorage, decodeJwt };
   },
   { persist: true }
 );

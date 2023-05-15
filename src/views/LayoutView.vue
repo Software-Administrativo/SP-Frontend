@@ -8,7 +8,11 @@
         :style="sidebar"
         v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
       ></Sidebar>
-      <DefaultSidebar v-if="menu.menuIsOpen == false && routeName != 'sign-in'"></DefaultSidebar>
+      <DefaultSidebar
+        v-if="
+          isUserLoggedIn && menu.menuIsOpen == false && routeName != 'sign-in'
+        "
+      ></DefaultSidebar>
       <div :style="viewRouter">
         <div :style="viewContainer">
           <router-view></router-view>
@@ -22,20 +26,30 @@
 import Header from "@/modules/header/Header.vue";
 import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import { menuState } from "@/stores/menu";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import DefaultSidebar from "../modules/sidebar/DefaultSidebar.vue";
+import { useStorage } from "@/stores/localStorage";
 
 const menu = menuState();
+const isUserLogged = useStorage();
+
+const isUserLoggedIn = computed(() => {
+  return isUserLogged.loggedIn;
+});
 
 const routeName = computed(() => {
   return useRoute().name;
 });
 
 const viewRouter = computed(() => {
-  if (menu.menuIsOpen) {
+  if (menu.menuIsOpen && routeName.value != "sign-in") {
     return "width: calc(100% - 230px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
-  } else {
+  } else if (
+    !menu.menuIsOpen &&
+    isUserLoggedIn &&
+    routeName.value != "sign-in"
+  ) {
     return "width: calc(100% - 70px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   }
 });
