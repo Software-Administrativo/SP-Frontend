@@ -349,10 +349,10 @@ const getDataBrands = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { Brands } = await getBrands();
+    const { mark } = await getBrands();
     let countActive = 1;
     let countInactive = 1;
-    Brands.forEach((item) => {
+    mark.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       if (item.status == "Activo") {
         item.id = countActive++;

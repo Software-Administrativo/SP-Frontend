@@ -8,7 +8,7 @@ import { getToken } from "@/helpers";
 const getBrands = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/inventory/brands`, {
+    const { data } = await sugarAxios.get(`/inventory/mark`, {
       headers: {
         token: tokenExist,
       },
@@ -23,7 +23,7 @@ const postBrand = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/inventory/brands/register`,
+      `/inventory/mark/register`,
       {
         name: type.name,
         farm: type.farm,
@@ -45,7 +45,7 @@ const updateBrand = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/brands/update/${item.id}`,
+      `/inventory/mark/update/${item.id}`,
       {
         name: item.name,
         farm: item.farm,
@@ -67,7 +67,7 @@ const inactiveBrand = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/brands/inactive/${id}`,
+      `/inventory/mark/inactive/${id}`,
       {},
       {
         headers: {
@@ -85,7 +85,7 @@ const activeBrand = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/brands/active/${id}`,
+      `/inventory/mark/active/${id}`,
       {},
       {
         headers: {

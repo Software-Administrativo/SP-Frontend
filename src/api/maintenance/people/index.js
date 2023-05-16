@@ -46,4 +46,67 @@ const postPeople = async (type) => {
   }
 };
 
-export { getPeople, postPeople };
+const updatePeople = async (type) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.post(
+      `/maintenance/people/update`,
+      {
+        document: item.document,
+        name: item.name,
+        lastName: item.lastName,
+        description: item.description,
+        birthDate: item.birthDate,
+        phone: item.phone,
+        bloodType: item.bloodType,
+        peopleType: item.peopleType,
+      },
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const inactivePeople = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/people/inactive/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const activePeople = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.put(
+      `/maintenance/people/active/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getPeople, postPeople, inactivePeople, activePeople, updatePeople};
