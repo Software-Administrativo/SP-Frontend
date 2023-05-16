@@ -10,9 +10,11 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useRoute } from "vue-router";
 import ListModules from "@/modules/global/ListModules.vue";
+import { computed, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
 
 const routeName = computed(() => {
   return useRoute().name;

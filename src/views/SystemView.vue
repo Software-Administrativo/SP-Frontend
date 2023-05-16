@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.push('/home')"/>
+      <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
@@ -515,6 +518,10 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
 .spinner {
   position: absolute;
   top: 50%;
@@ -576,6 +583,26 @@ onMounted(() => {
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
+  }
+}
+@media (min-width: 621px) and (max-width: 720px) {
+  .container-table {
+    max-width: 610px;
+  }
+}
+@media (min-width: 721px) and (max-width: 920px) {
+  .container-table {
+    max-width: 710px;
+  }
+}
+@media (min-width: 921px) and (max-width: 1020px) {
+  .container-table {
+    max-width: 810px;
+  }
+}
+@media (min-width: 1021px) and (max-width: 1320px) {
+  .container-table {
+    max-width: 1010px;
   }
 }
 </style>

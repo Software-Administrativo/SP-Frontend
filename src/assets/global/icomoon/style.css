@@ -1,19 +1,18 @@
 @font-face {
-  font-family: "icomoon";
-  src: url("fonts/icomoon.eot?ok4c3d");
-  src: url("fonts/icomoon.eot?ok4c3d#iefix") format("embedded-opentype"),
-    url("fonts/icomoon.ttf?ok4c3d") format("truetype"),
-    url("fonts/icomoon.woff?ok4c3d") format("woff"),
-    url("fonts/icomoon.svg?ok4c3d#icomoon") format("svg");
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?yoiv04');
+  src:  url('fonts/icomoon.eot?yoiv04#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?yoiv04') format('truetype'),
+    url('fonts/icomoon.woff?yoiv04') format('woff'),
+    url('fonts/icomoon.svg?yoiv04#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-"],
-[class*=" icon-"] {
+[class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: "icomoon" !important;
+  font-family: 'icomoon' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -26,81 +25,84 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-search:before {
+.icon-backRoute:before {
   content: "\e900";
 }
+.icon-search:before {
+  content: "\e92d";
+}
 .icon-close:before {
-  content: "\e901";
+  content: "\e92e";
 }
 .icon-wineries:before {
-  content: "\e902";
+  content: "\e92f";
 }
 .icon-brands:before {
-  content: "\e903";
+  content: "\e930";
 }
 .icon-categories:before {
-  content: "\e904";
+  content: "\e931";
 }
 .icon-product:before {
-  content: "\e905";
+  content: "\e932";
 }
 .icon-inventory-entries:before {
-  content: "\e906";
+  content: "\e933";
 }
 .icon-inventory-adjust:before {
-  content: "\e907";
+  content: "\e934";
 }
 .icon-persons:before {
-  content: "\e908";
+  content: "\e935";
 }
 .icon-tages:before {
-  content: "\e909";
+  content: "\e936";
 }
 .icon-type-document:before {
-  content: "\e90a";
+  content: "\e937";
 }
 .icon-unit-extent:before {
-  content: "\e90b";
+  content: "\e938";
 }
 .icon-type-labors:before {
-  content: "\e90c";
+  content: "\e939";
 }
 .icon-create-estate:before {
-  content: "\e90d";
+  content: "\e93a";
 }
 .icon-lots:before {
-  content: "\e90e";
+  content: "\e93b";
 }
 .icon-eps:before {
-  content: "\e90f";
+  content: "\e93c";
 }
 .icon-type-money:before {
-  content: "\e910";
+  content: "\e93d";
 }
 .icon-home:before {
-  content: "\e911";
+  content: "\e93e";
 }
 .icon-inventory:before {
-  content: "\e912";
+  content: "\e93f";
 }
 .icon-cost:before {
-  content: "\e913";
+  content: "\e940";
 }
 .icon-transformation:before {
-  content: "\e914";
+  content: "\e941";
 }
 .icon-order:before {
-  content: "\e915";
+  content: "\e942";
 }
 .icon-report:before {
-  content: "\e916";
+  content: "\e943";
 }
 .icon-maintenance:before {
-  content: "\e917";
+  content: "\e944";
 }
 .icon-system:before {
-  content: "\e918";
+  content: "\e945";
 }
 .icon-check:before {
-  content: "\e919";
+  content: "\e946";
 }
