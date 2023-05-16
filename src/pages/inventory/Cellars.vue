@@ -128,16 +128,6 @@
           />
           <Input
             class="q-pb-xs"
-            label="Finca"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputFarm"
-            v-model="farmCellars"
-            @onWrite="getInputFarm"
-          />
-          <Input
-            class="q-pb-xs"
             label="Tipo Contrato"
             :required="true"
             type="text"
@@ -217,12 +207,10 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
 let nameCellars = ref("");
-let farmCellars = ref("");
 let typeContractCellars = ref("");
 let descriptionCellars = ref("");
 let valueCellars = ref("");
 let valueInputName = ref("");
-let valueInputFarm = ref("");
 let valueInputTypeContract = ref("");
 let valueInputDescription = ref("");
 let valueInputValue = ref("");
@@ -309,10 +297,6 @@ const getInputName = (value) => {
   nameCellars.value = value;
 };
 
-const getInputFarm = (value) => {
-  farmCellars.value = value;
-};
-
 const getInputTypeContract = (value) => {
   typeContractCellars.value = value;
 };
@@ -328,14 +312,12 @@ const getInputValue = (value) => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR BODEGAS";
   valueInputName.value = "";
-  valueInputFarm.value = "";
   valueInputTypeContract.value = "";
   valueInputDescription.value = "";
   valueInputValue.value = "";
   typeAction.value = true;
   modal.toggleModal();
   nameCellars.value = "";
-  farmCellars.value = "";
   typeContractCellars.value = "";
   descriptionCellars.value = "";
   valueCellars.value = "";
@@ -346,12 +328,10 @@ const editCellarsInventory = (item) => {
   typeAction.value = false;
   idCellars.value = item._id;
   valueInputName.value = item.name;
-  valueInputFarm.value = item.farm;
   valueInputTypeContract.value = item.typecontract;
   valueInputDescription.value = item.description;
   valueInputValue.value = item.value;
   nameCellars.value = item.name;
-  farmCellars.value = item.farm;
   typeContractCellars.value = item.typecontract;
   descriptionCellars.value = item.description;  
   valueCellars.value = item.value;
@@ -381,9 +361,8 @@ async function inactiveCellarInventory(id) {
 async function postDataCellar() {
   modal.toggleModal();
   try {
-    const Cellars = await postCellar({
+    const cellars = await postCellar({
       name: nameCellars.value,
-      farm: farmCellars.value,
       typecontract: typeContractCellars.value,
       description: descriptionCellars.value,
       value: valueCellars.value,
@@ -409,10 +388,10 @@ const getDataCellars = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { cellars } = await getCellars();
+    const { cellar } = await getCellars();
     let countActive = 1;
     let countInactive = 1;
-    cellars.forEach((item) => {
+    cellar.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       if (item.status == "Activo") {
         item.id = countActive++;
@@ -439,7 +418,6 @@ async function updateDataCellar() {
     const response = await updateCellar({
       id: idCellars.value,
       name: nameCellars.value,
-      farm: farmCellars.value,
       typecontract: typeContractCellars.value,
       description: descriptionCellars.value,
       value: valueCellars.value,
@@ -461,7 +439,6 @@ async function updateDataCellar() {
   }
   nameCellars.value = "";
   descriptionCellars.value = "";
-  farmCellars.value = "";
 }
 
 async function activeCellarInventory(id) {

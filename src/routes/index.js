@@ -72,16 +72,6 @@ const router = createRouter({
           name: "inventory-products",
           component: () => import("../pages/inventory/Products.vue"),
         },
-        {
-          path: "entries",
-          name: "inventory-entries",
-          component: () => import("../pages/inventory/InventoryEntries.vue"),
-        },
-        {
-          path: "stock",
-          name: "inventory-stock-adjustments",
-          component: () => import("../pages/inventory/StockAdjustments.vue"),
-        },
       ],
     },
     {

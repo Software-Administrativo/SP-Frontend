@@ -8,7 +8,7 @@ import { getToken } from "@/helpers";
 const getCellars = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/inventory/cellars`, {
+    const { data } = await sugarAxios.get(`/inventory/cellar`, {
       headers: {
         token: tokenExist,
       },
@@ -23,7 +23,7 @@ const postCellar = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/inventory/cellars/register`,
+      `/inventory/cellar/register`,
       {
         name: type.name,
         farm: type.farm,
@@ -47,10 +47,9 @@ const updateCellar = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/cellars/update/${item.id}`,
+      `/inventory/cellar/update/${item.id}`,
       {
         name: item.name,
-        farm: item.farm,
         typecontract: item.typecontract,
         description: item.description,
         value: item.value,
@@ -71,7 +70,7 @@ const inactiveCellar = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/cellars/inactive/${id}`,
+      `/inventory/cellar/inactive/${id}`,
       {},
       {
         headers: {
@@ -89,7 +88,7 @@ const activeCellar = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/cellars/active/${id}`,
+      `/inventory/cellar/active/${id}`,
       {},
       {
         headers: {
