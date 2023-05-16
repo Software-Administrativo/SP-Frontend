@@ -18,10 +18,13 @@
 <script setup>
 // Imports
 import { onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 // Data
 const typeDocument = ref(props.value);
 const types = ref([]);
+const storage = useStorage();
+const namesFarms = ref([]);
 
 const props = defineProps({
   type: {
@@ -76,7 +79,13 @@ onMounted(() => {
       return `${item[0].toUpperCase()}${item.slice(1)}`;
     });
   } else if (props.type === "farms"){
-    types.value = ["Agricultura", "Comercial", "Industrial", "Otros", "Servicios"];
+    const isValidateJWT = storage.decodeJwt();
+    const farms = isValidateJWT.farms;
+
+    const names = farms.forEach( element  => {
+      namesFarms.value.push(element.name)
+    });
+    types.value = namesFarms.value
   }
 });
 </script>

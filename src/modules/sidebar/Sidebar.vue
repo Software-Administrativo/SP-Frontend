@@ -36,8 +36,8 @@ import { computed, onMounted, ref } from "vue";
 
 const nameUser = ref("");
 
-const validateToken = useStorage();
-const isValidateJWT = validateToken.decodeJwt();
+const storage = useStorage();
+const isValidateJWT = storage.decodeJwt();
 const pathsRender = ref([]);
 
 function validatePaths() {
@@ -47,9 +47,9 @@ function validatePaths() {
   pathsRender.value = pathsValidate;
 }
 
-function getSelectData(){
-  console.log("select")
-}
+const getSelectData = (value) => {
+  storage.setFarm(value);
+};
 
 const paths = [
   {
