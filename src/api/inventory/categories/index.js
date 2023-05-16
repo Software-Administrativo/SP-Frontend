@@ -2,13 +2,13 @@ import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
 
 /**
- * data: data categories
- * @returns API Response, with the data of the categories
+ * data: data category
+ * @returns API Response, with the data of the category
  */
 const getCategories = async () => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.get(`/inventory/categories`, {
+    const { data } = await sugarAxios.get(`/inventory/category`, {
       headers: {
         token: tokenExist,
       },
@@ -23,7 +23,7 @@ const postCategorie = async (type) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/inventory/categories/register`,
+      `/inventory/category/register`,
       {
         name: type.name,
         description: type.description,
@@ -44,7 +44,7 @@ const updateCategorie = async (item) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/categories/update/${item.id}`,
+      `/inventory/category/update/${item.id}`,
       {
         name: item.name,
         description: item.description,
@@ -65,7 +65,7 @@ const inactiveCategorie = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/categories/inactive/${id}`,
+      `/inventory/category/inactive/${id}`,
       {},
       {
         headers: {
@@ -83,7 +83,7 @@ const activeCategorie = async (id) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/categories/active/${id}`,
+      `/inventory/category/active/${id}`,
       {},
       {
         headers: {

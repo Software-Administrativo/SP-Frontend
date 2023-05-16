@@ -39,16 +39,6 @@ const itemsListModules = ref([
     icon: "icon icon-product",
     name: "inventory-products",
   },
-  {
-    label: "Entradas al inventario",
-    icon: "icon icon-inventory-entries",
-    name: "inventory-entries",
-  },
-  {
-    label: "Ajustes de existencia",
-    icon: "icon icon-inventory-adjust",
-    name: "inventory-stock-adjustments",
-  },
 ]);
 </script>
 

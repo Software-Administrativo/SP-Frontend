@@ -349,10 +349,10 @@ const getDataBrands = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { Brands } = await getBrands();
+    const { mark } = await getBrands();
     let countActive = 1;
     let countInactive = 1;
-    Brands.forEach((item) => {
+    mark.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       if (item.status == "Activo") {
         item.id = countActive++;
@@ -458,7 +458,7 @@ onMounted(() => {
   height: 80%;
   max-height: 60vh;
   background-color: white;
-  border: 2px solid var(--color-gray);
+  /* border: 2px solid var(--color-gray); */
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }

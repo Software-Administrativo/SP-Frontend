@@ -319,10 +319,10 @@ const getDataCategories = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { categories } = await getCategories();
+    const { category } = await getCategories();
     let countActive = 1;
     let countInactive = 1;
-    categories.forEach((item) => {
+    category.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       if (item.status == "Activo") {
         item.id = countActive++;
