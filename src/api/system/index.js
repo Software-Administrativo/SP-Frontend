@@ -1,5 +1,6 @@
 import { getToken } from "@/helpers";
 import { sugarAxios } from "../global";
+import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data users
@@ -8,9 +9,13 @@ import { sugarAxios } from "../global";
 const getUsers = async () => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
+    
     const { data } = await sugarAxios.get(`/users`, {
       headers: {
         token: tokenExist,
+        farm: idFarm
       },
     });
     return data;
@@ -22,6 +27,9 @@ const getUsers = async () => {
 const postUser = async (item) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.post(
       `/users/register`,
       {
@@ -34,6 +42,7 @@ const postUser = async (item) => {
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -71,12 +80,16 @@ const updateUserSystem = async (item) => {
 const inactiveUser = async (id) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.put(
       `/users/inactive/${id}`,
       {},
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -89,12 +102,16 @@ const inactiveUser = async (id) => {
 const activeUser = async (id) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.put(
       `/users/active/${id}`,
       {},
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );

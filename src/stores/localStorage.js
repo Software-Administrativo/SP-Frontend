@@ -7,14 +7,18 @@ export const useStorage = defineStore(
   () => {
     // State
     const token = ref();
+    const loggedIn = ref(false);
+    const idSelected = ref();
 
     // Functions
     const addStorage = (value) => {
       token.value = value;
+      loggedIn.value = true;
     };
 
     const deleteStorage = () => {
       token.value = "";
+      loggedIn.value = false;
     };
 
     const decodeJwt = () => {
@@ -22,7 +26,19 @@ export const useStorage = defineStore(
       return decoded;
     };
 
-    return { token, addStorage, deleteStorage, decodeJwt };
+    const setFarm = (data) => {
+      const storage = useStorage();
+      const decodeToken = storage.decodeJwt();
+      const farms = decodeToken.farms;
+
+      const farmsExist = farms.forEach((item) => {
+        if (item.name = data) {
+          idSelected.value = item._id;
+        }
+      });
+    }
+
+    return { token, idSelected, loggedIn, addStorage, deleteStorage, decodeJwt, setFarm };
   },
   { persist: true }
 );

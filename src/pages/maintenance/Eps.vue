@@ -167,11 +167,11 @@
 </template>
 <script setup>
 import {
-  activeEps,
-  getEps,
-  inactiveEps,
-  postEps,
-  updateEps,
+activeEps,
+getEps,
+inactiveEps,
+postEps,
+updateEps,
 } from "@/api/maintenance/eps";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -479,6 +479,26 @@ onMounted(() => {
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
+  }
+}
+@media (min-width: 621px) and (max-width: 720px) {
+  .container-table {
+    max-width: 610px;
+  }
+}
+@media (min-width: 721px) and (max-width: 920px) {
+  .container-table {
+    max-width: 710px;
+  }
+}
+@media (min-width: 921px) and (max-width: 1020px) {
+  .container-table {
+    max-width: 810px;
+  }
+}
+@media (min-width: 1021px) and (max-width: 1320px) {
+  .container-table {
+    max-width: 1010px;
   }
 }
 </style>
