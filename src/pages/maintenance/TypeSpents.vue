@@ -48,9 +48,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td 
-                  class="accions-td"
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         icon="edit_note"
@@ -95,9 +93,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    class="accions-td"
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         text-color="blue-10"
@@ -162,11 +158,11 @@
 </template>
 <script setup>
 import {
-activeTypeSpent,
-getTypeSpents,
-inactiveTypeSpent,
-postTypeSpent,
-updateTypeSpent,
+  activeTypeSpent,
+  getTypeSpents,
+  inactiveTypeSpent,
+  postTypeSpent,
+  updateTypeSpent,
 } from "@/api/maintenance/type-spents";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -318,26 +314,25 @@ async function postDataTypeSpents() {
   }
 }
 
-
 const getDataTypeSpents = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
-  try{
-  const { spents } = await getTypeSpents();
-  let countActive = 1;
-  let countInactive = 1;
-  spents.forEach((item) => {
-    item.status = item.status ? "Inactivo" : "Activo";
-    if(item.status == "Activo"){
-    item.id = countActive++;
-    rows.value.push(item);
-    } else {
-      item.id = countInactive++;
-      inactiveRows.value.push(item);
-    }
-    item.description =
-      item.description.trim() == "" ? "No registra" : item.description;
+  try {
+    const { spents } = await getTypeSpents();
+    let countActive = 1;
+    let countInactive = 1;
+    spents.forEach((item) => {
+      item.status = item.status ? "Inactivo" : "Activo";
+      if (item.status == "Activo") {
+        item.id = countActive++;
+        rows.value.push(item);
+      } else {
+        item.id = countInactive++;
+        inactiveRows.value.push(item);
+      }
+      item.description =
+        item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
   } catch {
@@ -346,8 +341,8 @@ const getDataTypeSpents = async () => {
       message: "Ocurrió un error",
       position: "top",
     });
-  };
-}
+  }
+};
 
 async function updateDataTypeSpents() {
   try {
@@ -399,7 +394,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.accions-td{
+.accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;

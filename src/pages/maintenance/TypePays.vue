@@ -1,7 +1,7 @@
 <template>
   <div class="q-py-md table-container">
     <div class="row">
-      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()"/>
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
       <h6 class="title q-my-lg">TIPOS DE PAGO</h6>
     </div>
     <q-separator class="separator" />
@@ -161,11 +161,11 @@
 </template>
 <script setup>
 import {
-activeTypePay,
-getTypePays,
-inactiveTypePay,
-postTypePay,
-updateTypePay,
+  activeTypePay,
+  getTypePays,
+  inactiveTypePay,
+  postTypePay,
+  updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

@@ -130,7 +130,7 @@
             class="q-mb-md"
             label="Descripción"
             type="text"
-            :required="false" 
+            :required="false"
             :value="valueInputDescription"
             v-model="descriptionCategories"
             @onWrite="getInputDescription"
@@ -267,7 +267,7 @@ const editCategorieInventory = (item) => {
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
   nameCategories.value = item.name;
-  descriptionCategories.value = item.description;  
+  descriptionCategories.value = item.description;
   modal.toggleModal();
 };
 

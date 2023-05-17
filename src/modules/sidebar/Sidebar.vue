@@ -10,7 +10,8 @@
       class="select-farm"
       @onSelect="getSelectData"
       type="farms"
-      label="Finca"
+      :required="false"
+      label="Cambiar de Finca"
       message="Finca requerida"
     ></Select>
     <q-separator class="separator" />
@@ -24,6 +25,7 @@
       src="../../assets/global/project-logo.svg"
       alt="logo"
       class="logo-global"
+      v-if="showImage"
     />
   </div>
 </template>
@@ -34,22 +36,10 @@ import { useStorage } from "@/stores/localStorage.js";
 import { event } from "quasar";
 import { computed, onMounted, ref } from "vue";
 
-const nameUser = ref("");
-
 const storage = useStorage();
 const isValidateJWT = storage.decodeJwt();
+const nameUser = ref("");
 const pathsRender = ref([]);
-
-function validatePaths() {
-  const pathsValidate = paths.filter((item) => {
-    return item.rol.includes(isValidateJWT.rol);
-  });
-  pathsRender.value = pathsValidate;
-}
-
-const getSelectData = (value) => {
-  storage.setFarm(value);
-};
 
 const paths = [
   {
@@ -102,10 +92,17 @@ const paths = [
   },
 ];
 
-onMounted(() => {
-  nameUser.value = isValidateJWT.name;
-  validatePaths();
+const showImage = computed(() => {
+  if (window.screen.width < 680 || window.screen.height < 730) {
+    return false;
+  } else {
+    return true;
+  }
 });
+
+const getSelectData = (value) => {
+  storage.setFarm(value);
+};
 
 const emits = defineEmits({
   onRoute: null,
@@ -114,10 +111,22 @@ const emits = defineEmits({
 const clickRoute = computed(() => {
   emits("onRoute", event);
 });
+
+function validatePaths() {
+  const pathsValidate = paths.filter((item) => {
+    return item.rol.includes(isValidateJWT.rol);
+  });
+  pathsRender.value = pathsValidate;
+}
+
+onMounted(() => {
+  nameUser.value = isValidateJWT.name;
+  validatePaths();
+});
 </script>
 
 <style scoped>
-.select-farm{
+.select-farm {
   margin: 15px;
 }
 .router-link-active {

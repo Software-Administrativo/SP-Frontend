@@ -140,7 +140,7 @@
             class="q-mb-md"
             label="Descripción"
             type="text"
-            :required="false" 
+            :required="false"
             :value="valueInputDescription"
             v-model="descriptionBrands"
             @onWrite="getInputDescription"
@@ -296,7 +296,7 @@ const editBrandInventory = (item) => {
   valueInputDescription.value = item.description;
   nameBrands.value = item.name;
   farmBrands.value = item.farm;
-  descriptionBrands.value = item.description;  
+  descriptionBrands.value = item.description;
   modal.toggleModal();
 };
 

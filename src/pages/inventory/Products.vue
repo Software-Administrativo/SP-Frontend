@@ -151,7 +151,7 @@
             label="Cantidad"
             :required="true"
             type="text"
-            :ruless="rules" 
+            :ruless="rules"
             :value="valueInputAmount"
             v-model="amountProducts"
             @onWrite="getInputAmount"
@@ -326,7 +326,7 @@ const editProductsInventory = (item) => {
   nameProducts.value = item.name;
   categorieProducts.value = item.categories;
   brandProducts.value = item.brand;
-  amountProducts.value = item.amount;  
+  amountProducts.value = item.amount;
   modal.toggleModal();
 };
 

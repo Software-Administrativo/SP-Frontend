@@ -103,4 +103,4 @@ const activeCellar = async (id) => {
   }
 };
 
-export { getCellars, postCellar, inactiveCellar, activeCellar, updateCellar};
+export { getCellars, postCellar, inactiveCellar, activeCellar, updateCellar };

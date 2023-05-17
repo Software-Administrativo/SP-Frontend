@@ -17,7 +17,7 @@ const getProducts = async () => {
   } catch (error) {
     console.error(error);
   }
-};  
+};
 
 const postProduct = async (type) => {
   try {
@@ -101,4 +101,10 @@ const activeProduct = async (id) => {
   }
 };
 
-export { getProducts, postProduct, inactiveProduct, activeProduct, updateProduct};
+export {
+  getProducts,
+  postProduct,
+  inactiveProduct,
+  activeProduct,
+  updateProduct,
+};

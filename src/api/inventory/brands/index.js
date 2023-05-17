@@ -99,4 +99,4 @@ const activeBrand = async (id) => {
   }
 };
 
-export { getBrands, postBrand, inactiveBrand, activeBrand, updateBrand};
+export { getBrands, postBrand, inactiveBrand, activeBrand, updateBrand };

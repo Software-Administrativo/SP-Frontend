@@ -107,4 +107,4 @@ const activeLot = async (id) => {
   }
 };
 
-export { getLots, postLot, updateLot, inactiveLot, activeLot};
+export { getLots, postLot, updateLot, inactiveLot, activeLot };

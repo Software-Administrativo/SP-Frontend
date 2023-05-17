@@ -59,7 +59,7 @@ const updateTypeLabor = async (item) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const inactiveTypeLabor = async (id) => {
   try {
@@ -97,4 +97,10 @@ const activeTypeLabor = async (id) => {
   }
 };
 
-export { getTypeLabors, postTypeLabor, activeTypeLabor, inactiveTypeLabor, updateTypeLabor};
+export {
+  getTypeLabors,
+  postTypeLabor,
+  activeTypeLabor,
+  inactiveTypeLabor,
+  updateTypeLabor,
+};
