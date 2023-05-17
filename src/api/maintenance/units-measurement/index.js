@@ -1,5 +1,6 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
+import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data units measurement
@@ -8,9 +9,12 @@ import { getToken } from "@/helpers";
 const getUnitsMeasurement = async () => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/maintenance/unittypes`, {
       headers: {
         token: tokenExist,
+        farm: idFarm
       },
     });
     return data;
@@ -22,6 +26,8 @@ const getUnitsMeasurement = async () => {
 const postUnitMeasurement = async (type) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/unittypes/register`,
       {
@@ -31,6 +37,7 @@ const postUnitMeasurement = async (type) => {
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -43,6 +50,8 @@ const postUnitMeasurement = async (type) => {
 const updateUnitMeasurement = async (item) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/unittypes/update/${item.id}`,
       {
@@ -52,6 +61,7 @@ const updateUnitMeasurement = async (item) => {
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -64,12 +74,15 @@ const updateUnitMeasurement = async (item) => {
 const inactiveUnitMeasurement = async (id) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/unittypes/inactive/${id}`,
       {},
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -82,12 +95,15 @@ const inactiveUnitMeasurement = async (id) => {
 const activeUnitMeasurement = async (id) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/unittypes/active/${id}`,
       {},
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
