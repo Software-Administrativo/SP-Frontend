@@ -209,11 +209,11 @@
 </template>
 <script setup>
 import {
-activeLot,
-getLots,
-inactiveLot,
-postLot,
-updateLot,
+  activeLot,
+  getLots,
+  inactiveLot,
+  postLot,
+  updateLot,
 } from "@/api/maintenance/lots";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -376,7 +376,6 @@ const getInputDescription = (value) => {
   descriptionLots.value = value;
 };
 
-
 const clickButton = () => {
   titleModal.value = "REGISTRAR LOTE";
   valueInputName.value = "";
@@ -438,7 +437,6 @@ async function inactiveLotMaintenance(id) {
   }
 }
 
-
 async function postDataLot() {
   modal.toggleModal();
   try {
@@ -488,7 +486,7 @@ const getDataLots = async () => {
         item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
-} catch {
+  } catch {
     $q.notify({
       type: "negative",
       message: "Ocurrió un error",

@@ -159,11 +159,11 @@
 </template>
 <script setup>
 import {
-activeUnitMeasurement,
-getUnitsMeasurement,
-inactiveUnitMeasurement,
-postUnitMeasurement,
-updateUnitMeasurement,
+  activeUnitMeasurement,
+  getUnitsMeasurement,
+  inactiveUnitMeasurement,
+  postUnitMeasurement,
+  updateUnitMeasurement,
 } from "@/api/maintenance/units-measurement";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

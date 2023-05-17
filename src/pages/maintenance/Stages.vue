@@ -169,11 +169,11 @@
 </template>
 <script setup>
 import {
-activeStage,
-getStages,
-inactiveStage,
-postStage,
-updateStage,
+  activeStage,
+  getStages,
+  inactiveStage,
+  postStage,
+  updateStage,
 } from "@/api/maintenance/stages";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

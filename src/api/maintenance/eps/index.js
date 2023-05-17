@@ -99,4 +99,4 @@ const activeEps = async (id) => {
   }
 };
 
-export { getEps, postEps, inactiveEps, activeEps, updateEps};
+export { getEps, postEps, inactiveEps, activeEps, updateEps };

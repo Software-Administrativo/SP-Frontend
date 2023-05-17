@@ -97,4 +97,10 @@ const activeCategorie = async (id) => {
   }
 };
 
-export { getCategories, postCategorie, inactiveCategorie, activeCategorie, updateCategorie};
+export {
+  getCategories,
+  postCategorie,
+  inactiveCategorie,
+  activeCategorie,
+  updateCategorie,
+};

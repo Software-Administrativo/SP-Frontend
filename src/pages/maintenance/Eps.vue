@@ -130,7 +130,7 @@
             class="q-mb-md"
             label="Descripción"
             type="text"
-            :required="false" 
+            :required="false"
             :value="valueInputDescription"
             v-model="descriptionEps"
             @onWrite="getInputDescription"
@@ -167,11 +167,11 @@
 </template>
 <script setup>
 import {
-activeEps,
-getEps,
-inactiveEps,
-postEps,
-updateEps,
+  activeEps,
+  getEps,
+  inactiveEps,
+  postEps,
+  updateEps,
 } from "@/api/maintenance/eps";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

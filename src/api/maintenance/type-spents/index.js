@@ -59,7 +59,7 @@ const updateTypeSpent = async (item) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const inactiveTypeSpent = async (id) => {
   try {
@@ -97,4 +97,10 @@ const activeTypeSpent = async (id) => {
   }
 };
 
-export { getTypeSpents, postTypeSpent, activeTypeSpent, inactiveTypeSpent, updateTypeSpent};
+export {
+  getTypeSpents,
+  postTypeSpent,
+  activeTypeSpent,
+  inactiveTypeSpent,
+  updateTypeSpent,
+};
