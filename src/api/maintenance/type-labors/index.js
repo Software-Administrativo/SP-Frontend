@@ -1,5 +1,6 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
+import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data type labors
@@ -8,9 +9,12 @@ import { getToken } from "@/helpers";
 const getTypeLabors = async () => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/maintenance/works`, {
       headers: {
         token: tokenExist,
+        farm: idFarm
       },
     });
     return data;
@@ -22,6 +26,8 @@ const getTypeLabors = async () => {
 const postTypeLabor = async (type) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/works/register`,
       {
@@ -31,6 +37,7 @@ const postTypeLabor = async (type) => {
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -43,6 +50,8 @@ const postTypeLabor = async (type) => {
 const updateTypeLabor = async (item) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/works/update/${item.id}`,
       {
@@ -52,6 +61,7 @@ const updateTypeLabor = async (item) => {
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -64,12 +74,15 @@ const updateTypeLabor = async (item) => {
 const inactiveTypeLabor = async (id) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/works/inactive/${id}`,
       {},
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
@@ -82,12 +95,15 @@ const inactiveTypeLabor = async (id) => {
 const activeTypeLabor = async (id) => {
   try {
     const tokenExist = getToken();
+    const storage = useStorage();
+    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/works/active/${id}`,
       {},
       {
         headers: {
           token: tokenExist,
+          farm: idFarm
         },
       }
     );
