@@ -11,15 +11,16 @@ const getUsers = async () => {
     const tokenExist = getToken();
     const storage = useStorage();
     const idFarm = storage.idSelected;
-    
+
     const { data } = await sugarAxios.get(`/users`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
   } catch (error) {
+    console.log(error);
     return error;
   }
 };
@@ -42,7 +43,7 @@ const postUser = async (item) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -89,7 +90,7 @@ const inactiveUser = async (id) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -111,7 +112,7 @@ const activeUser = async (id) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

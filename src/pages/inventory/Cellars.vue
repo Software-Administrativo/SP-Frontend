@@ -140,7 +140,7 @@
             class="q-mb-md"
             label="Descripción"
             type="text"
-            :required="false" 
+            :required="false"
             :value="valueInputDescription"
             v-model="descriptionCellars"
             @onWrite="getInputDescription"
@@ -333,7 +333,7 @@ const editCellarsInventory = (item) => {
   valueInputValue.value = item.value;
   nameCellars.value = item.name;
   typeContractCellars.value = item.typecontract;
-  descriptionCellars.value = item.description;  
+  descriptionCellars.value = item.description;
   valueCellars.value = item.value;
   modal.toggleModal();
 };

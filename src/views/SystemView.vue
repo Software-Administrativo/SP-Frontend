@@ -1,7 +1,7 @@
 <template>
   <div class="q-py-md table-container">
     <div class="row">
-      <i class="icon icon-backRoute q-pt-lg" @click="$router.push('/home')"/>
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.push('/home')" />
       <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
     </div>
     <q-separator class="separator" />
@@ -390,7 +390,6 @@ const editSystemUser = (item) => {
 async function updateDataUserSystem() {
   loading.value = true;
   isLoading.value = true;
-  console.log(passwordUserSystem.value);
   // try {
   //   const response = await updateUserSystem({
   //     id: idUserSystem.value,

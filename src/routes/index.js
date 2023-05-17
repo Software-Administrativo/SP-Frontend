@@ -182,7 +182,7 @@ router.beforeEach((to, from) => {
       const isValidateJWT = validateToken.decodeJwt();
       const userRole = isValidateJWT.rol;
       const allowedRoles = to.meta.rol; // obtener los roles permitidos para la ruta actual
-      if (!allowedRoles.includes(userRole)) { 
+      if (!allowedRoles.includes(userRole)) {
         // si el rol del usuario no está incluido en los permitidos
         // redirigir al usuario a una ruta de la página de inicio
         return {
@@ -193,8 +193,7 @@ router.beforeEach((to, from) => {
         return {
           path: "/",
         };
-      } else if (isValidateJWT.rol == 'ADMIN') {
-
+      } else if (isValidateJWT.rol == "ADMIN") {
       }
     }
   }

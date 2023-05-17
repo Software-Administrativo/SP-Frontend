@@ -59,7 +59,7 @@ const updateUnitMeasurement = async (item) => {
   } catch (error) {
     console.error(error);
   }
-}
+};
 
 const inactiveUnitMeasurement = async (id) => {
   try {
@@ -97,6 +97,10 @@ const activeUnitMeasurement = async (id) => {
   }
 };
 
-
-
-export { getUnitsMeasurement, postUnitMeasurement, activeUnitMeasurement, inactiveUnitMeasurement, updateUnitMeasurement };
+export {
+  getUnitsMeasurement,
+  postUnitMeasurement,
+  activeUnitMeasurement,
+  inactiveUnitMeasurement,
+  updateUnitMeasurement,
+};

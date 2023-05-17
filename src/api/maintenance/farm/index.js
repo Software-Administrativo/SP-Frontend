@@ -99,5 +99,4 @@ const activeFarm = async (id) => {
   }
 };
 
-
 export { getFarms, postFarm, updateFarm, inactiveFarm, activeFarm };

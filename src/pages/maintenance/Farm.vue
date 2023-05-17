@@ -170,11 +170,11 @@
 </template>
 <script setup>
 import {
-activeFarm,
-getFarms,
-inactiveFarm,
-postFarm,
-updateFarm,
+  activeFarm,
+  getFarms,
+  inactiveFarm,
+  postFarm,
+  updateFarm,
 } from "@/api/maintenance/farm";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -198,7 +198,6 @@ const disableSave = computed(() => {
   );
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
-
 
 let filter = ref("");
 let nameFarm = ref("");
@@ -280,7 +279,6 @@ const getInputOwner = (value) => {
   ownerFarm.value = value;
 };
 
-
 const clickButton = () => {
   titleModal.value = "REGISTRAR FINCA";
   valueInputName.value = "";
@@ -354,7 +352,7 @@ const getDataFarms = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
-  try{
+  try {
     const { farms } = await getFarms();
     let countActive = 1;
     let countInactive = 1;

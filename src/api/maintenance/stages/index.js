@@ -99,9 +99,4 @@ const activeStage = async (id) => {
   }
 };
 
-
-
-
-
-
-export { getStages, postStage, inactiveStage, activeStage, updateStage};
+export { getStages, postStage, inactiveStage, activeStage, updateStage };

@@ -48,9 +48,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    class="accions-td"
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         icon="edit_note"
@@ -95,9 +93,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    class="accions-td"
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         text-color="blue-10"
@@ -162,11 +158,11 @@
 </template>
 <script setup>
 import {
-activeTypeLabor,
-getTypeLabors,
-inactiveTypeLabor,
-postTypeLabor,
-updateTypeLabor,
+  activeTypeLabor,
+  getTypeLabors,
+  inactiveTypeLabor,
+  postTypeLabor,
+  updateTypeLabor,
 } from "@/api/maintenance/type-labors";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -298,7 +294,6 @@ async function inactiveLaborMaintenance(id) {
 async function postDataTypeLabors() {
   modal.toggleModal();
   try {
-    console.log(nameTypeLabors.value, descriptionTypeLabors.value);
     const works = await postTypeLabor({
       name: nameTypeLabors.value,
       description: descriptionTypeLabors.value,
@@ -324,30 +319,30 @@ const getDataTypeLabors = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-  const { works } = await getTypeLabors();
-  let countActive = 1;
-  let countInactive = 1;
-  works.forEach((item) => {
-    item.status = item.status ? "Inactivo" : "Activo";
-    if (item.status == "Activo"){
-      item.id = countActive++;
-      rows.value.push(item);
-    } else {
-      item.id = countInactive++;
-      inactiveRows.value.push(item);
-    }
-    item.description =
-      item.description.trim() == "" ? "No registra" : item.description;
-  });
-  loading.value = false;
-} catch {
+    const { works } = await getTypeLabors();
+    let countActive = 1;
+    let countInactive = 1;
+    works.forEach((item) => {
+      item.status = item.status ? "Inactivo" : "Activo";
+      if (item.status == "Activo") {
+        item.id = countActive++;
+        rows.value.push(item);
+      } else {
+        item.id = countInactive++;
+        inactiveRows.value.push(item);
+      }
+      item.description =
+        item.description.trim() == "" ? "No registra" : item.description;
+    });
+    loading.value = false;
+  } catch {
     $q.notify({
       type: "negative",
       message: "Ocurrió un error",
       position: "top",
     });
   }
-}
+};
 
 async function updateDataTypeLabors() {
   try {
@@ -365,7 +360,7 @@ async function updateDataTypeLabors() {
     rows.value = [];
     getDataTypeLabors();
   } catch {
-    $q.notify({ 
+    $q.notify({
       type: "negative",
       position: "top",
       message: "Ocurrió un error",
@@ -399,7 +394,7 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.accions-td{
+.accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;

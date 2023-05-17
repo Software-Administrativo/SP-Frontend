@@ -11,13 +11,13 @@
       name="type"
       v-model="typeDocument"
       :options="types"
-      :rules="[(val) => !!val || props.message]"
+      :rules="defaultRules"
     />
   </div>
 </template>
 <script setup>
 // Imports
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { useStorage } from "@/stores/localStorage.js";
 
 // Data
@@ -25,6 +25,14 @@ const typeDocument = ref(props.value);
 const types = ref([]);
 const storage = useStorage();
 const namesFarms = ref([]);
+
+const defaultRules = computed(() => {
+  if(props.ruless){
+    return props.ruless;
+  } else{
+    return [(val) => !!val || props.message];
+  }
+});
 
 const props = defineProps({
   type: {
@@ -78,14 +86,14 @@ onMounted(() => {
     types.value = ["ADMIN"].map((item) => {
       return `${item[0].toUpperCase()}${item.slice(1)}`;
     });
-  } else if (props.type === "farms"){
+  } else if (props.type === "farms") {
     const isValidateJWT = storage.decodeJwt();
     const farms = isValidateJWT.farms;
 
-    const names = farms.forEach( element  => {
-      namesFarms.value.push(element.name)
+    const names = farms.forEach((element) => {
+      namesFarms.value.push(element.name);
     });
-    types.value = namesFarms.value
+    types.value = namesFarms.value;
   }
 });
 </script>

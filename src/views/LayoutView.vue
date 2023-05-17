@@ -16,6 +16,29 @@
       <div :style="viewRouter">
         <div :style="viewContainer">
           <router-view></router-view>
+          <template v-if="selectFarm !== false ">
+            <ModalForm show="false">
+              <div class="column q-px-xl q-pt-lg q-mb-sm">
+                <span class="title-farm">Para continuar</span>
+                <q-separator class="separator" />
+                <span class="text-farm"
+                  >Seleccione la finca a administrar:</span
+                >
+                <Select
+                  class="select-farm"
+                  @onSelect="getSelectData"
+                  type="farms"
+                  label="Finca"
+                  message="Finca requerida"
+                ></Select>
+                <ButtonSave
+                  :disable="disableSave"
+                  @onClick="saveInfo"
+                  class="q-mt-md"
+                />
+              </div>
+            </ModalForm>
+          </template>
         </div>
       </div>
     </div>
@@ -26,16 +49,38 @@
 import Header from "@/modules/header/Header.vue";
 import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import { menuState } from "@/stores/menu";
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import DefaultSidebar from "../modules/sidebar/DefaultSidebar.vue";
 import { useStorage } from "@/stores/localStorage";
+import ModalForm from "@/modules/global/ModalForm.vue";
+import Select from "@/commons/forms/Select.vue";
+import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
 const menu = menuState();
-const isUserLogged = useStorage();
+const storage = useStorage();
+const selectFarm = ref(false);
+const farmSelected = ref("");
+const disableSave = ref(true);
+
+const getSelectData = (value) => {
+  farmSelected.value = value;
+  disableSave.value = false;
+};
+
+const saveInfo = () => {
+  storage.setFarm(farmSelected.value);
+  selectFarm.value = false;
+  disableSave.value = true;
+};
 
 const isUserLoggedIn = computed(() => {
-  return isUserLogged.loggedIn;
+  if (storage.loggedIn == true && !storage.idSelected) {
+    selectFarm.value = true;
+  } else {
+    selectFarm.value = false;
+  }
+  return storage.loggedIn;
 });
 
 const routeName = computed(() => {
@@ -62,14 +107,6 @@ const viewContainer = computed(() => {
   }
 });
 
-function clickButton() {
-  if (window.screen.width < 680) {
-    if (menu.menuIsOpen) {
-      menu.toggleMenu();
-    }
-  }
-}
-
 const sidebar = computed(() => {
   if (window.screen.width < 680) {
     if (menu.menuIsOpen) {
@@ -77,6 +114,14 @@ const sidebar = computed(() => {
     }
   }
 });
+
+function clickButton() {
+  if (window.screen.width < 680) {
+    if (menu.menuIsOpen) {
+      menu.toggleMenu();
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -85,5 +130,18 @@ const sidebar = computed(() => {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
+}
+.text-farm {
+  font-size: var(--font-medium);
+  padding: 10px 0;
+}
+.title-farm {
+  font-size: var(--font-subtitle);
+}
+.title {
+  font-size: var(--font-title);
+}
+.separator {
+  border: 1.8px solid var(--color-gray);
 }
 </style>
