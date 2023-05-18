@@ -7,11 +7,10 @@ import { useStorage } from "@/stores/localStorage.js";
  * @returns API Response, with the data of the type pays
  */
 
-const getTypePays = async () => {
+const getTypePays = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.get(`/maintenance/pays`, {
       headers: {
         token: tokenExist,
@@ -24,11 +23,10 @@ const getTypePays = async () => {
   }
 };
 
-const postTypePay = async (type) => {
+const postTypePay = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.post(
       `/maintenance/pays/register`,
       {
@@ -48,11 +46,10 @@ const postTypePay = async (type) => {
   }
 };
 
-const updateTypePay = async (item) => {
+const updateTypePay = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.put(
       `/maintenance/pays/update/${item.id}`,
       {
@@ -72,11 +69,10 @@ const updateTypePay = async (item) => {
   }
 };
 
-const inactiveTypePay = async (id) => {
+const inactiveTypePay = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.put(
       `/maintenance/pays/inactive/${id}`,
       {},
@@ -93,11 +89,10 @@ const inactiveTypePay = async (id) => {
   }
 };
 
-const activeTypePay = async (id) => {
+const activeTypePay = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
+
     const { data } = await sugarAxios.put(
       `/maintenance/pays/active/${id}`,
       {},

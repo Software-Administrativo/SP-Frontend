@@ -1,9 +1,6 @@
 <template>
   <div class="q-py-md table-container">
-    <div class="row">
-      <i class="icon icon-backRoute q-pt-lg" @click="$router.push('/home')" />
-      <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
-    </div>
+    <h6 class="title q-my-lg">ACCESO AL SISTEMA</h6>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nuevo usuario" />
@@ -222,7 +219,8 @@ import { RESPONSES } from "@/helpers";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
 
@@ -234,6 +232,7 @@ const isLoading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
+const storage = useStorage();
 
 let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
@@ -387,6 +386,14 @@ const editSystemUser = (item) => {
   modal.toggleModal();
 };
 
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
+
 async function updateDataUserSystem() {
   loading.value = true;
   isLoading.value = true;
@@ -423,7 +430,7 @@ async function getDataUsers() {
   loading.value = true;
 
   try {
-    const data = await getUsers();
+    const data = await getUsers(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     data.forEach((item) => {
@@ -444,7 +451,7 @@ async function getDataUsers() {
 
 async function inactiveSystemUser(id) {
   try {
-    const inactive = await inactiveUser(id);
+    const inactive = await inactiveUser(id, idFarm.value);
     showNotification("positive", "Usuario desactivado correctamente");
     rows.value = [];
     inactiveRows.value = [];
@@ -456,7 +463,7 @@ async function inactiveSystemUser(id) {
 
 async function activeSystemUser(id) {
   try {
-    const active = await activeUser(id);
+    const active = await activeUser(id, idFarm.value);
     showNotification("positive", "Usuario activado correctamente");
     rows.value = [];
     inactiveRows.value = [];
@@ -469,13 +476,16 @@ async function activeSystemUser(id) {
 async function postDataUserSystem() {
   isLoading.value = true;
   try {
-    const data = await postUser({
-      name: nameUserSystem.value,
-      tpdocument: typeDocumentUserSystem.value,
-      numdocument: numberDocumentUserSystem.value,
-      role: roleUserSystem.value,
-      password: passwordUserSystem.value,
-    });
+    const data = await postUser(
+      {
+        name: nameUserSystem.value,
+        tpdocument: typeDocumentUserSystem.value,
+        numdocument: numberDocumentUserSystem.value,
+        role: roleUserSystem.value,
+        password: passwordUserSystem.value,
+      },
+      idFarm.value
+    );
 
     isLoading.value = false;
 
@@ -504,23 +514,19 @@ async function postDataUserSystem() {
   }
 }
 
-function showNotification(type, message) {
-  $q.notify({
-    type: type,
-    message: message,
-    position: "top",
-  });
-}
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataUsers();
+});
 
 onMounted(() => {
   getDataUsers();
 });
 </script>
 <style scoped>
-.icon-backRoute {
-  font-size: 30px;
-  padding-right: 20px;
-}
 .spinner {
   position: absolute;
   top: 50%;

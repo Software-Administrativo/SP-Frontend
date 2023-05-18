@@ -6,11 +6,9 @@ import { useStorage } from "@/stores/localStorage.js";
  * data: data users
  * @returns API Response, with the data of the users
  */
-const getUsers = async () => {
+const getUsers = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
 
     const { data } = await sugarAxios.get(`/users`, {
       headers: {
@@ -20,16 +18,13 @@ const getUsers = async () => {
     });
     return data;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
 
-const postUser = async (item) => {
+const postUser = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
 
     const { data } = await sugarAxios.post(
       `/users/register`,
@@ -53,7 +48,7 @@ const postUser = async (item) => {
   }
 };
 
-const updateUserSystem = async (item) => {
+const updateUserSystem = async (item, idFarm) => {
   console.log(item);
   // try {
   //   const tokenExist = getToken();
@@ -78,11 +73,9 @@ const updateUserSystem = async (item) => {
   // }
 };
 
-const inactiveUser = async (id) => {
+const inactiveUser = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
 
     const { data } = await sugarAxios.put(
       `/users/inactive/${id}`,
@@ -100,11 +93,9 @@ const inactiveUser = async (id) => {
   }
 };
 
-const activeUser = async (id) => {
+const activeUser = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
 
     const { data } = await sugarAxios.put(
       `/users/active/${id}`,

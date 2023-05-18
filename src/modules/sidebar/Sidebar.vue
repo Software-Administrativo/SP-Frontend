@@ -15,18 +15,14 @@
       message="Finca requerida"
     ></Select>
     <q-separator class="separator" />
-    <div v-for="item in pathsRender" :key="item.name" @click="clickRoute">
-      <RouterLink class="item" :to="item.path">
-        <i class="icon-module" v-bind:class="item.icon"></i>
-        <h5 class="name">{{ item.name }}</h5>
-      </RouterLink>
+    <div class="container-router">
+      <div v-for="item in pathsRender" :key="item.name" @click="clickRoute">
+        <RouterLink class="item" :to="item.path">
+          <i class="icon-module" v-bind:class="item.icon"></i>
+          <h5 class="name">{{ item.name }}</h5>
+        </RouterLink>
+      </div>
     </div>
-    <img
-      src="../../assets/global/project-logo.svg"
-      alt="logo"
-      class="logo-global"
-      v-if="showImage"
-    />
   </div>
 </template>
 
@@ -92,14 +88,6 @@ const paths = [
   },
 ];
 
-const showImage = computed(() => {
-  if (window.screen.width < 680 || window.screen.height < 730) {
-    return false;
-  } else {
-    return true;
-  }
-});
-
 const getSelectData = (value) => {
   storage.setFarm(value);
 };
@@ -129,6 +117,13 @@ onMounted(() => {
 .select-farm {
   margin: 15px;
 }
+.container-router{
+  overflow-y: scroll;
+  height: 60vh;
+}
+.container-router::-webkit-scrollbar {
+   display: none;
+}
 .router-link-active {
   background-color: var(--color-gray);
 }
@@ -137,11 +132,6 @@ onMounted(() => {
   width: 230px;
   min-height: 610px;
   background-color: white;
-  overflow-y: scroll;
-  position: relative;
-}
-.sidebar::-webkit-scrollbar {
-  display: none;
 }
 .user-sidebar {
   background-image: url(../../assets/sidebar/background.png);
@@ -175,13 +165,6 @@ onMounted(() => {
   font-size: var(--font-large);
   color: white;
 }
-.logo-global {
-  position: absolute;
-  bottom: 20px;
-  width: 60px;
-  left: calc(50% - 30px);
-}
-
 .icon {
   font-size: var(--font-large);
   color: var(--color-blue);

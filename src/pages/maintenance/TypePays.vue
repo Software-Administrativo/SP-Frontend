@@ -173,7 +173,8 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
 
@@ -184,6 +185,7 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idTypePays = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
   return nameTypePays.value == "";
@@ -282,7 +284,7 @@ const editPayMaintenance = (item) => {
 
 async function inactivePayMaintenance(id) {
   try {
-    const inactive = await inactiveTypePay(id);
+    const inactive = await inactiveTypePay(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Tipo de pago desactivado correctamente",
@@ -306,7 +308,7 @@ async function postDataTypePays() {
     const pays = await postTypePay({
       name: nameTypePays.value,
       description: descriptionTypePays.value,
-    });
+    }, idFarm.value );
     $q.notify({
       type: "positive",
       message: "Tipo de pago registrado correctamente",
@@ -328,7 +330,7 @@ async function getDataTypePays() {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { pays } = await getTypePays();
+    const { pays } = await getTypePays(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     pays.forEach((item) => {
@@ -359,7 +361,7 @@ async function updateDataTypePays() {
       id: idTypePays.value,
       name: nameTypePays.value,
       description: descriptionTypePays.value,
-    });
+    }, idFarm.value );
     $q.notify({
       type: "positive",
       position: "top",
@@ -381,7 +383,7 @@ async function updateDataTypePays() {
 
 async function activePayMaintenance(id) {
   try {
-    const active = await activeTypePay(id);
+    const active = await activeTypePay(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Tipo de pago activado correctamente",
@@ -398,6 +400,14 @@ async function activePayMaintenance(id) {
   }
 }
 
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataTypePays();
+});
+
 onMounted(() => {
   getDataTypePays();
 });
@@ -406,6 +416,9 @@ onMounted(() => {
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
+}
+.icon-backRoute:hover{
+  cursor: pointer;
 }
 .accions-td {
   padding: 0px;

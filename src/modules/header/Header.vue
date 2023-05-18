@@ -9,6 +9,7 @@
         class="text-white"
         @click="toggle()"
       />
+      <span class="name-farm">{{ nameFarm }}</span>
       <q-space></q-space>
       <q-btn
         flat
@@ -26,8 +27,13 @@
 <script setup>
 import { menuState } from "@/stores/menu";
 import { useStorage } from "@/stores/localStorage";
+import { computed } from "vue";
 
 const storage = useStorage();
+
+const nameFarm = computed(() => {
+  return storage.nameSelected;
+});
 
 const menu = menuState();
 function toggle() {
@@ -46,5 +52,10 @@ const logoutSession = () => {
 .header {
   background-color: var(--color-blue);
   width: 100%;
+}
+.name-farm{
+  font-size: var(--font-subtitle);
+  color: white;
+  margin-left: 20px;
 }
 </style>
