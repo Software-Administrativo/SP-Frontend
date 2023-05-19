@@ -1,8 +1,10 @@
 <template>
   <div class="container-modal">
     <div class="column modal-forms bg-white">
-      <i class="icon icon-close self-end" @click="toggle()" />
-      <q-separator class="separator" />
+      <div class="column" v-if="props.show != 'false'">
+        <i class="icon icon-close self-end" @click="toggle()" />
+        <q-separator class="separator" />
+      </div>
       <slot />
     </div>
   </div>
@@ -11,6 +13,10 @@
 import { modalState } from "@/stores/modal.js";
 
 const modal = modalState();
+
+const props = defineProps({
+  show: String,
+});
 
 function toggle() {
   modal.toggleModal();
