@@ -6,11 +6,10 @@ import { useStorage } from "@/stores/localStorage.js";
  * data: data units measurement
  * @returns API Response, with the data of the units measurement
  */
-const getUnitsMeasurement = async () => {
+
+const getUnitsMeasurement = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/maintenance/unittypes`, {
       headers: {
         token: tokenExist,
@@ -26,8 +25,6 @@ const getUnitsMeasurement = async () => {
 const postUnitMeasurement = async (type) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/unittypes/register`,
       {
@@ -50,8 +47,6 @@ const postUnitMeasurement = async (type) => {
 const updateUnitMeasurement = async (item) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/unittypes/update/${item.id}`,
       {
@@ -74,8 +69,6 @@ const updateUnitMeasurement = async (item) => {
 const inactiveUnitMeasurement = async (id) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/unittypes/inactive/${id}`,
       {},
@@ -95,8 +88,6 @@ const inactiveUnitMeasurement = async (id) => {
 const activeUnitMeasurement = async (id) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/unittypes/active/${id}`,
       {},

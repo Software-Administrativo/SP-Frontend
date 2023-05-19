@@ -1,16 +1,15 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
+
 
 /**
  * data: data type labors
  * @returns API Response, with the data of the type labors
  */
-const getTypeLabors = async () => {
+
+const getTypeLabors = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/maintenance/works`, {
       headers: {
         token: tokenExist,
@@ -23,11 +22,9 @@ const getTypeLabors = async () => {
   }
 };
 
-const postTypeLabor = async (type) => {
+const postTypeLabor = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/works/register`,
       {
@@ -47,11 +44,9 @@ const postTypeLabor = async (type) => {
   }
 };
 
-const updateTypeLabor = async (item) => {
+const updateTypeLabor = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/works/update/${item.id}`,
       {
@@ -71,11 +66,9 @@ const updateTypeLabor = async (item) => {
   }
 };
 
-const inactiveTypeLabor = async (id) => {
+const inactiveTypeLabor = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/works/inactive/${id}`,
       {},
@@ -92,11 +85,9 @@ const inactiveTypeLabor = async (id) => {
   }
 };
 
-const activeTypeLabor = async (id) => {
+const activeTypeLabor = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/works/active/${id}`,
       {},

@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-sm table-container">
-    <h6 class="title q-my-lg">EPS</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">EPS</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva EPS" />
@@ -179,7 +182,10 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
+
+const $q = useQuasar();
 
 const modal = modalState();
 const titleModal = ref("");
@@ -188,6 +194,7 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idEps = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
   return nameEps.value == "";
@@ -195,15 +202,15 @@ const disableSave = computed(() => {
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
+let tab = ref("active");
+
 let nameEps = ref("");
 let descriptionEps = ref("");
 let observationEps = ref("");
+
 let valueInputName = ref("");
 let valueInputDescription = ref("");
 let valueInputObservation = ref("");
-let tab = ref("active");
-
-const $q = useQuasar();
 
 const columns = ref([
   {
@@ -276,11 +283,15 @@ const getInputObservation = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR EPS";
+  resetValuesForm();
+  typeAction.value = true;
+  modal.toggleModal();
+};
+
+const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
   valueInputObservation.value = "";
-  typeAction.value = true;
-  modal.toggleModal();
   nameEps.value = "";
   descriptionEps.value = "";
   observationEps.value = "";
@@ -301,7 +312,7 @@ const editEpsMaintenance = (item) => {
 
 async function inactiveEpsMaintenance(id) {
   try {
-    const inactive = await inactiveEps(id);
+    const inactive = await inactiveEps(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Eps desactivada correctamente",
@@ -326,7 +337,7 @@ async function postDataEps() {
       name: nameEps.value,
       description: descriptionEps.value,
       observation: observationEps.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Eps registrada correctamente",
@@ -348,7 +359,7 @@ const getDataEps = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { eps } = await getEps();
+    const { eps } = await getEps(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     eps.forEach((item) => {
@@ -382,7 +393,7 @@ async function updateDataEps() {
       name: nameEps.value,
       description: descriptionEps.value,
       observation: observationEps.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       position: "top",
@@ -405,7 +416,7 @@ async function updateDataEps() {
 
 async function activeEpsMaintenance(id) {
   try {
-    const active = await activeEps(id);
+    const active = await activeEps(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Eps activada correctamente",
@@ -423,11 +434,27 @@ async function activeEpsMaintenance(id) {
   }
 }
 
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataEps();
+});
+
+
 onMounted(() => {
   getDataEps();
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.icon-backRoute:hover{
+  cursor: pointer;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;
@@ -436,7 +463,10 @@ onMounted(() => {
 }
 .text-required {
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-small);
+}
+.title {
+  font-size: var(--font-title);
 }
 .table-container {
   position: relative;
@@ -448,17 +478,17 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-.icon {
-  font-size: 1.5rem;
+.icon-table {
+  font-size: 18px;
 }
-.title {
-  font-size: var(--font-title);
+.icon-check {
+  font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
-  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;

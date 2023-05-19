@@ -1,6 +1,5 @@
 import { getToken } from "@/helpers";
 import { sugarAxios } from "../../global";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data type pays
@@ -10,7 +9,6 @@ import { useStorage } from "@/stores/localStorage.js";
 const getTypePays = async (idFarm) => {
   try {
     const tokenExist = getToken();
-
     const { data } = await sugarAxios.get(`/maintenance/pays`, {
       headers: {
         token: tokenExist,
