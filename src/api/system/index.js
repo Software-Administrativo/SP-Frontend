@@ -1,11 +1,11 @@
 import { getToken } from "@/helpers";
 import { sugarAxios } from "../global";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data users
  * @returns API Response, with the data of the users
  */
+
 const getUsers = async (idFarm) => {
   try {
     const tokenExist = getToken();

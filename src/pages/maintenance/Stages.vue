@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">TIPOS ETAPAS</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">ETAPAS</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva etapa" />
@@ -181,7 +184,10 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
+
+const $q = useQuasar();
 
 const modal = modalState();
 const titleModal = ref("");
@@ -190,6 +196,7 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idStage = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
   return nameStages.value == "";
@@ -197,15 +204,15 @@ const disableSave = computed(() => {
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
+let tab = ref("active");
+
 let nameStages = ref("");
 let lotStages = ref("");
 let descriptionStages = ref("");
+
 let valueInputName = ref("");
 let valueInputDescription = ref("");
 let valueInputLot = ref("");
-let tab = ref("active");
-
-const $q = useQuasar();
 
 const columns = ref([
   {
@@ -278,11 +285,15 @@ const getInputDescription = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR ETAPA";
+  resetValuesForm();
+  typeAction.value = true;
+  modal.toggleModal();
+};
+
+const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
   valueInputLot.value = "";
-  typeAction.value = true;
-  modal.toggleModal();
   nameStages.value = "";
   lotStages.value = "";
   descriptionStages.value = "";
@@ -303,7 +314,7 @@ const editStageMaintenance = (item) => {
 
 async function inactiveStageMaintenance(id) {
   try {
-    const inactive = await inactiveStage(id);
+    const inactive = await inactiveStage(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Etapa desactivada correctamente",
@@ -328,7 +339,7 @@ async function postDataStages() {
       name: nameStages.value,
       lot: lotStages.value,
       description: descriptionStages.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Etapa registrada correctamente",
@@ -350,7 +361,7 @@ const getDataStages = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { stages } = await getStages();
+    const { stages } = await getStages(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     stages.forEach((item) => {
@@ -382,7 +393,7 @@ async function updateDataStage() {
       name: nameStages.value,
       lot: lotStages.value,
       description: descriptionStages.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       position: "top",
@@ -405,7 +416,7 @@ async function updateDataStage() {
 
 async function activeStageMaintenance(id) {
   try {
-    const active = await activeStage(id);
+    const active = await activeStage(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Etapa activada correctamente",
@@ -423,11 +434,26 @@ async function activeStageMaintenance(id) {
   }
 }
 
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataStages();
+});
+
 onMounted(() => {
   getDataStages();
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.icon-backRoute:hover{
+  cursor: pointer;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;
@@ -436,42 +462,39 @@ onMounted(() => {
 }
 .text-required {
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-small);
 }
-
 .title {
   font-size: var(--font-title);
 }
-
 .table-container {
   position: relative;
 }
-
 .separator {
   border: 1.8px solid var(--color-gray);
 }
-
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
 }
-.icon {
-  font-size: 1.5rem;
+.icon-table {
+  font-size: 18px;
+}
+.icon-check {
+  font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
-  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }
-
 .container-table::-webkit-scrollbar {
   display: none;
 }
-
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
     max-width: 300px;

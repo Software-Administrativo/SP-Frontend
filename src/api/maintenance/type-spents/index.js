@@ -1,17 +1,15 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data type spents
  * @returns API Response, with the data of the type spents
  */
 
-const getTypeSpents = async () => {
+const getTypeSpents = async (idFarm) => {
   const tokenExist = getToken();
-  const storage = useStorage();
-  const idFarm = storage.idSelected;
   try {
+    const tokenExist = getToken();
     const { data } = await sugarAxios.get(`/maintenance/spents`, {
       headers: {
         token: tokenExist,
@@ -24,11 +22,9 @@ const getTypeSpents = async () => {
   }
 };
 
-const postTypeSpent = async (type) => {
+const postTypeSpent = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/spents/register`,
       {
@@ -48,11 +44,9 @@ const postTypeSpent = async (type) => {
   }
 };
 
-const updateTypeSpent = async (item) => {
+const updateTypeSpent = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/spents/update/${item.id}`,
       {
@@ -72,11 +66,9 @@ const updateTypeSpent = async (item) => {
   }
 };
 
-const inactiveTypeSpent = async (id) => {
+const inactiveTypeSpent = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/spents/inactive/${id}`,
       {},
@@ -93,11 +85,9 @@ const inactiveTypeSpent = async (id) => {
   }
 };
 
-const activeTypeSpent = async (id) => {
+const activeTypeSpent = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/spents/active/${id}`,
       {},
