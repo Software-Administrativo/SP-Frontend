@@ -1,17 +1,14 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data category
  * @returns API Response, with the data of the category
  */
 
-const getCategories = async () => {
+const getCategories = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/inventory/category`, {
       headers: {
         token: tokenExist,
@@ -24,11 +21,9 @@ const getCategories = async () => {
   }
 };
 
-const postCategorie = async (type) => {
+const postCategorie = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/inventory/category/register`,
       {
@@ -48,11 +43,9 @@ const postCategorie = async (type) => {
   }
 };
 
-const updateCategorie = async (item) => {
+const updateCategorie = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/category/update/${item.id}`,
       {
@@ -72,11 +65,9 @@ const updateCategorie = async (item) => {
   }
 };
 
-const inactiveCategorie = async (id) => {
+const inactiveCategorie = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/category/inactive/${id}`,
       {},
@@ -93,11 +84,9 @@ const inactiveCategorie = async (id) => {
   }
 };
 
-const activeCategorie = async (id) => {
+const activeCategorie = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/category/active/${id}`,
       {},

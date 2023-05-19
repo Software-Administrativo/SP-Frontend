@@ -1,17 +1,14 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data cellars
  * @returns API Response, with the data of the cellars
  */
 
-const getCellars = async () => {
+const getCellars = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/inventory/cellar`, {
       headers: {
         token: tokenExist,
@@ -24,11 +21,9 @@ const getCellars = async () => {
   }
 };
 
-const postCellar = async (type) => {
+const postCellar = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/inventory/cellar/register`,
       {
@@ -50,11 +45,9 @@ const postCellar = async (type) => {
   }
 };
 
-const updateCellar = async (item) => {
+const updateCellar = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/cellar/update/${item.id}`,
       {
@@ -76,11 +69,9 @@ const updateCellar = async (item) => {
   }
 };
 
-const inactiveCellar = async (id) => {
+const inactiveCellar = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/cellar/inactive/${id}`,
       {},
@@ -97,11 +88,9 @@ const inactiveCellar = async (id) => {
   }
 };
 
-const activeCellar = async (id) => {
+const activeCellar = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/cellar/active/${id}`,
       {},

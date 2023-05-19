@@ -1,17 +1,14 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data Lots
  * @returns API Response, with the data of the Lots
  */
 
-const getLots = async () => {
+const getLots = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/maintenance/lots`, {
       headers: {
         token: tokenExist,
@@ -24,11 +21,9 @@ const getLots = async () => {
   }
 };
 
-const postLot = async (type) => {
+const postLot = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/lots/register`,
       {
@@ -53,11 +48,9 @@ const postLot = async (type) => {
   }
 };
 
-const updateLot = async (item) => {
+const updateLot = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/lots/update/${item.id}`,
       {
@@ -82,11 +75,9 @@ const updateLot = async (item) => {
   }
 };
 
-const inactiveLot = async (id) => {
+const inactiveLot = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/lots/inactive/${id}`,
       {},
@@ -103,11 +94,9 @@ const inactiveLot = async (id) => {
   }
 };
 
-const activeLot = async (id) => {
+const activeLot = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/lots/active/${id}`,
       {},
