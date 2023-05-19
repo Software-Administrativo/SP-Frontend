@@ -24,7 +24,6 @@ const getTypePays = async (idFarm) => {
 const postTypePay = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-
     const { data } = await sugarAxios.post(
       `/maintenance/pays/register`,
       {
@@ -47,7 +46,6 @@ const postTypePay = async (type, idFarm) => {
 const updateTypePay = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-
     const { data } = await sugarAxios.put(
       `/maintenance/pays/update/${item.id}`,
       {
@@ -70,7 +68,6 @@ const updateTypePay = async (item, idFarm) => {
 const inactiveTypePay = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-
     const { data } = await sugarAxios.put(
       `/maintenance/pays/inactive/${id}`,
       {},

@@ -1,16 +1,13 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data products
  * @returns API Response, with the data of the products
  */
-const getProducts = async () => {
+const getProducts = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/inventory/product`, {
       headers: {
         token: tokenExist,
@@ -23,11 +20,9 @@ const getProducts = async () => {
   }
 };
 
-const postProduct = async (type) => {
+const postProduct = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/inventory/product/register`,
       {
@@ -50,11 +45,9 @@ const postProduct = async (type) => {
   }
 };
 
-const updateProduct = async (item) => {
+const updateProduct = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/product/update/${item.id}`,
       {
@@ -77,11 +70,9 @@ const updateProduct = async (item) => {
   }
 };
 
-const inactiveProduct = async (id) => {
+const inactiveProduct = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/product/inactive/${id}`,
       {},
@@ -98,11 +89,9 @@ const inactiveProduct = async (id) => {
   }
 };
 
-const activeProduct = async (id) => {
+const activeProduct = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/product/active/${id}`,
       {},

@@ -1,6 +1,5 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data units measurement
@@ -22,7 +21,7 @@ const getUnitsMeasurement = async (idFarm) => {
   }
 };
 
-const postUnitMeasurement = async (type) => {
+const postUnitMeasurement = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
@@ -44,7 +43,7 @@ const postUnitMeasurement = async (type) => {
   }
 };
 
-const updateUnitMeasurement = async (item) => {
+const updateUnitMeasurement = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
@@ -66,7 +65,7 @@ const updateUnitMeasurement = async (item) => {
   }
 };
 
-const inactiveUnitMeasurement = async (id) => {
+const inactiveUnitMeasurement = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
@@ -85,7 +84,7 @@ const inactiveUnitMeasurement = async (id) => {
   }
 };
 
-const activeUnitMeasurement = async (id) => {
+const activeUnitMeasurement = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(

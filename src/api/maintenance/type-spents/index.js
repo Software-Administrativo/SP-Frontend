@@ -9,6 +9,7 @@ import { getToken } from "@/helpers";
 const getTypeSpents = async (idFarm) => {
   const tokenExist = getToken();
   try {
+    const tokenExist = getToken();
     const { data } = await sugarAxios.get(`/maintenance/spents`, {
       headers: {
         token: tokenExist,

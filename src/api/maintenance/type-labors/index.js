@@ -1,7 +1,6 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
 
-
 /**
  * data: data type labors
  * @returns API Response, with the data of the type labors
