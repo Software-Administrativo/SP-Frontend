@@ -1,17 +1,14 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data type brands
  * @returns API Response, with the data of the type brands
  */
 
-const getBrands = async () => {
+const getBrands = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/inventory/mark`, {
       headers: {
         token: tokenExist,
@@ -24,11 +21,9 @@ const getBrands = async () => {
   }
 };
 
-const postBrand = async (type) => {
+const postBrand = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/inventory/mark/register`,
       {
@@ -48,11 +43,9 @@ const postBrand = async (type) => {
   }
 };
 
-const updateBrand = async (item) => {
+const updateBrand = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/mark/update/${item.id}`,
       {
@@ -72,11 +65,9 @@ const updateBrand = async (item) => {
   }
 };
 
-const inactiveBrand = async (id) => {
+const inactiveBrand = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/mark/inactive/${id}`,
       {},
@@ -93,11 +84,9 @@ const inactiveBrand = async (id) => {
   }
 };
 
-const activeBrand = async (id) => {
+const activeBrand = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/inventory/mark/active/${id}`,
       {},

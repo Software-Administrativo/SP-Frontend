@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">LOTES</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">LOTES</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nuevo lote" />
@@ -221,7 +224,10 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
+
+const $q = useQuasar();
 
 const modal = modalState();
 const titleModal = ref("");
@@ -230,13 +236,18 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idLot = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
-  return nameLots.value == "";
+  return (nameLots.value == "" || areaSizeLots.value ==""
+  || lotStateLots.value == "" || soildStateLots.value == ""
+  || classLots.value || sowingDensityLots.value); //
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
+let tab = ref("active");
+
 let nameLots = ref("");
 let areaSizeLots = ref("");
 let lotStateLots = ref("");
@@ -244,6 +255,7 @@ let soildStateLots = ref("");
 let classLots = ref("");
 let sowingDensityLots = ref("");
 let descriptionLots = ref("");
+
 let valueInputName = ref("");
 let valueInputAreaSize = ref("");
 let valueInputLoteState = ref("");
@@ -251,9 +263,7 @@ let valueInputSoildState = ref("");
 let valueInputClass = ref("");
 let valueInputSowingDensity = ref("");
 let valueInputDescription = ref("");
-let tab = ref("active");
 
-const $q = useQuasar();
 
 const columns = ref([
   {
@@ -378,6 +388,12 @@ const getInputDescription = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR LOTE";
+  resetValuesForm();
+  typeAction.value = true;
+  modal.toggleModal();
+};
+
+const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputAreaSize.value = "";
   valueInputLoteState.value = "";
@@ -385,8 +401,6 @@ const clickButton = () => {
   valueInputClass.value = "";
   valueInputSowingDensity.value = "";
   valueInputDescription.value = "";
-  typeAction.value = true;
-  modal.toggleModal();
   nameLots.value = "";
   areaSizeLots.value = "";
   lotStateLots.value = "";
@@ -419,7 +433,7 @@ const editLotMaintenance = (item) => {
 
 async function inactiveLotMaintenance(id) {
   try {
-    const inactive = await inactiveLot(id);
+    const inactive = await inactiveLot(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Lote desactivado correctamente",
@@ -448,7 +462,7 @@ async function postDataLot() {
       classlot: classLots.value,
       sowingdensity: sowingDensityLots.value,
       description: descriptionLots.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Lote registrado correctamente",
@@ -470,7 +484,7 @@ const getDataLots = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { lots } = await getLots();
+    const { lots } = await getLots(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     lots.forEach((item) => {
@@ -506,7 +520,7 @@ async function updateDataLot() {
       classlot: classLots.value,
       sowingdensity: sowingDensityLots.value,
       description: descriptionLots.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       position: "top",
@@ -533,7 +547,7 @@ async function updateDataLot() {
 
 async function activeLotMaintenance(id) {
   try {
-    const active = await activeLot(id);
+    const active = await activeLot(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Lote activado correctamente",
@@ -551,11 +565,26 @@ async function activeLotMaintenance(id) {
   }
 }
 
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataLots();
+});
+
 onMounted(() => {
   getDataLots();
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.icon-backRoute:hover{
+  cursor: pointer;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;
@@ -564,7 +593,10 @@ onMounted(() => {
 }
 .text-required {
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-small);
+}
+.title {
+  font-size: var(--font-title);
 }
 .table-container {
   position: relative;
@@ -576,17 +608,17 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-.icon {
-  font-size: 1.5rem;
+.icon-table {
+  font-size: 18px;
 }
-.title {
-  font-size: var(--font-title);
+.icon-check {
+  font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
-  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
@@ -594,6 +626,7 @@ onMounted(() => {
 .container-table::-webkit-scrollbar {
   display: none;
 }
+
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
     max-width: 300px;
@@ -630,3 +663,4 @@ onMounted(() => {
   }
 }
 </style>
+

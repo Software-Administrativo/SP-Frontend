@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">UNIDADES DE MEDIDA</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">UNIDADES DE MEDIDA</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear unidad de medida" />
@@ -171,7 +174,10 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
+
+const $q = useQuasar();
 
 const modal = modalState();
 const titleModal = ref("");
@@ -180,6 +186,7 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idUnitsMeasurement = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
   return (
@@ -189,13 +196,13 @@ const disableSave = computed(() => {
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
-let nameUnitsMeasurement = ref("");
-let unitTypeUnitsMeasurement = ref("");
-let valueInputName = ref("");
-let valueInputUnitType = ref("");
 let tab = ref("active");
 
-const $q = useQuasar();
+let nameUnitsMeasurement = ref("");
+let unitTypeUnitsMeasurement = ref("");
+
+let valueInputName = ref("");
+let valueInputUnitType = ref("");
 
 const columns = ref([
   {
@@ -255,10 +262,14 @@ const getInputunittype = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR UNIDAD DE MEDIDA";
-  valueInputUnitType.value = "";
-  valueInputName.value = "";
+  resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
+};
+
+const resetValuesForm = () => {
+  valueInputUnitType.value = "";
+  valueInputName.value = "";
   nameUnitsMeasurement.value = "";
   unitTypeUnitsMeasurement.value = "";
 };
@@ -276,7 +287,7 @@ const editUnitMaintenance = (item) => {
 
 async function inactiveUnitMaintenance(id) {
   try {
-    const inactive = await inactiveUnitMeasurement(id);
+    const inactive = await inactiveUnitMeasurement(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Unidad de medida desactivada correctamente",
@@ -300,7 +311,7 @@ async function postDataUnitMeasurement() {
     const unitType = await postUnitMeasurement({
       name: nameUnitsMeasurement.value,
       unittype: unitTypeUnitsMeasurement.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Unidad de medida registrada correctamente",
@@ -322,7 +333,7 @@ const getDataUnitsMeasurement = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { unitType } = await getUnitsMeasurement();
+    const { unitType } = await getUnitsMeasurement(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     unitType.forEach((item) => {
@@ -351,7 +362,7 @@ async function updateDataUnitMeasurement() {
       id: idUnitsMeasurement.value,
       name: nameUnitsMeasurement.value,
       unittype: unitTypeUnitsMeasurement.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       position: "top",
@@ -373,7 +384,7 @@ async function updateDataUnitMeasurement() {
 
 async function activeUnitMaintenance(id) {
   try {
-    const active = await activeUnitMeasurement(id);
+    const active = await activeUnitMeasurement(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Unidad de medida activada correctamente",
@@ -390,24 +401,39 @@ async function activeUnitMaintenance(id) {
     });
   }
 }
+ 
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataUnitsMeasurement();
+});
 
 onMounted(() => {
   getDataUnitsMeasurement();
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.icon-backRoute:hover{
+  cursor: pointer;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
 }
-.title {
-  font-size: var(--font-title);
-}
 .text-required {
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-small);
+}
+.title {
+  font-size: var(--font-title);
 }
 .table-container {
   position: relative;
@@ -419,14 +445,17 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
 }
-.icon {
-  font-size: 1.5rem;
+.icon-table {
+  font-size: 18px;
+}
+.icon-check {
+  font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
-  height: 80%;
-  max-height: 70vh;
   background-color: white;
+  height: 80%;
+  max-height: 60vh;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;

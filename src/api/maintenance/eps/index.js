@@ -1,16 +1,14 @@
 import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
-import { useStorage } from "@/stores/localStorage.js";
 
 /**
  * data: data Eps
  * @returns API Response, with the data of the Eps
  */
-const getEps = async () => {
+
+const getEps = async (idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.get(`/maintenance/eps`, {
       headers: {
         token: tokenExist,
@@ -23,11 +21,9 @@ const getEps = async () => {
   }
 };
 
-const postEps = async (type) => {
+const postEps = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.post(
       `/maintenance/eps/register`,
       {
@@ -48,11 +44,9 @@ const postEps = async (type) => {
   }
 };
 
-const updateEps = async (item) => {
+const updateEps = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/eps/update/${item.id}`,
       {
@@ -73,11 +67,9 @@ const updateEps = async (item) => {
   }
 };
 
-const inactiveEps = async (id) => {
+const inactiveEps = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/eps/inactive/${id}`,
       {},
@@ -94,11 +86,9 @@ const inactiveEps = async (id) => {
   }
 };
 
-const activeEps = async (id) => {
+const activeEps = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
-    const storage = useStorage();
-    const idFarm = storage.idSelected;
     const { data } = await sugarAxios.put(
       `/maintenance/eps/active/${id}`,
       {},

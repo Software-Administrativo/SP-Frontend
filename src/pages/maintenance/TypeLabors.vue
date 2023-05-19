@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">TIPOS DE LABOR</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">TIPOS DE LABOR</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear tipo de labor" />
@@ -170,7 +173,10 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
+
+const $q = useQuasar();
 
 const modal = modalState();
 const titleModal = ref("");
@@ -179,6 +185,7 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idTypeLabors = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
   return nameTypeLabors.value == "";
@@ -186,13 +193,13 @@ const disableSave = computed(() => {
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
-let nameTypeLabors = ref("");
-let descriptionTypeLabors = ref("");
-let valueInputName = ref("");
-let valueInputDescription = ref("");
 let tab = ref("active");
 
-const $q = useQuasar();
+let nameTypeLabors = ref("");
+let descriptionTypeLabors = ref("");
+
+let valueInputName = ref("");
+let valueInputDescription = ref("");
 
 const columns = ref([
   {
@@ -252,10 +259,14 @@ const getInputDescription = (value) => {
 
 const clickButton = () => {
   titleModal.value = "REGISTRAR TIPO DE LABOR";
-  valueInputDescription.value = "";
-  valueInputName.value = "";
+  resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
+};
+
+const resetValuesForm = () => {
+  valueInputDescription.value = "";
+  valueInputName.value = "";
   nameTypeLabors.value = "";
   descriptionTypeLabors.value = "";
 };
@@ -273,7 +284,7 @@ const editLaborMaintenance = (item) => {
 
 async function inactiveLaborMaintenance(id) {
   try {
-    const inactive = await inactiveTypeLabor(id);
+    const inactive = await inactiveTypeLabor(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Tipo de labor desactivado correctamente",
@@ -297,7 +308,7 @@ async function postDataTypeLabors() {
     const works = await postTypeLabor({
       name: nameTypeLabors.value,
       description: descriptionTypeLabors.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Tipo de labor registrado correctamente",
@@ -319,7 +330,7 @@ const getDataTypeLabors = async () => {
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { works } = await getTypeLabors();
+    const { works } = await getTypeLabors(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     works.forEach((item) => {
@@ -350,7 +361,7 @@ async function updateDataTypeLabors() {
       id: idTypeLabors.value,
       name: nameTypeLabors.value,
       description: descriptionTypeLabors.value,
-    });
+    }, idFarm.value);
     $q.notify({
       type: "positive",
       position: "top",
@@ -372,7 +383,7 @@ async function updateDataTypeLabors() {
 
 async function activeLaborMaintenance(id) {
   try {
-    const active = await activeTypeLabor(id);
+    const active = await activeTypeLabor(id, idFarm.value);
     $q.notify({
       type: "positive",
       message: "Tipo de labor activado correctamente",
@@ -389,23 +400,38 @@ async function activeLaborMaintenance(id) {
   }
 }
 
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataTypeLabors();
+});
+
 onMounted(() => {
   getDataTypeLabors();
 });
 </script>
 <style scoped>
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.icon-backRoute:hover{
+  cursor: pointer;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
 }
-.title {
-  font-size: var(--font-title);
-}
 .text-required {
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-small);
+}
+.title {
+  font-size: var(--font-title);
 }
 .table-container {
   position: relative;
@@ -413,18 +439,21 @@ onMounted(() => {
 .separator {
   border: 1.8px solid var(--color-gray);
 }
-.icon {
-  font-size: 1.5rem;
-}
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
 }
+.icon-table {
+  font-size: 18px;
+}
+.icon-check {
+  font-size: 25px;
+}
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
-  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
