@@ -202,9 +202,7 @@ const isLoading = ref(false);
 
 const disableSave = computed(() => {
   if(
-    nameEps.value == "" ||
-    descriptionEps.value == "" ||
-    observationEps.value == ""
+    nameEps.value == "" 
   ){
     return true;
   } else if (isLoading.value == true){
