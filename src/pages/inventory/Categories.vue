@@ -60,7 +60,7 @@
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none"
-                        @click="inactiveCategorieInventory(props.row._id)"
+                        @click="inactiveCategoryInventory(props.row._id)"
                       />
                     </q-btn-group>
                   </td>
@@ -98,7 +98,7 @@
                       <q-btn
                         text-color="blue-10"
                         class="col q-pa-none"
-                        @click="activeCategorieInventory(props.row._id)"
+                        @click="activeCategoryInventory(props.row._id)"
                       >
                         <i class="icon icon-check"></i>
                       </q-btn>
@@ -123,7 +123,7 @@
             type="text"
             :ruless="rules"
             :value="valueInputName"
-            v-model="nameCategories"
+            v-model="nameCategory"
             @onWrite="getInputName"
           />
           <Input
@@ -132,7 +132,7 @@
             type="text"
             :required="false"
             :value="valueInputDescription"
-            v-model="descriptionCategories"
+            v-model="descriptionCategory"
             @onWrite="getInputDescription"
           />
           <span class="text-required q-pb-sm"
@@ -143,13 +143,16 @@
             <ButtonSave
               v-if="typeAction"
               :disable="disableSave"
-              @onClick="postDataCategorie"
+              @onClick="postDataCategory"
             />
             <ButtonSave
               v-else
               :disable="disableSave"
-              @onClick="updateDataCategorie"
+              @onClick="updateDataCategory"
             />
+          </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
           </div>
         </div>
       </div>
@@ -158,11 +161,11 @@
 </template>
 <script setup>
 import {
-  activeCategorie,
+  activeCategory,
   getCategories,
-  inactiveCategorie,
-  postCategorie,
-  updateCategorie,
+  inactiveCategory,
+  postCategory,
+  updateCategory,
 } from "@/api/inventory/categories";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -170,7 +173,8 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 const modal = modalState();
 const titleModal = ref("");
@@ -179,15 +183,23 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idCategories = ref();
+const isLoading = ref(false);
+const storage = useStorage();
 
 const disableSave = computed(() => {
-  return nameCategories.value == "";
+  if (!nameCategory.value || !descriptionCategory.value) {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return false;
+  }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
-let nameCategories = ref("");
-let descriptionCategories = ref("");
+let nameCategory = ref("");
+let descriptionCategory = ref("");
 let valueInputName = ref("");
 let valueInputDescription = ref("");
 let tab = ref("active");
@@ -223,31 +235,22 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "status",
-    label: "Estado",
-    field: "status",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "Acciones",
     label: "Acciones",
     field: "acciones",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
 ]);
 
 const getInputName = (value) => {
-  nameCategories.value = value;
+  nameCategory.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionCategories.value = value;
+  descriptionCategory.value = value;
 };
 
 const clickButton = () => {
@@ -256,8 +259,8 @@ const clickButton = () => {
   valueInputDescription.value = "";
   typeAction.value = true;
   modal.toggleModal();
-  nameCategories.value = "";
-  descriptionCategories.value = "";
+  nameCategory.value = "";
+  descriptionCategory.value = "";
 };
 
 const editCategorieInventory = (item) => {
@@ -266,60 +269,25 @@ const editCategorieInventory = (item) => {
   idCategories.value = item._id;
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
-  nameCategories.value = item.name;
-  descriptionCategories.value = item.description;
+  nameCategory.value = item.name;
+  descriptionCategory.value = item.description;
   modal.toggleModal();
 };
 
-async function inactiveCategorieInventory(id) {
-  try {
-    const inactive = await inactiveCategorie(id);
-    $q.notify({
-      type: "positive",
-      message: "Categoria desactivada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataCategories();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-async function postDataCategorie() {
-  modal.toggleModal();
-  try {
-    const categories = await postCategorie({
-      name: nameCategories.value,
-      description: descriptionCategories.value,
-    });
-    $q.notify({
-      type: "positive",
-      message: "Categorias registrada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataCategories();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 const getDataCategories = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { category } = await getCategories();
+    const { category } = await getCategories(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     category.forEach((item) => {
@@ -336,65 +304,109 @@ const getDataCategories = async () => {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 };
 
-async function updateDataCategorie() {
+async function postDataCategory() {
+  isLoading.value = true;
   try {
-    const response = await updateCategorie({
-      id: idCategories.value,
-      name: nameCategories.value,
-      description: descriptionCategories.value,
-    });
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Categoria actualizada correctamente",
-    });
+    const categories = await postCategory(
+      {
+        name: nameCategory.value,
+        description: descriptionCategory.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Categorias registrada correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataCategories();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
-  nameCategories.value = "";
-  descriptionCategories.value = "";
 }
 
-async function activeCategorieInventory(id) {
+async function updateDataCategory() {
+  isLoading.value = true;
   try {
-    const active = await activeCategorie(id);
-    $q.notify({
-      type: "positive",
-      message: "Categoria activada correctamente",
-      position: "top",
-    });
+    const response = await updateCategory(
+      {
+        id: idCategories.value,
+        name: nameCategory.value,
+        description: descriptionCategory.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Categoria actualizada correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataCategories();
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+  nameCategory.value = "";
+  descriptionCategory.value = "";
+}
+
+async function activeCategoryInventory(id) {
+  loading.value = true;
+  try {
+    const active = await activeCategory(id, idFarm.value);
+    showNotification("positive", "Categoria activada correctamente");
+    loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
     getDataCategories();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
+
+async function inactiveCategoryInventory(id) {
+  loading.value = true;
+  try {
+    const inactive = await inactiveCategory(id, idFarm.value);
+    showNotification("positive", "Categoria desactivada correctamente");
+    loading.value = false;
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataCategories();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataCategories();
+});
 
 onMounted(() => {
   getDataCategories();
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;

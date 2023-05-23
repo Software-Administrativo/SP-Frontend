@@ -16,7 +16,7 @@ const getProducts = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -28,7 +28,7 @@ const postProduct = async (type, idFarm) => {
       {
         name: type.name,
         category: type.category,
-        brand: type.brand,
+        mark: type.mark,
         amount: type.amount,
         description: type.description,
       },
@@ -41,7 +41,7 @@ const postProduct = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -66,7 +66,7 @@ const updateProduct = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -74,7 +74,7 @@ const inactiveProduct = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/product/inactive/${id}`,
+      `/inventory/product/inactivate/${id}`,
       {},
       {
         headers: {
@@ -85,7 +85,7 @@ const inactiveProduct = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -93,7 +93,7 @@ const activeProduct = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/product/active/${id}`,
+      `/inventory/product/activate/${id}`,
       {},
       {
         headers: {
@@ -104,7 +104,7 @@ const activeProduct = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

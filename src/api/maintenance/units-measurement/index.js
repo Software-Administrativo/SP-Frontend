@@ -17,7 +17,7 @@ const getUnitsMeasurement = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -39,7 +39,7 @@ const postUnitMeasurement = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -61,7 +61,7 @@ const updateUnitMeasurement = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -80,7 +80,7 @@ const inactiveUnitMeasurement = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -99,7 +99,7 @@ const activeUnitMeasurement = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

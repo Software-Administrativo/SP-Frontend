@@ -163,6 +163,9 @@
               @onClick="updateDataFarm"
             />
           </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -188,14 +191,21 @@ const modal = modalState();
 const titleModal = ref("");
 const loading = ref(false);
 const typeAction = ref(true);
+const isLoading = ref(false);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idFarm = ref();
 
 const disableSave = computed(() => {
-  return (
+  if(
     nameFarm.value == "" || addressFarm.value == "" || ownerFarm.value == ""
-  );
+  ) {
+    return true;
+  } else if (isLoading.value == true){
+    return true;
+  } else {
+    return false;
+  }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
@@ -242,15 +252,6 @@ const columns = ref([
     name: "owner",
     label: "Propietario",
     field: "owner",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "status",
-    label: "Estado",
-    field: "status",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -304,51 +305,15 @@ const editFarmMaintenance = (item) => {
   modal.toggleModal();
 };
 
-async function inactiveFarmMaintenance(id) {
-  try {
-    const inactive = await inactiveFarm(id);
-    $q.notify({
-      type: "positive",
-      message: "Finca desactivada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataFarms();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
-async function postDataFarm() {
-  modal.toggleModal();
-  try {
-    const farm = await postFarm({
-      name: nameFarm.value,
-      address: addressFarm.value,
-      owner: ownerFarm.value,
-    });
-    $q.notify({
-      type: "positive",
-      message: "Finca registrada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataFarms();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-const getDataFarms = async () => {
+async function getDataFarms() {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
@@ -368,15 +333,32 @@ const getDataFarms = async () => {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
-};
+}
+
+async function postDataFarm() {
+  isLoading.value = true;
+  try {
+    const farm = await postFarm({
+      name: nameFarm.value,
+      address: addressFarm.value,
+      owner: ownerFarm.value,
+    });
+    isLoading.value = false;
+    modal.toggleModal();
+    showNotification("positive", "Finca registrada correctamente");
+    rows.value = [];
+    getDataFarms();
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
 
 async function updateDataFarm() {
+  isLoading.value = true;
   try {
     const response = await updateFarm({
       id: idFarm.value,
@@ -384,20 +366,14 @@ async function updateDataFarm() {
       address: addressFarm.value,
       owner: ownerFarm.value,
     });
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Finca actualizada correctamente",
-    });
+    isLoading.value = false;
+    showNotification("positive", "Finca actualizada correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataFarms();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
   nameFarm.value = "";
   addressFarm.value = "";
@@ -405,22 +381,32 @@ async function updateDataFarm() {
 }
 
 async function activeFarmMaintenance(id) {
+  loading.value = true;
   try {
     const intive = await activeFarm(id);
-    $q.notify({
-      type: "positive",
-      message: "Finca activada correctamente",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("positive", "Finca activada correctamente");
     rows.value = [];
     inactiveRows.value = [];
     getDataFarms();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function inactiveFarmMaintenance(id) {
+  loading.value = true;
+  try {
+    const inactive = await inactiveFarm(id);
+    loading.value = false;
+    showNotification("positive", "Finca desactivada correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataFarms();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
 
@@ -429,6 +415,16 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;
