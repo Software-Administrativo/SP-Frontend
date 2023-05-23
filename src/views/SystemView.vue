@@ -209,7 +209,7 @@
   </template>
 </template>
 <script setup>
-import { activeUser, getUsers, inactiveUser, postUser } from "@/api/system";
+import { activeUser, getUsers, inactiveUser, postUser, updateUserSystem } from "@/api/system";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
@@ -313,15 +313,6 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "status",
-    label: "Estado",
-    field: "status",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "Acciones",
     label: "Acciones",
     field: "acciones",
@@ -394,36 +385,6 @@ const showNotification = (type, message) => {
   });
 };
 
-async function updateDataUserSystem() {
-  loading.value = true;
-  isLoading.value = true;
-  // try {
-  //   const response = await updateUserSystem({
-  //     id: idUserSystem.value,
-  //     name: nameUserSystem.value,
-  //     tpdocument: typeDocumentUserSystem.value,
-  //     numdocument: numberDocumentUserSystem.value,
-  //     role: roleUserSystem.value,
-  //     password: passwordUserSystem.value,
-  //   });
-  //   isLoading.value = false;
-  //   $q.notify({
-  //     type: "positive",
-  //     position: "top",
-  //     message: "Tipo de pago actualizado correctamente",
-  //   });
-  //   modal.toggleModal();
-  //   rows.value = [];
-  //   getDataUsers();
-  // } catch {
-  //   $q.notify({
-  //     type: "negative",
-  //     position: "top",
-  //     message: "Ocurrió un error",
-  //   });
-  // }
-}
-
 async function getDataUsers() {
   rows.value = [];
   inactiveRows.value = [];
@@ -449,27 +410,28 @@ async function getDataUsers() {
   }
 }
 
-async function inactiveSystemUser(id) {
+async function updateDataUserSystem() {
+  loading.value = true;
+  isLoading.value = true;
   try {
-    const inactive = await inactiveUser(id, idFarm.value);
-    showNotification("positive", "Usuario desactivado correctamente");
+    const response = await updateUserSystem({
+      id: idUserSystem.value,
+      name: nameUserSystem.value,
+      tpdocument: typeDocumentUserSystem.value,
+      numdocument: numberDocumentUserSystem.value,
+      role: roleUserSystem.value,
+      password: passwordUserSystem.value,
+    }, idFarm.value);
+    isLoading.value = false;
+    loading.value = false;
+    showNotification("positive", "Tipo de pago actualizado correctamente");
+    modal.toggleModal();
     rows.value = [];
-    inactiveRows.value = [];
     getDataUsers();
-  } catch (error) {
-    showNotification("negative", "Ocurrió un error al desactivar el usuario");
-  }
-}
-
-async function activeSystemUser(id) {
-  try {
-    const active = await activeUser(id, idFarm.value);
-    showNotification("positive", "Usuario activado correctamente");
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataUsers();
-  } catch (error) {
-    showNotification("negative", "Ocurrió un error al activar el usuario");
+  } catch {
+    isLoading.value = false;
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
 
@@ -511,6 +473,30 @@ async function postDataUserSystem() {
     }
   } catch (error) {
     showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function activeSystemUser(id) {
+  try {
+    const active = await activeUser(id, idFarm.value);
+    showNotification("positive", "Usuario activado correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataUsers();
+  } catch (error) {
+    showNotification("negative", "Ocurrió un error al activar el usuario");
+  }
+}
+
+async function inactiveSystemUser(id) {
+  try {
+    const inactive = await inactiveUser(id, idFarm.value);
+    showNotification("positive", "Usuario desactivado correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataUsers();
+  } catch (error) {
+    showNotification("negative", "Ocurrió un error al desactivar el usuario");
   }
 }
 

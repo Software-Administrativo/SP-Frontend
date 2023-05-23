@@ -18,7 +18,7 @@ const getTypeSpents = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -40,7 +40,7 @@ const postTypeSpent = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -62,7 +62,7 @@ const updateTypeSpent = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -81,7 +81,7 @@ const inactiveTypeSpent = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -100,7 +100,7 @@ const activeTypeSpent = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

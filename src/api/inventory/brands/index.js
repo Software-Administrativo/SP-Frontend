@@ -17,7 +17,7 @@ const getBrands = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -28,6 +28,7 @@ const postBrand = async (type, idFarm) => {
       `/inventory/mark/register`,
       {
         name: type.name,
+        category: type.category,
         description: type.description,
       },
       {
@@ -39,7 +40,7 @@ const postBrand = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -50,6 +51,7 @@ const updateBrand = async (item, idFarm) => {
       `/inventory/mark/update/${item.id}`,
       {
         name: item.name,
+        category: item.category,
         description: item.description,
       },
       {
@@ -61,7 +63,7 @@ const updateBrand = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -69,7 +71,7 @@ const inactiveBrand = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/mark/inactive/${id}`,
+      `/inventory/mark/inactivate/${id}`,
       {},
       {
         headers: {
@@ -80,7 +82,7 @@ const inactiveBrand = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -88,7 +90,7 @@ const activeBrand = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/mark/active/${id}`,
+      `/inventory/mark/activate/${id}`,
       {},
       {
         headers: {
@@ -99,7 +101,7 @@ const activeBrand = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

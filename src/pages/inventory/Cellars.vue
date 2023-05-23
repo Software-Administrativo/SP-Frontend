@@ -171,6 +171,9 @@
               @onClick="updateDataCellar"
             />
           </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -190,7 +193,8 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 const modal = modalState();
 const titleModal = ref("");
@@ -199,9 +203,17 @@ const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idCellars = ref();
+const storage = useStorage();
+const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  return nameCellars.value == "";
+  if (!nameCellars.value || !typeContractCellars.value || !valueCellars.value) {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return false;
+  }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
@@ -238,18 +250,9 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "farm",
-    label: "Finca",
-    field: "farm",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "typecontract",
     label: "Tipo Contrato",
-    field: "typecontract",
+    field: "tpcontrato",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -267,16 +270,7 @@ const columns = ref([
   {
     name: "value",
     label: "Valor",
-    field: "value",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "status",
-    label: "Estado",
-    field: "status",
+    field: "valor",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -328,67 +322,30 @@ const editCellarsInventory = (item) => {
   typeAction.value = false;
   idCellars.value = item._id;
   valueInputName.value = item.name;
-  valueInputTypeContract.value = item.typecontract;
+  valueInputTypeContract.value = item.tpcontrato;
   valueInputDescription.value = item.description;
-  valueInputValue.value = item.value;
+  valueInputValue.value = item.valor;
   nameCellars.value = item.name;
-  typeContractCellars.value = item.typecontract;
+  typeContractCellars.value = item.tpcontrato;
   descriptionCellars.value = item.description;
-  valueCellars.value = item.value;
+  valueCellars.value = item.valor;
   modal.toggleModal();
 };
 
-async function inactiveCellarInventory(id) {
-  try {
-    const inactive = await inactiveCellar(id);
-    $q.notify({
-      type: "positive",
-      message: "Bodega desactivada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataCellars();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-async function postDataCellar() {
-  modal.toggleModal();
-  try {
-    const cellars = await postCellar({
-      name: nameCellars.value,
-      typecontract: typeContractCellars.value,
-      description: descriptionCellars.value,
-      value: valueCellars.value,
-    });
-    $q.notify({
-      type: "positive",
-      message: "Bodega registrada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataCellars();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 const getDataCellars = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { cellar } = await getCellars();
+    const { cellar } = await getCellars(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     cellar.forEach((item) => {
@@ -405,67 +362,113 @@ const getDataCellars = async () => {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    showNotification("negative", "Ocurrió un error");
   }
 };
 
-async function updateDataCellar() {
+async function postDataCellar() {
+  isLoading.value = true;
   try {
-    const response = await updateCellar({
-      id: idCellars.value,
-      name: nameCellars.value,
-      typecontract: typeContractCellars.value,
-      description: descriptionCellars.value,
-      value: valueCellars.value,
-    });
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Bodega actualizada correctamente",
-    });
+    const cellars = await postCellar(
+      {
+        name: nameCellars.value,
+        tpcontrato: typeContractCellars.value,
+        description: descriptionCellars.value,
+        valor: valueCellars.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    loading.value = false;
+    showNotification("positive", "Bodega registrada correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataCellars();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function updateDataCellar() {
+  isLoading.value = true;
+  try {
+    const response = await updateCellar(
+      {
+        id: idCellars.value,
+        name: nameCellars.value,
+        tpcontrato: typeContractCellars.value,
+        description: descriptionCellars.value,
+        valor: valueCellars.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Bodega actualizada correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataCellars();
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
   nameCellars.value = "";
   descriptionCellars.value = "";
 }
 
 async function activeCellarInventory(id) {
+  loading.value = true;
   try {
-    const active = await activeCellar(id);
-    $q.notify({
-      type: "positive",
-      message: "Bodega activada correctamente",
-      position: "top",
-    });
+    const active = await activeCellar(id, idFarm.value);
+    showNotification("positive", "Bodega activada correctamente");
+    loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
     getDataCellars();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
+
+async function inactiveCellarInventory(id) {
+  loading.value = true;
+  try {
+    const inactive = await inactiveCellar(id, idFarm.value);
+    showNotification("positive", "Bodega desactivada correctamente");
+    loading.value = false;
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataCellars();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataUsers();
+});
 
 onMounted(() => {
   getDataCellars();
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;

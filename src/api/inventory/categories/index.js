@@ -17,11 +17,11 @@ const getCategories = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
-const postCategorie = async (type, idFarm) => {
+const postCategory = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
@@ -39,11 +39,11 @@ const postCategorie = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
-const updateCategorie = async (item, idFarm) => {
+const updateCategory = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
@@ -61,15 +61,15 @@ const updateCategorie = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
-const inactiveCategorie = async (id, idFarm) => {
+const inactiveCategory = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/category/inactive/${id}`,
+      `/inventory/category/inactivate/${id}`,
       {},
       {
         headers: {
@@ -80,15 +80,15 @@ const inactiveCategorie = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
-const activeCategorie = async (id, idFarm) => {
+const activeCategory = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/category/active/${id}`,
+      `/inventory/category/activate/${id}`,
       {},
       {
         headers: {
@@ -99,14 +99,14 @@ const activeCategorie = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
 export {
   getCategories,
-  postCategorie,
-  inactiveCategorie,
-  activeCategorie,
-  updateCategorie,
+  postCategory,
+  inactiveCategory,
+  activeCategory,
+  updateCategory,
 };

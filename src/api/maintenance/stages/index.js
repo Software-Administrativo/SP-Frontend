@@ -17,7 +17,7 @@ const getStages = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -40,7 +40,7 @@ const postStage = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -63,7 +63,7 @@ const updateStage = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -82,7 +82,7 @@ const inactiveStage = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -101,7 +101,7 @@ const activeStage = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

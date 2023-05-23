@@ -15,7 +15,7 @@ const getFarms = async () => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -37,7 +37,7 @@ const postFarm = async (type) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -59,7 +59,7 @@ const updateFarm = async (item) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -77,7 +77,7 @@ const inactiveFarm = async (id) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -95,7 +95,7 @@ const activeFarm = async (id) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 

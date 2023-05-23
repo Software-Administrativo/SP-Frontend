@@ -128,19 +128,20 @@
           />
           <Input
             class="q-pb-xs"
-            label="Finca"
+            label="Categoria"
             :required="true"
             type="text"
             :ruless="rules"
-            :value="valueInputFarm"
-            v-model="farmBrands"
-            @onWrite="getInputFarm"
+            :value="valueInputCategory"
+            v-model="categoryBrands"
+            @onWrite="getInputCategory"
           />
           <Input
-            class="q-mb-md"
+            class="q-mb-xs"
             label="Descripción"
             type="text"
-            :required="false"
+            :required="true"
+            :ruless="rules"
             :value="valueInputDescription"
             v-model="descriptionBrands"
             @onWrite="getInputDescription"
@@ -161,6 +162,9 @@
               @onClick="updateDataBrand"
             />
           </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -180,27 +184,36 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 const modal = modalState();
 const titleModal = ref("");
 const loading = ref(false);
 const typeAction = ref(true);
+const isLoading = ref(false);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const idBrands = ref();
+const storage = useStorage();
 
 const disableSave = computed(() => {
-  return nameBrands.value == "";
+  if (!nameBrands.value || !categoryBrands.value || !descriptionBrands.value) {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return true;
+  }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
 let nameBrands = ref("");
-let farmBrands = ref("");
+let categoryBrands = ref("");
 let descriptionBrands = ref("");
 let valueInputName = ref("");
-let valueInputFarm = ref("");
+let valueInputCategory = ref("");
 let valueInputDescription = ref("");
 let tab = ref("active");
 
@@ -226,9 +239,9 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "farm",
-    label: "Finca",
-    field: "farm",
+    name: "category",
+    label: "Categoria",
+    field: "category",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -244,22 +257,13 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "status",
-    label: "Estado",
-    field: "status",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "Acciones",
     label: "Acciones",
     field: "acciones",
     align: "left",
     sortable: true,
-    headerStyle: "font-size: var(--font-medium); font-weight: bold;",
-    style: "font-size: var(--font-medium);",
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
   },
 ]);
 
@@ -267,8 +271,8 @@ const getInputName = (value) => {
   nameBrands.value = value;
 };
 
-const getInputFarm = (value) => {
-  farmBrands.value = value;
+const getInputCategory = (value) => {
+  categoryBrands.value = value;
 };
 
 const getInputDescription = (value) => {
@@ -278,12 +282,12 @@ const getInputDescription = (value) => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR MARCAS";
   valueInputName.value = "";
-  valueInputFarm.value = "";
+  valueInputCategory.value = "";
   valueInputDescription.value = "";
   typeAction.value = true;
   modal.toggleModal();
   nameBrands.value = "";
-  farmBrands.value = "";
+  categoryBrands.value = "";
   descriptionBrands.value = "";
 };
 
@@ -292,64 +296,28 @@ const editBrandInventory = (item) => {
   typeAction.value = false;
   idBrands.value = item._id;
   valueInputName.value = item.name;
-  valueInputFarm.value = item.farm;
+  valueInputCategory.value = item.category;
   valueInputDescription.value = item.description;
   nameBrands.value = item.name;
-  farmBrands.value = item.farm;
+  categoryBrands.value = item.category;
   descriptionBrands.value = item.description;
   modal.toggleModal();
 };
 
-async function inactiveBrandInventory(id) {
-  try {
-    const inactive = await inactiveBrand(id);
-    $q.notify({
-      type: "positive",
-      message: "Marca desactivada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataBrands();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-async function postDataBrand() {
-  modal.toggleModal();
-  try {
-    const brands = await postBrand({
-      name: nameBrands.value,
-      farm: farmBrands.value,
-      description: descriptionBrands.value,
-    });
-    $q.notify({
-      type: "positive",
-      message: "Marca registrada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataBrands();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 const getDataBrands = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { mark } = await getBrands();
+    const { mark } = await getBrands(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     mark.forEach((item) => {
@@ -366,67 +334,109 @@ const getDataBrands = async () => {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    showNotification("negative", "Ocurrió un error");
   }
 };
 
-async function updateDataBrand() {
+async function postDataBrand() {
+  isLoading.value = true;
   try {
-    const response = await updateBrand({
-      id: idBrands.value,
-      name: nameBrands.value,
-      farm: farmBrands.value,
-      description: descriptionBrands.value,
-    });
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Marca actualizada correctamente",
-    });
+    const brands = await postBrand(
+      {
+        name: nameBrands.value,
+        category: categoryBrands.value,
+        description: descriptionBrands.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    modal.toggleModal();
+    showNotification("positive", "Marca registrada correctamente");
+    rows.value = [];
+    getDataBrands();
+  } catch {
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function updateDataBrand() {
+  isLoading.value = true;
+  try {
+    const response = await updateBrand(
+      {
+        id: idBrands.value,
+        name: nameBrands.value,
+        category: categoryBrands.value,
+        description: descriptionBrands.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Marca actualizada correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataBrands();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    showNotification("negative", "Ocurrió un error");
   }
   nameBrands.value = "";
   descriptionBrands.value = "";
-  farmBrands.value = "";
+  categoryBrands.value = "";
 }
 
 async function activeBrandInventory(id) {
+  loading.value = true;
   try {
-    const active = await activeBrand(id);
-    $q.notify({
-      type: "positive",
-      message: "Marca activada correctamente",
-      position: "top",
-    });
+    const active = await activeBrand(id, idFarm.value);
+    loading.value = false;
+    showNotification("positive", "Marca activada correctamente");
     rows.value = [];
     inactiveRows.value = [];
     getDataBrands();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
+
+async function inactiveBrandInventory(id) {
+  loading.value = true;
+  try {
+    const inactive = await inactiveBrand(id, idFarm.value);
+    loading.value = false;
+    showNotification("positive", "Marca desactivada correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataBrands();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataBrands();
+});
 
 onMounted(() => {
   getDataBrands();
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
 .accions-td {
   padding: 0px;
   margin: 0px;

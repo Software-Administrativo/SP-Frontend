@@ -17,7 +17,7 @@ const getCellars = async (idFarm) => {
     });
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -28,9 +28,9 @@ const postCellar = async (type, idFarm) => {
       `/inventory/cellar/register`,
       {
         name: type.name,
-        typecontract: type.typecontract,
+        tpcontrato: type.tpcontrato,
         description: type.description,
-        value: type.value,
+        valor : type.valor,
       },
       {
         headers: {
@@ -41,7 +41,7 @@ const postCellar = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -52,9 +52,9 @@ const updateCellar = async (item, idFarm) => {
       `/inventory/cellar/update/${item.id}`,
       {
         name: item.name,
-        typecontract: item.typecontract,
         description: item.description,
-        value: item.value,
+        tpcontrato: item.typecontract,
+        valor: item.value,
       },
       {
         headers: {
@@ -65,7 +65,7 @@ const updateCellar = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -84,7 +84,7 @@ const inactiveCellar = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
@@ -92,7 +92,7 @@ const activeCellar = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/inventory/cellar/active/${id}`,
+      `/inventory/cellar/activate/${id}`,
       {},
       {
         headers: {
@@ -103,7 +103,7 @@ const activeCellar = async (id, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.error(error);
+    return error;
   }
 };
 
