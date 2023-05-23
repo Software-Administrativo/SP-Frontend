@@ -198,7 +198,11 @@ const idBrands = ref();
 const storage = useStorage();
 
 const disableSave = computed(() => {
-  if (!nameBrands.value || !categoryBrands.value || !descriptionBrands.value) {
+  if (
+    nameBrands.value != "" ||
+    categoryBrands.value != "" ||
+    descriptionBrands.value != ""
+  ) {
     return true;
   } else if (isLoading.value == true) {
     return true;

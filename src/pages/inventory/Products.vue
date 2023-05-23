@@ -219,13 +219,13 @@ const isLoading = ref(false);
 
 const disableSave = computed(() => {
   if (
-    !nameProducts.value ||
-    !categorieProducts.value ||
-    !brandProducts.value ||
-    !amountProducts.value ||
-    !descriptionProduct.value
+    nameProducts.value != "" ||
+    categorieProducts.value != "" ||
+    brandProducts.value != "" ||
+    amountProducts.value != "" ||
+    descriptionProduct.value != ""
   ) {
-    return true;
+    return false;
   } else if(isLoading.value == true){
     return true;
   } else{
