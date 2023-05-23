@@ -154,6 +154,9 @@
               @onClick="updateDataTypePays"
             />
           </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -186,10 +189,18 @@ const rows = ref([]);
 const inactiveRows = ref([]);
 const idTypePays = ref();
 const storage = useStorage();
+const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  return nameTypePays.value == "";
+  if (nameTypePays.value == "") {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;  
+  } else {
+    return false;
+  }
 });
+
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
@@ -282,48 +293,13 @@ const editPayMaintenance = (item) => {
   modal.toggleModal();
 };
 
-async function inactivePayMaintenance(id) {
-  try {
-    const inactive = await inactiveTypePay(id, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Tipo de pago desactivado correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataTypePays();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-async function postDataTypePays() {
-  modal.toggleModal();
-  try {
-    const pays = await postTypePay({
-      name: nameTypePays.value,
-      description: descriptionTypePays.value,
-    }, idFarm.value );
-    $q.notify({
-      type: "positive",
-      message: "Tipo de pago registrado correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataTypePays();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 async function getDataTypePays() {
   rows.value = [];
@@ -347,56 +323,89 @@ async function getDataTypePays() {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
 
-async function updateDataTypePays() {
+async function postDataTypePays() {
+  isLoading.value = true;
   try {
-    const response = await updateTypePay({
-      id: idTypePays.value,
-      name: nameTypePays.value,
-      description: descriptionTypePays.value,
-    }, idFarm.value );
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Tipo de pago actualizado correctamente",
-    });
+    const pays = await postTypePay(
+      {
+        name: nameTypePays.value,
+        description: descriptionTypePays.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Tipo de pago registrado correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataTypePays();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    isLoading.value = false;
+    showNotification(
+      "negative",
+      "Ocurrió un error, por favor verifique los datos"
+    );
+  }
+}
+
+async function updateDataTypePays() {
+  isLoading.value = true;
+  try {
+    const response = await updateTypePay(
+      {
+        id: idTypePays.value,
+        name: nameTypePays.value,
+        description: descriptionTypePays.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Tipo de pago actualizado correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataTypePays();
+  } catch {
+    isLoading.value = false;
+    showNotification(
+      "negative",
+      "Ocurrió un error, por favor verifique los datos"
+    );
   }
   nameTypePays.value = "";
   descriptionTypePays.value = "";
 }
 
 async function activePayMaintenance(id) {
+  loading.value = true;
   try {
     const active = await activeTypePay(id, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Tipo de pago activado correctamente",
-      position: "top",
-    });
+    showNotification("positive", "Tipo de pago activado correctamente");
+    loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
     getDataTypePays();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function inactivePayMaintenance(id) {
+  loading.value = false;
+  try {
+    const inactive = await inactiveTypePay(id, idFarm.value);
+    loading.value = false;
+    showNotification("positive", "Tipo de pago desactivado correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataTypePays();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
 
@@ -413,11 +422,21 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
 }
-.icon-backRoute:hover{
+.icon-backRoute:hover {
   cursor: pointer;
 }
 .accions-td {

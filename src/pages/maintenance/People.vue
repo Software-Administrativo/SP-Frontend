@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">PERSONAS</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">PERSONAS</h6>
+    </div>
     <q-separator class="separator" />
     <ButtonAdd @onClick="clickButton" label="Crear nueva persona" />
     <div class="container-table q-mt-md q-pa-md" rounded>
@@ -394,12 +397,35 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.title {
-  font-size: var(--font-title);
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
+.icon-backRoute {
+  font-size: 30px;
+  padding-right: 20px;
+}
+.icon-backRoute:hover {
+  cursor: pointer;
+}
+.accions-td {
+  padding: 0px;
+  margin: 0px;
+  min-width: 100px;
+  max-width: 100px;
 }
 .text-required {
   display: inline-block;
-  font-size: 12px;
+  font-size: var(--font-small);
+}
+.title {
+  font-size: var(--font-title);
 }
 .table-container {
   position: relative;
@@ -408,17 +434,26 @@ onMounted(() => {
   border: 1.8px solid var(--color-gray);
 }
 .container-content {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+.icon-table {
+  font-size: 18px;
+}
+.icon-check {
+  font-size: 25px;
 }
 .container-table {
   border-radius: 15px;
+  background-color: white;
   height: 80%;
   max-height: 60vh;
-  background-color: white;
   border: 2px solid var(--color-gray);
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  overflow-y: scroll;
+}
+.container-table::-webkit-scrollbar {
+  display: none;
 }
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
@@ -435,14 +470,24 @@ onMounted(() => {
     max-width: 510px;
   }
 }
-@media (min-width: 621px) and (max-width: 920px) {
+@media (min-width: 621px) and (max-width: 720px) {
+  .container-table {
+    max-width: 610px;
+  }
+}
+@media (min-width: 721px) and (max-width: 920px) {
   .container-table {
     max-width: 710px;
   }
 }
-@media (min-width: 920px) and (max-width: 1020px) {
+@media (min-width: 921px) and (max-width: 1020px) {
   .container-table {
     max-width: 810px;
+  }
+}
+@media (min-width: 1021px) and (max-width: 1320px) {
+  .container-table {
+    max-width: 1010px;
   }
 }
 </style>

@@ -205,6 +205,9 @@
               @onClick="updateDataLot"
             />
           </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -237,11 +240,23 @@ const rows = ref([]);
 const inactiveRows = ref([]);
 const idLot = ref();
 const storage = useStorage();
+const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  return (nameLots.value == "" || areaSizeLots.value ==""
-  || lotStateLots.value == "" || soildStateLots.value == ""
-  || classLots.value || sowingDensityLots.value); //
+  if (
+    nameLots.value == "" ||
+    areaSizeLots.value == "" ||
+    lotStateLots.value == "" ||
+    soildStateLots.value == "" ||
+    classLots.value ||
+    sowingDensityLots.value
+  ) {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return false;
+  }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
@@ -263,7 +278,6 @@ let valueInputSoildState = ref("");
 let valueInputClass = ref("");
 let valueInputSowingDensity = ref("");
 let valueInputDescription = ref("");
-
 
 const columns = ref([
   {
@@ -431,53 +445,13 @@ const editLotMaintenance = (item) => {
   modal.toggleModal();
 };
 
-async function inactiveLotMaintenance(id) {
-  try {
-    const inactive = await inactiveLot(id, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Lote desactivado correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataLots();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-async function postDataLot() {
-  modal.toggleModal();
-  try {
-    const lots = await postLot({
-      name: nameLots.value,
-      areasize: areaSizeLots.value,
-      lotestate: lotStateLots.value,
-      soildstate: soildStateLots.value,
-      classlot: classLots.value,
-      sowingdensity: sowingDensityLots.value,
-      description: descriptionLots.value,
-    }, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Lote registrado correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataLots();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 const getDataLots = async () => {
   rows.value = [];
@@ -501,40 +475,67 @@ const getDataLots = async () => {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 };
 
-async function updateDataLot() {
+async function postDataLot() {
+  isLoading.value = true;
   try {
-    const response = await updateLot({
-      id: idLot.value,
-      name: nameLots.value,
-      areasize: areaSizeLots.value,
-      lotestate: lotStateLots.value,
-      soildstate: soildStateLots.value,
-      classlot: classLots.value,
-      sowingdensity: sowingDensityLots.value,
-      description: descriptionLots.value,
-    }, idFarm.value);
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Lote actualizado correctamente",
-    });
+    const lots = await postLot(
+      {
+        name: nameLots.value,
+        areasize: areaSizeLots.value,
+        lotestate: lotStateLots.value,
+        soildstate: soildStateLots.value,
+        classlot: classLots.value,
+        sowingdensity: sowingDensityLots.value,
+        description: descriptionLots.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Lote registrado correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataLots();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    loading.value = false;
+    showNotification(
+      "negative",
+      "Ocurrió un error, por favor verifique los datos"
+    );
+  }
+}
+
+async function updateDataLot() {
+  isLoading.value = true;
+  try {
+    const response = await updateLot(
+      {
+        id: idLot.value,
+        name: nameLots.value,
+        areasize: areaSizeLots.value,
+        lotestate: lotStateLots.value,
+        soildstate: soildStateLots.value,
+        classlot: classLots.value,
+        sowingdensity: sowingDensityLots.value,
+        description: descriptionLots.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Lote actualizado correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataLots();
+  } catch {
+    isLoading.value = false;
+    showNotification(
+      "negative",
+      "Ocurrió un error, por favor verifique los datos"
+    );
   }
   nameLots.value = "";
   areaSizeLots.value = "";
@@ -546,22 +547,31 @@ async function updateDataLot() {
 }
 
 async function activeLotMaintenance(id) {
+  loading.value = true;
   try {
     const active = await activeLot(id, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Lote activado correctamente",
-      position: "top",
-    });
+    showNotification("positive", "Eps activada correctamente");
+    loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
     getDataLots();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function inactiveLotMaintenance(id) {
+  try {
+    const inactive = await inactiveLot(id, idFarm.value);
+    loading.value = false;
+    showNotification("positive", "Eps desactivada correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataLots();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
 
@@ -578,42 +588,63 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
+
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
 }
-.icon-backRoute:hover{
+
+.icon-backRoute:hover {
   cursor: pointer;
 }
+
 .accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
 }
+
 .text-required {
   display: inline-block;
   font-size: var(--font-small);
 }
+
 .title {
   font-size: var(--font-title);
 }
+
 .table-container {
   position: relative;
 }
+
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .icon-table {
   font-size: 18px;
 }
+
 .icon-check {
   font-size: 25px;
 }
+
 .container-table {
   border-radius: 15px;
   background-color: white;
@@ -623,6 +654,7 @@ onMounted(() => {
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }
+
 .container-table::-webkit-scrollbar {
   display: none;
 }
@@ -632,35 +664,40 @@ onMounted(() => {
     max-width: 300px;
   }
 }
+
 @media (min-width: 401px) and (max-width: 520px) {
   .container-table {
     max-width: 410px;
   }
 }
+
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
   }
 }
+
 @media (min-width: 621px) and (max-width: 720px) {
   .container-table {
     max-width: 610px;
   }
 }
+
 @media (min-width: 721px) and (max-width: 920px) {
   .container-table {
     max-width: 710px;
   }
 }
+
 @media (min-width: 921px) and (max-width: 1020px) {
   .container-table {
     max-width: 810px;
   }
 }
+
 @media (min-width: 1021px) and (max-width: 1320px) {
   .container-table {
     max-width: 1010px;
   }
 }
 </style>
-

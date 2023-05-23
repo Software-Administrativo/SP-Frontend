@@ -165,6 +165,9 @@
               @onClick="updateDataStage"
             />
           </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
+          </div>
         </div>
       </div>
     </ModalForm>
@@ -197,9 +200,16 @@ const rows = ref([]);
 const inactiveRows = ref([]);
 const idStage = ref();
 const storage = useStorage();
+const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  return nameStages.value == "";
+  if (nameStages.value == "") {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return false;
+  }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
 
@@ -312,49 +322,13 @@ const editStageMaintenance = (item) => {
   modal.toggleModal();
 };
 
-async function inactiveStageMaintenance(id) {
-  try {
-    const inactive = await inactiveStage(id, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Etapa desactivada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    inactiveRows.value = [];
-    getDataStages();
-  } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
-
-async function postDataStages() {
-  modal.toggleModal();
-  try {
-    const stages = await postStage({
-      name: nameStages.value,
-      lot: lotStages.value,
-      description: descriptionStages.value,
-    }, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Etapa registrada correctamente",
-      position: "top",
-    });
-    rows.value = [];
-    getDataStages();
-  } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
-  }
-}
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 const getDataStages = async () => {
   rows.value = [];
@@ -378,36 +352,59 @@ const getDataStages = async () => {
     });
     loading.value = false;
   } catch {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 };
 
-async function updateDataStage() {
+async function postDataStages() {
+  isLoading.value = true;
   try {
-    const response = await updateStage({
-      id: idStage.value,
-      name: nameStages.value,
-      lot: lotStages.value,
-      description: descriptionStages.value,
-    }, idFarm.value);
-    $q.notify({
-      type: "positive",
-      position: "top",
-      message: "Etapa actualizada correctamente",
-    });
+    const stages = await postStage(
+      {
+        name: nameStages.value,
+        lot: lotStages.value,
+        description: descriptionStages.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Etapa registrada correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataStages();
   } catch {
-    $q.notify({
-      type: "negative",
-      position: "top",
-      message: "Ocurrió un error",
-    });
+    isLoading.value = false;
+    showNotification(
+      "negative",
+      "Ocurrió un error, por favor verifique los datos"
+    );
+  }
+}
+
+async function updateDataStage() {
+  isLoading.value = true;
+  try {
+    const response = await updateStage(
+      {
+        id: idStage.value,
+        name: nameStages.value,
+        lot: lotStages.value,
+        description: descriptionStages.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Etapa actualizada correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataStages();
+  } catch {
+    isLoading.value = false;
+    showNotification(
+      "negative",
+      "Ocurrió un error, por favor verifique los datos"
+    );
   }
   nameStages.value = "";
   lotStages.value = "";
@@ -415,22 +412,32 @@ async function updateDataStage() {
 }
 
 async function activeStageMaintenance(id) {
+  loading.value = true;
   try {
     const active = await activeStage(id, idFarm.value);
-    $q.notify({
-      type: "positive",
-      message: "Etapa activada correctamente",
-      position: "top",
-    });
+    showNotification("positive", "Etapa activada correctamente");
+    loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
     getDataStages();
   } catch (error) {
-    $q.notify({
-      type: "negative",
-      message: "Ocurrió un error",
-      position: "top",
-    });
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function inactiveStageMaintenance(id) {
+  loading.value = false;
+  try {
+    const inactive = await inactiveStage(id, idFarm.value);
+    loading.value = false;
+    showNotification("positive", "Etapa desactivada correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataStages();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
   }
 }
 
@@ -447,11 +454,21 @@ onMounted(() => {
 });
 </script>
 <style scoped>
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid var(--color-gray);
+  border-radius: 10px;
+}
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
 }
-.icon-backRoute:hover{
+.icon-backRoute:hover {
   cursor: pointer;
 }
 .accions-td {
