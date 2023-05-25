@@ -1,6 +1,9 @@
 <template>
-  <div class="q-py-sm table-container">
-    <h6 class="title q-my-lg">Bodegas</h6>
+  <div class="q-py-md table-container">
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">FINCA</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva bodega" />
@@ -181,20 +184,20 @@
 </template>
 <script setup>
 import {
-  activeCellar,
-  getCellars,
-  inactiveCellar,
-  postCellar,
-  updateCellar,
+activeCellar,
+getCellars,
+inactiveCellar,
+postCellar,
+updateCellar,
 } from "@/api/inventory/cellars";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const modal = modalState();
 const titleModal = ref("");
@@ -474,6 +477,13 @@ onMounted(() => {
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
+}
+.icon-backRoute {
+  font-size: 30px !important;
+  padding-right: 20px;
+}
+.icon-backRoute:hover {
+  cursor: pointer;
 }
 .text-required {
   display: inline-block;

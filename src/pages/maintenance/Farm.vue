@@ -1,6 +1,9 @@
 <template>
   <div class="q-py-md table-container">
-    <h6 class="title q-my-lg">Finca</h6>
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">FINCA</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva finca" />
@@ -173,11 +176,11 @@
 </template>
 <script setup>
 import {
-  activeFarm,
-  getFarms,
-  inactiveFarm,
-  postFarm,
-  updateFarm,
+activeFarm,
+getFarms,
+inactiveFarm,
+postFarm,
+updateFarm,
 } from "@/api/maintenance/farm";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -430,6 +433,13 @@ onMounted(() => {
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
+}
+.icon-backRoute {
+  font-size: 30px !important;
+  padding-right: 20px;
+}
+.icon-backRoute:hover {
+  cursor: pointer;
 }
 .text-required {
   display: inline-block;

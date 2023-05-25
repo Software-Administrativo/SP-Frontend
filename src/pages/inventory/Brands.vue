@@ -1,6 +1,9 @@
 <template>
-  <div class="q-py-sm table-container">
-    <h6 class="title q-my-lg">Marcas</h6>
+  <div class="q-py-md table-container">
+    <div class="row">
+      <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
+      <h6 class="title q-my-lg">MARCAS</h6>
+    </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd @onClick="clickButton" label="Crear nueva marca" />
@@ -172,20 +175,20 @@
 </template>
 <script setup>
 import {
-  activeBrand,
-  getBrands,
-  inactiveBrand,
-  postBrand,
-  updateBrand,
+activeBrand,
+getBrands,
+inactiveBrand,
+postBrand,
+updateBrand,
 } from "@/api/inventory/brands";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const modal = modalState();
 const titleModal = ref("");
@@ -453,6 +456,14 @@ onMounted(() => {
 }
 .table-container {
   position: relative;
+}
+.icon-backRoute {
+  font-size: 30px !important;
+  padding-right: 20px;
+  /* padding-top: 30px; */
+}
+.icon-backRoute:hover {
+  cursor: pointer;
 }
 .separator {
   border: 1.8px solid var(--color-gray);
