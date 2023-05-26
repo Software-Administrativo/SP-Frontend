@@ -164,24 +164,24 @@
 </template>
 <script setup>
 import {
-  activeTypePay,
-  getTypePays,
-  inactiveTypePay,
-  postTypePay,
-  updateTypePay,
+activeTypePay,
+getTypePays,
+inactiveTypePay,
+postTypePay,
+updateTypePay,
 } from "@/api/maintenance/type-pays";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
-
 const modal = modalState();
+
 const titleModal = ref("");
 const loading = ref(false);
 const typeAction = ref(true);
@@ -205,10 +205,8 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
 let tab = ref("active");
-
 let nameTypePays = ref("");
 let descriptionTypePays = ref("");
-
 let valueInputName = ref("");
 let valueInputDescription = ref("");
 

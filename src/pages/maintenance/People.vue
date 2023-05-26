@@ -5,98 +5,155 @@
       <h6 class="title q-my-lg">PERSONAS</h6>
     </div>
     <q-separator class="separator" />
-    <ButtonAdd @onClick="clickButton" label="Crear nueva persona" />
-    <div class="container-table q-mt-md q-pa-md" rounded>
-      <q-table
-        flat
-        bordered
-        title="Personas"
-        row-key="name"
-        :rows="rows"
-        :columns="columns"
-        :filter="filter"
-        :loading="loading"
-        :rows-per-page-options="[5, 10, 20]"
-      >
-        <template v-slot:top-right>
-          <q-input
-            borderless
+
+    <div class="container-content">
+      <ButtonAdd @onClick="clickButton" label="Crear nueva persona" />
+      <div class="container-table q-mt-md q-pa-md" rounded>
+        <q-card>
+          <q-tabs
+            v-model="tab"
             dense
-            debounce="300"
-            v-model="filter"
-            placeholder="Search"
+            class="text-grey"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator
           >
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </template>
-      </q-table>
+            <q-tab name="active" label="Activos" />
+            <q-tab name="inactive" label="Inactivos" />
+          </q-tabs>
+
+          <q-separator />
+
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel name="active">
+              <q-table
+                flat
+                bordered
+                title="Personas"
+                row-key="name"
+                :rows="rows"
+                :columns="columns"
+                :filter="filter"
+                :loading="loading"
+                :rows-per-page-options="[5, 10, 20]"
+              >
+                <template v-slot:top-right>
+                  <q-input
+                    borderless
+                    dense
+                    debounce="300"
+                    v-model="filter"
+                    placeholder="Buscar"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </template>
+                <template v-slot:body-cell-Acciones="props">
+                  <td class="accions-td">
+                    <q-btn-group class="full-width full-height" outline square>
+                      <q-btn
+                        icon="edit_note"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none icon-table"
+                        @click="editPeopleMaintenance(props.row)"
+                      />
+                      <q-btn
+                        icon="highlight_off"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none icon-table"
+                        @click="inactivePeopleMaintenance(props.row._id)"
+                      />
+                    </q-btn-group>
+                  </td>
+                </template>
+              </q-table>
+            </q-tab-panel>
+            <q-tab-panel name="inactive">
+              <q-table
+                flat
+                bordered
+                title="Personas"
+                row-key="name"
+                :rows="inactiveRows"
+                :columns="columns"
+                :filter="filter"
+                :loading="loading"
+                :rows-per-page-options="[5, 10, 20]"
+              >
+                <template v-slot:top-right>
+                  <q-input
+                    borderless
+                    dense
+                    debounce="300"
+                    v-model="filter"
+                    placeholder="Search"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </template>
+
+                <template v-slot:body-cell-Acciones="props">
+                  <td class="accions-td">
+                    <q-btn-group class="full-width full-height" outline square>
+                      <q-btn
+                        text-color="blue-10"
+                        class="col q-pa-none"
+                        @click="activePeopleMaintenance(props.row._id)"
+                      >
+                        <i class="icon icon-check"></i>
+                      </q-btn>
+                    </q-btn-group>
+                  </td>
+                </template>
+              </q-table>
+            </q-tab-panel>
+          </q-tab-panels>
+        </q-card>
+      </div>
     </div>
   </div>
+
   <template v-if="modal.modalIsOpen">
     <ModalForm>
       <h6 class="q-my-md text-center">REGISTRAR PERSONA</h6>
       <div class="row q-px-xl">
         <div class="col-12">
-          <Select
-            class="q-mb-lg"
-            @onSelect="getSelectTypeDocument"
-            :style="selectStyles"
-            type="documents"
-            label="Tipo de Documento"
-          ></Select>
-          <Input
-            class="q-pb-xs"
-            label="Número de Documento"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            v-model="documentPeople"
-            @onWrite="getInputDocument"
-          />
+          <div class="row">
+            <Select
+              class="col-5 q-mb-lg q-pr-sm"
+              type="documents"
+              label="Tipo de Documento"
+              :ruless="rules"
+              v-model="typeDocumentPeople"
+              :value="valueSelectTypeDocument"
+              @onSelect="getSelectTypeDocument"
+            ></Select>
+            <Input
+              class="col-7 q-pb-xs"
+              label="Número de Documento"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputDocument"
+              v-model="documentPeople"
+              @onWrite="getInputDocument"
+            />
+          </div>
           <Input
             class="q-pb-xs"
             label="Nombre"
             :required="true"
             type="text"
             :ruless="rules"
+            :value="valueInputName"
             v-model="namePeople"
             @onWrite="getInputName"
           />
-          <Input
-            class="q-pb-xs"
-            label="Apellido"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            v-model="lastNamePeople"
-            @onWrite="getInputLastName"
-          />
-          <div class="q-pa-md" style="max-width: 300px">
-            <q-input filled v-model="date" mask="date" :rules="['date']">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy
-                    cover
-                    transition-show="scale"
-                    transition-hide="scale"
-                  >
-                    <q-date v-model="date">
-                      <div class="row items-center justify-end">
-                        <q-btn
-                          v-close-popup
-                          label="Close"
-                          color="primary"
-                          flat
-                        />
-                      </div>
-                    </q-date>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-          </div>
           <Input
             class="q-pb-xs"
             label="Teléfono"
@@ -104,71 +161,44 @@
             type="text"
             :ruless="rules"
             v-model="phonePeople"
+            :value="valueInputPhone"
             @onWrite="getInputPhone"
           />
-          <q-select
-            class="q-mb-lg"
-            filled
-            dense
-            label="Genero"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            v-model="genderPeople"
-            :options="optionsGender"
-            @onSelect="getSelectGender"
-          />
-          <q-select
-            class="q-mb-lg"
-            filled
-            dense
+          <Select
+            class="q-pb-xs q-mb-md"
             label="EPS"
             :required="true"
-            type="text"
             :ruless="rules"
+            :value="valueSelectEps"
             v-model="epsPeople"
-            :options="optionsEps"
+            type="eps"
             @onSelect="getSelectEps"
           />
-          <q-select
-            class="q-mb-lg"
-            filled
-            dense
-            label="Tipo de Sangre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            v-model="bloodTypePeople"
-            :options="optionsBloodType"
-            @onSelect="getSelectTypeBlood"
-          />
-          <q-select
-            class="q-mb-lg"
-            filled
-            dense
+          <Input
+            class="q-pb-xs"
             label="Tipo de Persona"
             :required="true"
             type="text"
             :ruless="rules"
-            v-model="peopleType"
-            :options="optionsPeopleType"
-            @onSelect="getSelectTypePeople"
-          />
-          <Input
-            class="q-mb-lgs"
-            label="Descripción"
-            :required="false"
-            type="text"
-            :ruless="rules"
-            v-model="descriptionPeople"
-            @onWrite="getInputDescription"
+            :value="valueInputType"
+            v-model="typePeople"
+            @onWrite="getInputPeople"
           />
           <span class="text-required q-pb-sm"
             >Todos los campos con <span class="text-red">*</span> son
             obligatorios</span
           >
           <div class="row justify-center">
-            <ButtonSave :disable="disableSave" @onClick="saveInfo" />
+            <ButtonSave
+              v-if="typeAction"
+              :disable="disableSave"
+              @onClick="postDataPeople"
+            />
+            <ButtonSave
+              v-else
+              :disable="disableSave"
+              @onClick="updateDataPeople"
+            />
           </div>
         </div>
       </div>
@@ -176,56 +206,76 @@
   </template>
 </template>
 <script setup>
-import { getPeople, postPeople } from "@/api/maintenance/people";
+import {
+  getPeople,
+  postPeople,
+  inactivePeople,
+  activePeople,
+  updatePeople,
+} from "@/api/maintenance/people";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
-import { computed, onMounted, ref } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
+import { useQuasar } from "quasar";
+import { computed, onMounted, ref, watch } from "vue";
 
+const $q = useQuasar();
 const modal = modalState();
 
-const optionsGender = ["M", "F", "I"];
-const optionsEps = ["1", "2", "3"];
-const optionsBloodType = ["a+", "a+", "ab+", "ab-", "b+", "b-", "o+", "o-"];
-const optionsPeopleType = ["1", "2", "3", "4", "5", "6"];
+const titleModal = ref("");
+const typeAction = ref(true);
+const idPeople = ref();
+const storage = useStorage();
+const isLoading = ref(false);
+const rows = ref([]);
 const loading = ref(false);
+const inactiveRows = ref([]);
 
-const typeDocument = ref("");
-let documentPeople = ref("");
-let namePeople = ref("");
-let filter = ref("");
-let lastNamePeople = ref("");
-let birthDayPeople = ref("");
-let phonePeople = ref("");
-let genderPeople = ref(null);
-let epsPeople = ref(null);
-let bloodTypePeople = ref(null);
-let peopleType = ref("");
-let descriptionPeople = ref("");
-let disableSave = computed(() => {
-  return namePeople.value == "";
+const disableSave = computed(() => {
+  if (
+    typeDocumentPeople.value == "" ||
+    documentPeople.value == "" ||
+    namePeople.value == "" ||
+    phonePeople.value == "" ||
+    epsPeople.value == "" ||
+    typePeople.value == ""
+  ) {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return false;
+  }
 });
 
 const rules = [(v) => !!v || "Este campo es requerido"];
 
-const rows = ref([]);
+let filter = ref("");
+let tab = ref("active");
+
+let typeDocumentPeople = ref("");
+let documentPeople = ref("");
+let namePeople = ref("");
+let phonePeople = ref("");
+let epsPeople = ref("");
+let typePeople = ref("");
+
+let valueSelectTypeDocument = ref("");
+let valueInputDocument = ref("");
+let valueInputName = ref("");
+let valueInputPhone = ref("");
+let valueSelectEps = ref("");
+let valueInputType = ref("");
+
 const columns = ref([
   {
     name: "id",
     label: "#",
     field: "id",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "typeDocument",
-    label: "Tipo",
-    field: "typeDocument",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -250,24 +300,6 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "lastName",
-    label: "Apellido",
-    field: "lastName",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "birthDay",
-    label: "Fecha de Nacimiento",
-    field: "birthDay",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "phone",
     label: "Teléfono",
     field: "phone",
@@ -286,18 +318,18 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "bloodType",
-    label: "Tipo de Sangre",
-    field: "bloodType",
+    name: "typePeople",
+    label: "Tipo de Persona",
+    field: "typePeople",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
     style: "font-size: var(--font-large);",
   },
   {
-    name: "status",
-    label: "Estado",
-    field: "status",
+    name: "Acciones",
+    label: "Acciones",
+    field: "acciones",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -305,23 +337,8 @@ const columns = ref([
   },
 ]);
 
-const clickButton = () => {
-  modal.toggleModal();
-  typeDocument.value = "";
-  documentPeople.value = "";
-  namePeople.value = "";
-  lastNamePeople.value = "";
-  birthDayPeople.value = "";
-  phonePeople.value = "";
-  genderPeople.value = "";
-  epsPeople.value = "";
-  bloodTypePeople.value = "";
-  peopleType.value = "";
-  descriptionPeople.value = "";
-};
-
 const getSelectTypeDocument = (value) => {
-  typeDocument.value = value;
+  typeDocumentPeople.value = value;
 };
 
 const getInputDocument = (value) => {
@@ -332,65 +349,174 @@ const getInputName = (value) => {
   namePeople.value = value;
 };
 
-const getInputLastName = (value) => {
-  lastNamePeople.value = value;
-};
-
-const getDateBirthDay = (value) => {
-  birthDayPeople.value = value;
-};
-
 const getInputPhone = (value) => {
   phonePeople.value = value;
-};
-
-const getSelectGender = (value) => {
-  genderPeople.value = value;
 };
 
 const getSelectEps = (value) => {
   epsPeople.value = value;
 };
 
-const getSelectTypeBlood = (value) => {
-  bloodTypePeople.value = value;
+const getInputPeople = (value) => {
+  typePeople.value = value;
 };
 
-const getSelectTypePeople = (value) => {
-  peopleType.value = value;
-};
-
-const getInputDescription = (value) => {
-  descriptionPeople.value = value;
-};
-
-const saveInfo = () => {
-  postDataPeople();
+const clickButton = () => {
+  titleModal.value = "REGISTRAR PERSONA";
+  resetValuesForm();
+  typeAction.value = true;
   modal.toggleModal();
 };
 
-const postDataPeople = async () => {
-  //falta peticion del backend
-  const { people } = await postPeople({
-    name: namePeople.value,
-    description: descriptionPeople.value,
-  });
-  getDataPeople();
+const resetValuesForm = () => {
+  typeDocumentPeople.value = "";
+  documentPeople.value = "";
+  namePeople.value = "";
+  phonePeople.value = "";
+  epsPeople.value = "";
+  typePeople.value = "";
 };
 
-const getDataPeople = async () => {
-  loading.value = true;
-  const { people } = await getPeople();
-  let count = 1;
-  people.forEach((item) => {
-    item.status = item.status ? "Inactivo" : "Activo";
-    item.id = count++;
-    item.description =
-      item.description.trim() == "" ? "No registra" : item.description;
-  });
-  rows.value = people;
-  loading.value = false;
+const editPeopleMaintenance = (item) => {
+  titleModal.value = "EDITAR PERSONA";
+  typeAction.value = false;
+  idPeople.value = item._id;
+  typeDocumentPeople.value = item.tpdct;
+  valueSelectTypeDocument.value = item.tpdct;
+  documentPeople.value = item.document;
+  valueInputDocument.value = item.document;
+  namePeople.value = item.name;
+  valueInputName.value = item.name;
+  phonePeople.value = item.phone;
+  valueInputPhone.value = item.phone;
+  epsPeople.value = item.eps;
+  valueSelectEps.value = item.eps;
+  typePeople.value = item.typePeople;
+  valueInputType.value = item.typePeople;
+  modal.toggleModal();
 };
+
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
+
+async function getDataPeople() {
+  rows.value = [];
+  inactiveRows.value = [];
+  loading.value = true;
+  try {
+    const { people } = await getPeople(idFarm.value);
+    let countActive = 1;
+    let countInactive = 1;
+    people.forEach((item) => {
+      item.status = item.status ? "Inactivo" : "Activo";
+      if (item.status == "Activo") {
+        item.id = countActive++;
+        rows.value.push(item);
+      } else {
+        item.id = countInactive++;
+        inactiveRows.value.push(item);
+      }
+    });
+    loading.value = false;
+  } catch {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function postDataPeople() {
+  isLoading.value = true;
+  try {
+    const people = await postPeople(
+      {
+        name: namePeople.value,
+        tpdct: typeDocumentPeople.value,
+        document: documentPeople.value,
+        phone: phonePeople.value,
+        eps: epsPeople.value,
+        typePeople: typePeople.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Se registró correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataPeople();
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function updateDataPeople() {
+  isLoading.value = true;
+  try {
+    const people = await updatePeople(
+      {
+        id: idPeople.value,
+        name: namePeople.value,
+        tpdct: typeDocumentPeople.value,
+        document: documentPeople.value,
+        phone: phonePeople.value,
+        eps: epsPeople.value,
+        typePeople: typePeople.value,
+      },
+      idFarm.value
+    );
+    isLoading.value = false;
+    showNotification("positive", "Se actualizó correctamente");
+    modal.toggleModal();
+    rows.value = [];
+    getDataPeople();
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function activePeopleMaintenance(id) {
+  loading.value = true;
+  try {
+    const people = await activePeople(id, idFarm.value);
+    showNotification("positive", "Se activó correctamente");
+    loading.value = false;
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataPeople();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function inactivePeopleMaintenance(id) {
+  loading.value = true;
+  try {
+    const people = await inactivePeople(id, idFarm.value);
+    showNotification("positive", "Se inactivó correctamente");
+    loading.value = false;
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataPeople();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
+
+watch(idFarm, () => {
+  getDataPeople();
+});
 
 onMounted(() => {
   getDataPeople();

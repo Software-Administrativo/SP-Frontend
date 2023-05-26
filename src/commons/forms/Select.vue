@@ -73,13 +73,12 @@ const emits = defineEmits({
   onSelect: null,
 });
 
-// Cuando la variable typeDocument cambia, emitimos el valor del input gracias al v-model
-watch(typeDocument, () => {
-  emits("onSelect", typeDocument.value);
+const idFarm = computed(() => {
+  return storage.idSelected;
 });
 
 // onMounted(async () => {
-onMounted(() => {
+onMounted( async() => {
   if (props.type === "documents") {
     types.value = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
   } else if (props.type === "roles") {
@@ -94,6 +93,18 @@ onMounted(() => {
       namesFarms.value.push(element.name);
     });
     types.value = namesFarms.value;
+  } else if (props.type === "eps"){
+    // const { eps } = await getEps(idFarm.value);
+    // FALTA PETICION
+    types.value = ["SURA", "SALUD TOTAL"]
   }
+});
+
+watch(typeDocument, () => {
+  emits("onSelect", typeDocument.value);
+});
+
+watch(idFarm, () => {
+  getDataTypePays();
 });
 </script>

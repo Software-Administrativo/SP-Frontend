@@ -21,20 +21,18 @@ const getPeople = async (idFarm) => {
   }
 };
 
-const postPeople = async (type, idFarm) => {
+const postPeople = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
       `/maintenance/people/register`,
       {
-        document: type.document,
-        name: type.name,
-        lastName: type.lastName,
-        description: type.description,
-        birthDate: type.birthDate,
-        phone: type.phone,
-        bloodType: type.bloodType,
-        peopleType: type.peopleType,
+        name: item.name,
+        tpdct: item.tpdct,
+        document: item.document,
+        phone: item.phone,
+        eps: item.eps,
+        typePeople: item.typePeople
       },
       {
         headers: {
@@ -53,16 +51,14 @@ const updatePeople = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/maintenance/people/update`,
+      `/maintenance/people/update/${item.id}`,
       {
-        document: item.document,
         name: item.name,
-        lastName: item.lastName,
-        description: item.description,
-        birthDate: item.birthDate,
+        tpdct: item.tpdct,
+        document: item.document,
         phone: item.phone,
-        bloodType: item.bloodType,
-        peopleType: item.peopleType,
+        eps: item.eps,
+        typePeople: item.typePeople
       },
       {
         headers: {
