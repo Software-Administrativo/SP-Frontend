@@ -37,11 +37,28 @@ const router = createRouter({
     {
       path: "/cost",
       name: "cost",
+      component: () => import("../views/CostView.vue"),
       meta: {
         requiresAuth: true,
         rol: ["ADMIN", "SUPER"],
       },
-      component: () => import("../views/CostView.vue"),
+      children: [
+        {
+          path: "activity-expenses",
+          name: "cost-activity-expenses",
+          component: () => import("../pages/costs/ActivityExpenses.vue"),
+        },
+        {
+          path: "admin-expenses",
+          name: "cost-admin-expenses",
+          component: () => import("../pages/costs/AdminExpenses.vue"),
+        },
+        {
+          path: "planting",
+          name: "cost-planting",
+          component: () => import("../pages/costs/CostsPlanting.vue"),
+        },
+      ],
     },
     {
       path: "/inventory",
