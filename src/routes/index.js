@@ -44,17 +44,17 @@ const router = createRouter({
       },
       children: [
         {
-          path: "activityexpenses",
+          path: "activity-expenses",
           name: "cost-activity-expenses",
           component: () => import("../pages/costs/ActivityExpenses.vue"),
         },
         {
-          path: "adminexpenses",
+          path: "admin-expenses",
           name: "cost-admin-expenses",
           component: () => import("../pages/costs/AdminExpenses.vue"),
         },
         {
-          path: "costsplanting",
+          path: "planting",
           name: "cost-planting",
           component: () => import("../pages/costs/CostsPlanting.vue"),
         },

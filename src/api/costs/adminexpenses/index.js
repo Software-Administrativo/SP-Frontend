@@ -71,7 +71,7 @@ const inactiveAdminExpenses = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/costs/adminexpenses/inactive/${id}`,
+      `/costs/adminexpenses/inactivate/${id}`,
       {},
       {
         headers: {
@@ -90,7 +90,7 @@ const activeAdminExpenses = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/costs/adminexpenses/active/${id}`,
+      `/costs/adminexpenses/activate/${id}`,
       {},
       {
         headers: {

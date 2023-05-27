@@ -25,7 +25,7 @@ const postCostsPlanting = async (type, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
-      `/costs/costsPlanting/register`,
+      `/costs/costsplanting/register`,
       {
         name: type.name,
         description: type.description,
@@ -48,7 +48,7 @@ const updateCostsPlanting = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/costs/CostsPlanting/update/${item.id}`,
+      `/costs/costsplanting/update/${item.id}`,
       {
         name: item.name,
         description: item.description,
@@ -71,7 +71,7 @@ const inactiveCostsPlanting = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/costs/CostsPlanting/inactive/${id}`,
+      `/costs/costsplanting/inactivate/${id}`,
       {},
       {
         headers: {
@@ -90,7 +90,7 @@ const activeCostsPlanting = async (id, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/costs/CostsPlanting/active/${id}`,
+      `/costs/costsplanting/activate/${id}`,
       {},
       {
         headers: {
