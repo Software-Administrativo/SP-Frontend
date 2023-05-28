@@ -33,7 +33,7 @@ const postUser = async (item, idFarm) => {
         tpdocument: item.tpdocument,
         numdocument: item.numdocument,
         role: item.role,
-        farms: [ idFarm ],
+        farms: [item.farms],
         password: item.password,
       },
       {
@@ -50,18 +50,17 @@ const postUser = async (item, idFarm) => {
 };
 
 const updateUserSystem = async (item, idFarm) => {
-  console.log(item, idFarm);
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
-      `/maintenance/pays/update/${item.id}`,
+      `/users/update/${item.id}`,
       {
-        name: item.nameUserSystem,
-        tpdocument: item.typeDocumentUserSystem,
-        numdocument: item.numberDocumentUserSystem,
-        role: item.roleUserSystem,
-        farms: [ idFarm ],
-        password: item.passwordUserSystem,
+        name: item.name,
+        tpdocument: item.tpdocument,
+        numdocument: item.numdocument,
+        role: item.role,
+        farms: [item.farms],
+        password: item.password,
       },
       {
         headers: {
@@ -72,7 +71,6 @@ const updateUserSystem = async (item, idFarm) => {
     );
     return data;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };
