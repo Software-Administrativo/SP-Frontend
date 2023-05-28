@@ -163,16 +163,30 @@
                 @onWrite="getInputNumberDocument"
               />
             </div>
+
             <Select
               v-if="valueInputRole != 'SUPER'"
-              class="q-pb-xs q-mb-md"
+              class="col-4 q-pb-xs q-mb-md"
               type="roles"
               label="Rol"
               :required="true"
+              :ruless="rules"
               :value="valueInputRole"
               v-model="roleUserSystem"
               @onSelect="getSelectDataRole"
             ></Select>
+
+            <Select
+              v-if="valueInputRole != 'SUPER'"
+              class="q-pb-xs q-mb-md"
+              label="Acceso"
+              type="multiFarms"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputFarms"
+              v-model="farmsUserSystem"
+              @onSelect="getSelectDataFarms"
+            />
 
             <Password
               v-if="valueInputRole != 'SUPER'"
@@ -209,7 +223,13 @@
   </template>
 </template>
 <script setup>
-import { activeUser, getUsers, inactiveUser, postUser, updateUserSystem } from "@/api/system";
+import {
+  activeUser,
+  getUsers,
+  inactiveUser,
+  postUser,
+  updateUserSystem,
+} from "@/api/system";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
@@ -238,10 +258,12 @@ let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
 let valueInputNumberDocument = ref("");
 let valueInputRole = ref("");
+let valueInputFarms = ref("");
 
 let nameUserSystem = ref("");
 let typeDocumentUserSystem = ref("");
 let numberDocumentUserSystem = ref("");
+let farmsUserSystem = ref("");
 let roleUserSystem = ref("");
 let passwordUserSystem = ref("");
 
@@ -254,7 +276,8 @@ const disableSave = computed(() => {
     !typeDocumentUserSystem.value ||
     !numberDocumentUserSystem.value ||
     !roleUserSystem.value ||
-    !passwordUserSystem.value
+    !passwordUserSystem.value ||
+    !farmsUserSystem.value
   ) {
     return true;
   } else if (isLoading.value == true) {
@@ -335,6 +358,10 @@ const getInputNumberDocument = (value) => {
   numberDocumentUserSystem.value = value;
 };
 
+const getSelectDataFarms = (value) => {
+  farmsUserSystem.value = value;
+};
+
 const getSelectDataRole = (value) => {
   roleUserSystem.value = value;
 };
@@ -343,7 +370,7 @@ const getPasswordData = (value) => {
   passwordUserSystem.value = value;
 };
 
-const clickButton = (event) => {
+const clickButton = () => {
   titleModal.value = "REGISTRAR ACCESO";
   resetValuesForm();
   typeAction.value = true;
@@ -355,11 +382,13 @@ const resetValuesForm = () => {
   valueInputTypeDocument.value = "";
   valueInputNumberDocument.value = "";
   valueInputRole.value = "";
+  valueInputFarms.value = "";
   nameUserSystem.value = "";
   typeDocumentUserSystem.value = "";
   numberDocumentUserSystem.value = "";
   roleUserSystem.value = "";
   passwordUserSystem.value = "";
+  farmsUserSystem.value = "";
 };
 
 const editSystemUser = (item) => {
@@ -370,9 +399,11 @@ const editSystemUser = (item) => {
   valueInputTypeDocument.value = item.tpdocument;
   valueInputNumberDocument.value = item.numdocument;
   valueInputRole.value = item.role;
+  valueInputFarms.value = item.farms;
   nameUserSystem.value = item.name;
   typeDocumentUserSystem.value = item.tpdocument;
   numberDocumentUserSystem.value = item.numdocument;
+  farmsUserSystem.value = item.farms;
   roleUserSystem.value = item.role;
   modal.toggleModal();
 };
@@ -411,26 +442,44 @@ async function getDataUsers() {
 }
 
 async function updateDataUserSystem() {
-  loading.value = true;
   isLoading.value = true;
   try {
-    const response = await updateUserSystem({
-      id: idUserSystem.value,
-      name: nameUserSystem.value,
-      tpdocument: typeDocumentUserSystem.value,
-      numdocument: numberDocumentUserSystem.value,
-      role: roleUserSystem.value,
-      password: passwordUserSystem.value,
-    }, idFarm.value);
+    const data = await updateUserSystem(
+      {
+        id: idUserSystem.value,
+        name: nameUserSystem.value,
+        tpdocument: typeDocumentUserSystem.value,
+        numdocument: numberDocumentUserSystem.value,
+        role: roleUserSystem.value,
+        farms: farmsUserSystem.value,
+        password: passwordUserSystem.value,
+      },
+      idFarm.value
+    );
     isLoading.value = false;
-    loading.value = false;
-    showNotification("positive", "Tipo de pago actualizado correctamente");
-    modal.toggleModal();
-    rows.value = [];
-    getDataUsers();
+
+    let response = data?.response?.data?.errors[0]?.msg;
+
+    if (response == RESPONSES.USEREXIST) {
+      showNotification("negative", "El usuario ya existe");
+    } else if (response == RESPONSES.LENGTHPASSWORD) {
+      showNotification(
+        "negative",
+        "La contraseña debe tener de 6 a 20 carácteres"
+      );
+    } else if (response == RESPONSES.RULESPASSWORD) {
+      showNotification(
+        "negative",
+        "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
+      );
+    } else {
+      showNotification("positive", "Tipo de pago actualizado correctamente");
+      modal.toggleModal();
+      rows.value = [];
+      getDataUsers();
+    }
   } catch {
     isLoading.value = false;
-    loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 }
@@ -444,6 +493,7 @@ async function postDataUserSystem() {
         tpdocument: typeDocumentUserSystem.value,
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
+        farms: farmsUserSystem.value,
         password: passwordUserSystem.value,
       },
       idFarm.value
@@ -451,7 +501,7 @@ async function postDataUserSystem() {
 
     isLoading.value = false;
 
-    let response = data.response.data.errors[0].msg;
+    let response = data?.response?.data?.errors[0]?.msg;
 
     if (response == RESPONSES.USEREXIST) {
       showNotification("negative", "El usuario ya existe");
@@ -472,30 +522,37 @@ async function postDataUserSystem() {
       getDataUsers();
     }
   } catch (error) {
+    isLoading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 }
 
 async function activeSystemUser(id) {
+  loading.value = true;
   try {
-    const active = await activeUser(id, idFarm.value);
+    await activeUser(id, idFarm.value);
+    loading.value = false;
     showNotification("positive", "Usuario activado correctamente");
     rows.value = [];
     inactiveRows.value = [];
     getDataUsers();
   } catch (error) {
+    loading.value = false;
     showNotification("negative", "Ocurrió un error al activar el usuario");
   }
 }
 
 async function inactiveSystemUser(id) {
+  loading.value = true;
   try {
-    const inactive = await inactiveUser(id, idFarm.value);
+    await inactiveUser(id, idFarm.value);
     showNotification("positive", "Usuario desactivado correctamente");
+    loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
     getDataUsers();
   } catch (error) {
+    loading.value = false;
     showNotification("negative", "Ocurrió un error al desactivar el usuario");
   }
 }
