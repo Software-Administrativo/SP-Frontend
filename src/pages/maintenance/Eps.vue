@@ -116,55 +116,57 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameEps"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-mb-md"
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionEps"
-            @onWrite="getInputDescription"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Observación"
-            type="text"
-            :required="false"
-            :value="valueInputObservation"
-            v-model="observationEps"
-            @onWrite="getInputObservation"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataEps"
+    <ModalForm class="modal">
+      <div class="modal-eps">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameEps"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataEps"
+            <Input
+              class="q-mb-md"
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionEps"
+              @onWrite="getInputDescription"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-pb-xs"
+              label="Observación"
+              type="text"
+              :required="false"
+              :value="valueInputObservation"
+              v-model="observationEps"
+              @onWrite="getInputObservation"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataEps"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataEps"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -201,11 +203,9 @@ const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if(
-    nameEps.value == "" 
-  ){
+  if (nameEps.value == "") {
     return true;
-  } else if (isLoading.value == true){
+  } else if (isLoading.value == true) {
     return true;
   } else {
     return false;
@@ -458,42 +458,62 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   border-radius: 10px;
 }
+
+.modal-eps {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+
+.modal-eps::-webkit-scrollbar {
+  display: none;
+}
+
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
 }
+
 .icon-backRoute:hover {
   cursor: pointer;
 }
+
 .accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
 }
+
 .text-required {
   display: inline-block;
   font-size: var(--font-small);
 }
+
 .title {
   font-size: var(--font-title);
 }
+
 .table-container {
   position: relative;
 }
+
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .icon-table {
   font-size: 18px;
 }
+
 .icon-check {
   font-size: 25px;
 }
+
 .container-table {
   border-radius: 15px;
   background-color: white;
@@ -503,39 +523,47 @@ onMounted(() => {
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }
+
 .container-table::-webkit-scrollbar {
   display: none;
 }
+
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
     max-width: 300px;
   }
 }
+
 @media (min-width: 401px) and (max-width: 520px) {
   .container-table {
     max-width: 410px;
   }
 }
+
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
   }
 }
+
 @media (min-width: 621px) and (max-width: 720px) {
   .container-table {
     max-width: 610px;
   }
 }
+
 @media (min-width: 721px) and (max-width: 920px) {
   .container-table {
     max-width: 710px;
   }
 }
+
 @media (min-width: 921px) and (max-width: 1020px) {
   .container-table {
     max-width: 810px;
   }
 }
+
 @media (min-width: 1021px) and (max-width: 1320px) {
   .container-table {
     max-width: 1010px;

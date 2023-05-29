@@ -116,46 +116,48 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            class="q-pb-xs"
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameTypeLabors"
-            @onWrite="getInputName"
-          />
-          <Input
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionTypeLabors"
-            @onWrite="getInputDescription"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataTypeLabors"
+    <ModalForm class="modal">
+      <div class="modal-labors">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              class="q-pb-xs"
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameTypeLabors"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataTypeLabors"
+            <Input
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionTypeLabors"
+              @onWrite="getInputDescription"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataTypeLabors"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataTypeLabors"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -431,6 +433,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-labors {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-labors::-webkit-scrollbar {
+  display: none;
 }
 .icon-backRoute {
   font-size: 30px;

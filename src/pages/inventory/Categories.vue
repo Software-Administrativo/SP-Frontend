@@ -116,46 +116,48 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameCategory"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-mb-md"
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionCategory"
-            @onWrite="getInputDescription"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataCategory"
+    <ModalForm class="modal">
+      <div class="modal-categories">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameCategory"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataCategory"
+            <Input
+              class="q-mb-md"
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionCategory"
+              @onWrite="getInputDescription"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataCategory"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataCategory"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -164,11 +166,11 @@
 </template>
 <script setup>
 import {
-activeCategory,
-getCategories,
-inactiveCategory,
-postCategory,
-updateCategory,
+  activeCategory,
+  getCategories,
+  inactiveCategory,
+  postCategory,
+  updateCategory,
 } from "@/api/inventory/categories";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -409,6 +411,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-categories {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-categories::-webkit-scrollbar {
+  display: none;
 }
 .icon-backRoute {
   font-size: 30px !important;
