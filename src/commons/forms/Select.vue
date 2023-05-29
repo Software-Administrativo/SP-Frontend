@@ -1,8 +1,8 @@
 <template>
   <div :style="props.styles">
-    <label for="type"
+    <span for="type"
       >{{ props.label
-      }}<span class="text-red">{{ props.required ? "*" : "" }}</span></label
+      }}<span class="text-red">{{ props.required ? "*" : "" }}</span></span
     >
     <q-select
       v-if="props.type != 'multiFarms'"
@@ -40,8 +40,6 @@ let model = ref(props.value);
 let namesFarms = ref([]);
 
 const storage = useStorage();
-const isValidateJWT = storage.decodeJwt();
-const farms = isValidateJWT.farms;
 const valueSelect = ref(props.value);
 const filterOptions = ref(stringOptions);
 
@@ -132,13 +130,16 @@ const idFarm = computed(() => {
 });
 
 onMounted(async () => {
-  if (props.type === "documents") {
+  if (props.type == "documents") {
     types.value = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
-  } else if (props.type === "roles") {
+  } 
+  else if (props.type === "roles") {
     types.value = ["ADMIN"].map((item) => {
       return `${item[0].toUpperCase()}${item.slice(1)}`;
     });
   } else if (props.type === "farms") {
+    const isValidateJWT = storage.decodeJwt();
+    const farms = isValidateJWT.farms;
     const names = farms.forEach((element) => {
       namesFarms.value.push(element.name);
     });
@@ -148,6 +149,8 @@ onMounted(async () => {
     // FALTA PETICION
     types.value = ["SURA", "SALUD TOTAL"];
   } else if (props.type === "multiFarms") {
+    const isValidateJWT = storage.decodeJwt();
+    const farms = isValidateJWT.farms;
     const names = farms.forEach((element) => {
       namesFarms.value.push(element.name);
     });

@@ -1,13 +1,14 @@
 <template>
   <div :style="props.styles">
-    <label
+    <span :for="props.label"
       >{{ props.label
-      }}<span class="text-red">{{ props.required ? "*" : "" }}</span></label
+      }}<span class="text-red">{{ props.required ? "*" : "" }}</span></span
     >
     <q-input
       v-model="data"
       dense
       filled
+      :id="props.label"
       :rules="rules"
       :type="isPasswordType ? 'password' : 'text'"
     >

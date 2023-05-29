@@ -1,9 +1,9 @@
 <template>
   <div :style="props.styles">
-    <label :for="props.label"
+    <span :for="props.label"
       >{{ props.label }}
       <span class="text-red">{{ props.required ? "*" : "" }}</span>
-    </label>
+    </span>
     <q-input
       dense
       filled
