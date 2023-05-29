@@ -117,12 +117,12 @@ onMounted(() => {
 .select-farm {
   margin: 15px;
 }
-.container-router{
+.container-router {
   overflow-y: scroll;
   height: 60vh;
 }
 .container-router::-webkit-scrollbar {
-   display: none;
+  display: none;
 }
 .router-link-active {
   background-color: var(--color-gray);

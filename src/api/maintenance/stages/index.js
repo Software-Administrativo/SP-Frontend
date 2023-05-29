@@ -12,7 +12,7 @@ const getStages = async (idFarm) => {
     const { data } = await sugarAxios.get(`/maintenance/stage`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -34,7 +34,7 @@ const postStage = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -57,7 +57,7 @@ const updateStage = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -76,7 +76,7 @@ const inactiveStage = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -95,7 +95,7 @@ const activeStage = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

@@ -303,7 +303,7 @@ const showNotification = (type, message) => {
     message: message,
     position: "top",
   });
-}
+};
 
 const getDataUnitsMeasurement = async () => {
   rows.value = [];
@@ -353,7 +353,6 @@ async function postDataUnitMeasurement() {
     );
   }
 }
-
 
 async function updateDataUnitMeasurement() {
   isLoading.value = true;

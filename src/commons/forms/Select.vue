@@ -118,7 +118,7 @@ const props = defineProps({
     type: String,
     required: false,
     default: "Tipo requerido",
-  }
+  },
 });
 
 const emits = defineEmits({
@@ -132,8 +132,7 @@ const idFarm = computed(() => {
 onMounted(async () => {
   if (props.type == "documents") {
     types.value = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
-  } 
-  else if (props.type === "roles") {
+  } else if (props.type === "roles") {
     types.value = ["ADMIN"].map((item) => {
       return `${item[0].toUpperCase()}${item.slice(1)}`;
     });

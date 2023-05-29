@@ -12,7 +12,7 @@ const getAdminExpenses = async (idFarm) => {
     const { data } = await sugarAxios.get(`/costs/adminexpenses`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -34,7 +34,7 @@ const postAdminExpenses = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -57,7 +57,7 @@ const updateAdminExpenses = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -76,7 +76,7 @@ const inactiveAdminExpenses = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -95,7 +95,7 @@ const activeAdminExpenses = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -105,4 +105,10 @@ const activeAdminExpenses = async (id, idFarm) => {
   }
 };
 
-export { getAdminExpenses, postAdminExpenses, inactiveAdminExpenses, activeAdminExpenses, updateAdminExpenses };
+export {
+  getAdminExpenses,
+  postAdminExpenses,
+  inactiveAdminExpenses,
+  activeAdminExpenses,
+  updateAdminExpenses,
+};

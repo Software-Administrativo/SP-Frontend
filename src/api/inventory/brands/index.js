@@ -12,7 +12,7 @@ const getBrands = async (idFarm) => {
     const { data } = await sugarAxios.get(`/inventory/mark`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -34,7 +34,7 @@ const postBrand = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -57,7 +57,7 @@ const updateBrand = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -76,7 +76,7 @@ const inactiveBrand = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -95,7 +95,7 @@ const activeBrand = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

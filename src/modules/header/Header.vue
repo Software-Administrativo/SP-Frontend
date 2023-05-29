@@ -53,7 +53,7 @@ const logoutSession = () => {
   background-color: var(--color-blue);
   width: 100%;
 }
-.name-farm{
+.name-farm {
   font-size: var(--font-subtitle);
   color: white;
   margin-left: 20px;

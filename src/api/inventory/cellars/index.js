@@ -12,7 +12,7 @@ const getCellars = async (idFarm) => {
     const { data } = await sugarAxios.get(`/inventory/cellar`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -30,12 +30,12 @@ const postCellar = async (type, idFarm) => {
         name: type.name,
         tpcontrato: type.tpcontrato,
         description: type.description,
-        valor : type.valor,
+        valor: type.valor,
       },
       {
         headers: {
           token: tokenExist,
-          farm:idFarm
+          farm: idFarm,
         },
       }
     );
@@ -59,7 +59,7 @@ const updateCellar = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -78,7 +78,7 @@ const inactiveCellar = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -97,7 +97,7 @@ const activeCellar = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

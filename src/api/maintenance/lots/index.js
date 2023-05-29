@@ -12,7 +12,7 @@ const getLots = async (idFarm) => {
     const { data } = await sugarAxios.get(`/maintenance/lots`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -38,7 +38,7 @@ const postLot = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -65,7 +65,7 @@ const updateLot = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -84,7 +84,7 @@ const inactiveLot = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -103,7 +103,7 @@ const activeLot = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

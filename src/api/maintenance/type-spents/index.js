@@ -13,7 +13,7 @@ const getTypeSpents = async (idFarm) => {
     const { data } = await sugarAxios.get(`/maintenance/spents`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -34,7 +34,7 @@ const postTypeSpent = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -56,7 +56,7 @@ const updateTypeSpent = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -75,7 +75,7 @@ const inactiveTypeSpent = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -94,7 +94,7 @@ const activeTypeSpent = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

@@ -391,7 +391,7 @@ async function activeSpentMaintenance(id) {
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
-  } 
+  }
 }
 
 async function inactiveSpentMaintenance(id) {

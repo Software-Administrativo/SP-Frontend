@@ -184,11 +184,11 @@
 </template>
 <script setup>
 import {
-activeCellar,
-getCellars,
-inactiveCellar,
-postCellar,
-updateCellar,
+  activeCellar,
+  getCellars,
+  inactiveCellar,
+  postCellar,
+  updateCellar,
 } from "@/api/inventory/cellars";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

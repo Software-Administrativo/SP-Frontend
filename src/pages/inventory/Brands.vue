@@ -175,11 +175,11 @@
 </template>
 <script setup>
 import {
-activeBrand,
-getBrands,
-inactiveBrand,
-postBrand,
-updateBrand,
+  activeBrand,
+  getBrands,
+  inactiveBrand,
+  postBrand,
+  updateBrand,
 } from "@/api/inventory/brands";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

@@ -12,7 +12,7 @@ const getTypePays = async (idFarm) => {
     const { data } = await sugarAxios.get(`/maintenance/pays`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -33,7 +33,7 @@ const postTypePay = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -55,7 +55,7 @@ const updateTypePay = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -74,7 +74,7 @@ const inactiveTypePay = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -94,7 +94,7 @@ const activeTypePay = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

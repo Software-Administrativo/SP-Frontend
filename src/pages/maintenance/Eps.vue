@@ -201,11 +201,9 @@ const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if(
-    nameEps.value == "" 
-  ){
+  if (nameEps.value == "") {
     return true;
-  } else if (isLoading.value == true){
+  } else if (isLoading.value == true) {
     return true;
   } else {
     return false;

@@ -32,7 +32,7 @@ const postPeople = async (item, idFarm) => {
         document: item.document,
         phone: item.phone,
         eps: item.eps,
-        typePeople: item.typePeople
+        typePeople: item.typePeople,
       },
       {
         headers: {
@@ -58,7 +58,7 @@ const updatePeople = async (item, idFarm) => {
         document: item.document,
         phone: item.phone,
         eps: item.eps,
-        typePeople: item.typePeople
+        typePeople: item.typePeople,
       },
       {
         headers: {

@@ -194,11 +194,11 @@
 </template>
 <script setup>
 import {
-activeProduct,
-getProducts,
-inactiveProduct,
-postProduct,
-updateProduct,
+  activeProduct,
+  getProducts,
+  inactiveProduct,
+  postProduct,
+  updateProduct,
 } from "@/api/inventory/products";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -229,9 +229,9 @@ const disableSave = computed(() => {
     descriptionProduct.value != ""
   ) {
     return false;
-  } else if(isLoading.value == true){
+  } else if (isLoading.value == true) {
     return true;
-  } else{
+  } else {
     return false;
   }
 });

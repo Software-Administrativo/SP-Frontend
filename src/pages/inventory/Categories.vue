@@ -164,11 +164,11 @@
 </template>
 <script setup>
 import {
-activeCategory,
-getCategories,
-inactiveCategory,
-postCategory,
-updateCategory,
+  activeCategory,
+  getCategories,
+  inactiveCategory,
+  postCategory,
+  updateCategory,
 } from "@/api/inventory/categories";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";

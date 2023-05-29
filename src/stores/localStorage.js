@@ -34,7 +34,7 @@ export const useStorage = defineStore(
       const farms = decodeToken.farms;
 
       const farmsExist = farms.forEach((item) => {
-        if ((item.name == data)) {
+        if (item.name == data) {
           idSelected.value = item._id;
         }
       });

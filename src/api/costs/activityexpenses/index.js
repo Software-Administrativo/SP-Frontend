@@ -12,7 +12,7 @@ const getActivityExpenses = async (idFarm) => {
     const { data } = await sugarAxios.get(`/costs/activityexpenses`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -34,7 +34,7 @@ const postActivityExpenses = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -57,7 +57,7 @@ const updateActivityExpenses = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -76,7 +76,7 @@ const inactiveActivityExpenses = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -95,7 +95,7 @@ const activeActivityExpenses = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -105,4 +105,10 @@ const activeActivityExpenses = async (id, idFarm) => {
   }
 };
 
-export { getActivityExpenses, postActivityExpenses, inactiveActivityExpenses, activeActivityExpenses, updateActivityExpenses };
+export {
+  getActivityExpenses,
+  postActivityExpenses,
+  inactiveActivityExpenses,
+  activeActivityExpenses,
+  updateActivityExpenses,
+};

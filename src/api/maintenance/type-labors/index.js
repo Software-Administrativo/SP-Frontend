@@ -12,7 +12,7 @@ const getTypeLabors = async (idFarm) => {
     const { data } = await sugarAxios.get(`/maintenance/works`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -33,7 +33,7 @@ const postTypeLabor = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -55,7 +55,7 @@ const updateTypeLabor = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -74,7 +74,7 @@ const inactiveTypeLabor = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -93,7 +93,7 @@ const activeTypeLabor = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

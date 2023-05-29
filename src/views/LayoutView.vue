@@ -16,7 +16,7 @@
       <div :style="viewRouter">
         <div :style="viewContainer">
           <router-view></router-view>
-          <template v-if="selectFarm !== false ">
+          <template v-if="selectFarm !== false">
             <ModalForm show="false">
               <div class="column q-px-xl q-pt-lg q-mb-sm">
                 <span class="title-farm">Para continuar</span>

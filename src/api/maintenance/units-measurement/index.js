@@ -12,7 +12,7 @@ const getUnitsMeasurement = async (idFarm) => {
     const { data } = await sugarAxios.get(`/maintenance/unittypes`, {
       headers: {
         token: tokenExist,
-        farm: idFarm
+        farm: idFarm,
       },
     });
     return data;
@@ -33,7 +33,7 @@ const postUnitMeasurement = async (type, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -55,7 +55,7 @@ const updateUnitMeasurement = async (item, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -74,7 +74,7 @@ const inactiveUnitMeasurement = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );
@@ -93,7 +93,7 @@ const activeUnitMeasurement = async (id, idFarm) => {
       {
         headers: {
           token: tokenExist,
-          farm: idFarm
+          farm: idFarm,
         },
       }
     );

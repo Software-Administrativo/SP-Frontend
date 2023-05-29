@@ -176,11 +176,11 @@
 </template>
 <script setup>
 import {
-activeFarm,
-getFarms,
-inactiveFarm,
-postFarm,
-updateFarm,
+  activeFarm,
+  getFarms,
+  inactiveFarm,
+  postFarm,
+  updateFarm,
 } from "@/api/maintenance/farm";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
@@ -200,11 +200,13 @@ const inactiveRows = ref([]);
 const idFarm = ref();
 
 const disableSave = computed(() => {
-  if(
-    nameFarm.value == "" || addressFarm.value == "" || ownerFarm.value == ""
+  if (
+    nameFarm.value == "" ||
+    addressFarm.value == "" ||
+    ownerFarm.value == ""
   ) {
     return true;
-  } else if (isLoading.value == true){
+  } else if (isLoading.value == true) {
     return true;
   } else {
     return false;
