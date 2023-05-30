@@ -414,6 +414,7 @@ const editSystemUser = (item) => {
   valueInputRole.value = item.role;
   valueInputFarms.value = item.farms;
   valueInputEmail.value = item.email;
+  
   nameUserSystem.value = item.name;
   typeDocumentUserSystem.value = item.tpdocument;
   numberDocumentUserSystem.value = item.numdocument;
