@@ -2,7 +2,7 @@
   <div class="q-py-md table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">FINCA</h6>
+      <h6 class="title q-my-lg">BODEGAS</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">

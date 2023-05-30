@@ -74,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Pagos"
+                title="Labores"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"

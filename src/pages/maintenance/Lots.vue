@@ -29,7 +29,7 @@
               <q-table
                 flat
                 bordered
-                title="Etapas"
+                title="Lotes"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -74,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Etapas"
+                title="Lotes"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
