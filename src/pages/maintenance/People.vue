@@ -119,86 +119,88 @@
   </div>
 
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">REGISTRAR PERSONA</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <div class="row">
-            <Select
-              class="col-5 q-mb-lg q-pr-sm"
-              type="documents"
-              label="Tipo de Documento"
-              :ruless="rules"
-              v-model="typeDocumentPeople"
-              :value="valueSelectTypeDocument"
-              @onSelect="getSelectTypeDocument"
-            ></Select>
+    <ModalForm class="modal">
+      <div class="modal-people">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <div class="row">
+              <Select
+                class="col-5 q-mb-lg q-pr-sm"
+                type="documents"
+                label="Tipo de Documento"
+                :ruless="rules"
+                v-model="typeDocumentPeople"
+                :value="valueSelectTypeDocument"
+                @onSelect="getSelectTypeDocument"
+              ></Select>
+              <Input
+                class="col-7 q-pb-xs"
+                label="Número de Documento"
+                :required="true"
+                type="text"
+                :ruless="rules"
+                :value="valueInputDocument"
+                v-model="documentPeople"
+                @onWrite="getInputDocument"
+              />
+            </div>
             <Input
-              class="col-7 q-pb-xs"
-              label="Número de Documento"
+              class="q-pb-xs"
+              label="Nombre"
               :required="true"
               type="text"
               :ruless="rules"
-              :value="valueInputDocument"
-              v-model="documentPeople"
-              @onWrite="getInputDocument"
+              :value="valueInputName"
+              v-model="namePeople"
+              @onWrite="getInputName"
             />
-          </div>
-          <Input
-            class="q-pb-xs"
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="namePeople"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Teléfono"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            v-model="phonePeople"
-            :value="valueInputPhone"
-            @onWrite="getInputPhone"
-          />
-          <Select
-            class="q-pb-xs q-mb-md"
-            label="EPS"
-            :required="true"
-            :ruless="rules"
-            :value="valueSelectEps"
-            v-model="epsPeople"
-            type="eps"
-            @onSelect="getSelectEps"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Tipo de Persona"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputType"
-            v-model="typePeople"
-            @onWrite="getInputPeople"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataPeople"
+            <Input
+              class="q-pb-xs"
+              label="Teléfono"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              v-model="phonePeople"
+              :value="valueInputPhone"
+              @onWrite="getInputPhone"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataPeople"
+            <Select
+              class="q-pb-xs q-mb-md"
+              label="EPS"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectEps"
+              v-model="epsPeople"
+              type="eps"
+              @onSelect="getSelectEps"
             />
+            <Input
+              class="q-pb-xs"
+              label="Tipo de Persona"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputType"
+              v-model="typePeople"
+              @onWrite="getInputPeople"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataPeople"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataPeople"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -532,6 +534,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-people {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-people::-webkit-scrollbar {
+  display: none;
 }
 .icon-backRoute {
   font-size: 30px;

@@ -29,7 +29,7 @@
               <q-table
                 flat
                 bordered
-                title="Bodegas"
+                title="Productos"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -74,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Bodegas"
+                title="Productos"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -116,76 +116,78 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameProducts"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Categoria"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputCategorie"
-            v-model="categorieProducts"
-            @onWrite="getInputCategorie"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Marca"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputBrand"
-            v-model="brandProducts"
-            @onWrite="getInputBrand"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Cantidad"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputAmount"
-            v-model="amountProducts"
-            @onWrite="getInputAmount"
-          />
-          <Input
-            label="Descripción"
-            :required="true"
-            :ruless="rules"
-            type="text"
-            :value="valueInputDescription"
-            v-model="descriptionProduct"
-            @onWrite="getInputName"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataProduct"
+    <ModalForm class="modal">
+      <div class="modal-products">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameProducts"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataProduct"
+            <Input
+              class="q-pb-xs"
+              label="Categoria"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputCategorie"
+              v-model="categorieProducts"
+              @onWrite="getInputCategorie"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-pb-xs"
+              label="Marca"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputBrand"
+              v-model="brandProducts"
+              @onWrite="getInputBrand"
+            />
+            <Input
+              class="q-pb-xs"
+              label="Cantidad"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputAmount"
+              v-model="amountProducts"
+              @onWrite="getInputAmount"
+            />
+            <Input
+              label="Descripción"
+              :required="true"
+              :ruless="rules"
+              type="text"
+              :value="valueInputDescription"
+              v-model="descriptionProduct"
+              @onWrite="getInputName"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataProduct"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataProduct"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -506,6 +508,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-products {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-products::-webkit-scrollbar {
+  display: none;
 }
 .icon-backRoute {
   font-size: 30px !important;

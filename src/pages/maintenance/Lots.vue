@@ -29,7 +29,7 @@
               <q-table
                 flat
                 bordered
-                title="Etapas"
+                title="Lotes"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -74,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Etapas"
+                title="Lotes"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -116,7 +116,8 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
+    <ModalForm class="modal">
+      <div class="modal-lots">
       <h6 class="q-my-md text-center">{{ titleModal }}</h6>
       <div class="row q-px-xl">
         <div class="col-12">
@@ -210,6 +211,7 @@
           </div>
         </div>
       </div>
+    </div>
     </ModalForm>
   </template>
 </template>
@@ -598,7 +600,13 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   border-radius: 10px;
 }
-
+.modal-lots {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-lots::-webkit-scrollbar {
+  display: none;
+}
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;

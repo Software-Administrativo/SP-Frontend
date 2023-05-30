@@ -48,14 +48,7 @@
                   </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    style="
-                      padding: 0px;
-                      margin: 0px;
-                      min-width: 100px;
-                      max-width: 20px;
-                    "
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         icon="edit_note"
@@ -97,18 +90,11 @@
                   >
                     <template v-slot:append>
                       <q-icon name="search" />
-                    </template> </q-input
-                  >´
+                    </template>
+                  </q-input>
                 </template>
                 <template v-slot:body-cell-Acciones="props">
-                  <td
-                    style="
-                      padding: 0px;
-                      margin: 0px;
-                      min-width: 100px;
-                      max-width: 100px;
-                    "
-                  >
+                  <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
                         text-color="blue-10"
@@ -586,6 +572,12 @@ onMounted(() => {
 }
 .modalSystem::-webkit-scrollbar {
   display: none;
+}
+.accions-td {
+  padding: 0px;
+  margin: 0px;
+  min-width: 100px;
+  max-width: 100px;
 }
 .title {
   font-size: var(--font-title);
