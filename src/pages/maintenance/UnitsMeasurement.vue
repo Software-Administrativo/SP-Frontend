@@ -116,7 +116,8 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
+    <ModalForm class="modal">
+      <div class="modal-units">
       <h6 class="q-my-md text-center">{{ titleModal }}</h6>
       <div class="row q-px-xl">
         <div class="col-12">
@@ -160,6 +161,7 @@
           </div>
         </div>
       </div>
+    </div>
     </ModalForm>
   </template>
 </template>
@@ -433,6 +435,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-units {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-units::-webkit-scrollbar {
+  display: none;
 }
 .icon-backRoute {
   font-size: 30px;

@@ -119,55 +119,57 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameActivityExpense"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-mb-md"
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionActivityExpense"
-            @onWrite="getInputDescription"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Valor"
-            type="text"
-            :required="false"
-            :value="valueInputWorth"
-            v-model="worthActivityExpense"
-            @onWrite="getInputObservation"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataAdminExpense"
+    <ModalForm class="modal">
+      <div class="modal-admin">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameActivityExpense"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataAdminExpense"
+            <Input
+              class="q-mb-md"
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionActivityExpense"
+              @onWrite="getInputDescription"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-pb-xs"
+              label="Valor"
+              type="text"
+              :required="false"
+              :value="valueInputWorth"
+              v-model="worthActivityExpense"
+              @onWrite="getInputObservation"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataAdminExpense"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataAdminExpense"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -465,6 +467,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-admin {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-admin::-webkit-scrollbar {
+  display: none;
 }
 .icon-backRoute {
   font-size: 30px;

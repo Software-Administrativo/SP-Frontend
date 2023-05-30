@@ -119,55 +119,57 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameActivityExpense"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-mb-md"
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionActivityExpense"
-            @onWrite="getInputDescription"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Valor"
-            type="text"
-            :required="false"
-            :value="valueInputWorth"
-            v-model="worthActivityExpense"
-            @onWrite="getInputObservation"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataActivityExpense"
+    <ModalForm class="modal">
+      <div class="modal-activity">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameActivityExpense"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataActivityExpense"
+            <Input
+              class="q-mb-md"
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionActivityExpense"
+              @onWrite="getInputDescription"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-pb-xs"
+              label="Valor"
+              type="text"
+              :required="false"
+              :value="valueInputWorth"
+              v-model="worthActivityExpense"
+              @onWrite="getInputObservation"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataActivityExpense"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataActivityExpense"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -463,42 +465,59 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   border-radius: 10px;
 }
+.modal-activity {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-activity::-webkit-scrollbar {
+  display: none;
+}
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
 }
+
 .icon-backRoute:hover {
   cursor: pointer;
 }
+
 .accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
 }
+
 .text-required {
   display: inline-block;
   font-size: var(--font-small);
 }
+
 .title {
   font-size: var(--font-title);
 }
+
 .table-container {
   position: relative;
 }
+
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .icon-table {
   font-size: 18px;
 }
+
 .icon-check {
   font-size: 25px;
 }
+
 .container-table {
   border-radius: 15px;
   background-color: white;
@@ -508,39 +527,47 @@ onMounted(() => {
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }
+
 .container-table::-webkit-scrollbar {
   display: none;
 }
+
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
     max-width: 300px;
   }
 }
+
 @media (min-width: 401px) and (max-width: 520px) {
   .container-table {
     max-width: 410px;
   }
 }
+
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
   }
 }
+
 @media (min-width: 621px) and (max-width: 720px) {
   .container-table {
     max-width: 610px;
   }
 }
+
 @media (min-width: 721px) and (max-width: 920px) {
   .container-table {
     max-width: 710px;
   }
 }
+
 @media (min-width: 921px) and (max-width: 1020px) {
   .container-table {
     max-width: 810px;
   }
 }
+
 @media (min-width: 1021px) and (max-width: 1320px) {
   .container-table {
     max-width: 1010px;

@@ -2,7 +2,7 @@
   <div class="q-py-md table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">FINCA</h6>
+      <h6 class="title q-my-lg">BODEGAS</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">
@@ -116,66 +116,68 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm>
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameCellars"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Tipo Contrato"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputTypeContract"
-            v-model="typeContractCellars"
-            @onWrite="getInputTypeContract"
-          />
-          <Input
-            class="q-mb-md"
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionCellars"
-            @onWrite="getInputDescription"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Valor"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputValue"
-            v-model="valueCellars"
-            @onWrite="getInputValue"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataCellar"
+    <ModalForm class="modal">
+      <div class="modal-cellars">
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameCellars"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataCellar"
+            <Input
+              class="q-pb-xs"
+              label="Tipo Contrato"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputTypeContract"
+              v-model="typeContractCellars"
+              @onWrite="getInputTypeContract"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-mb-md"
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionCellars"
+              @onWrite="getInputDescription"
+            />
+            <Input
+              class="q-pb-xs"
+              label="Valor"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputValue"
+              v-model="valueCellars"
+              @onWrite="getInputValue"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataCellar"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataCellar"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
@@ -471,6 +473,13 @@ onMounted(() => {
   padding: 20px;
   border: 2px solid var(--color-gray);
   border-radius: 10px;
+}
+.modal-cellars {
+  overflow-y: scroll;
+  max-height: 450px;
+}
+.modal-cellars::-webkit-scrollbar {
+  display: none;
 }
 .accions-td {
   padding: 0px;
