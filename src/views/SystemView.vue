@@ -173,7 +173,15 @@
               v-model="farmsUserSystem"
               @onSelect="getSelectDataFarms"
             />
-
+            <Email
+              v-if="valueInputRole != 'SUPER'"
+              label="Email"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputEmail"
+              v-model="emailUserSystem"
+              @onEmail="getEmailData"
+            />
             <Password
               v-if="valueInputRole != 'SUPER'"
               label="Contraseña"
@@ -219,6 +227,7 @@ import {
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Email from "@/commons/forms/Email.vue";
 import Password from "@/commons/forms/Password.vue";
 import Select from "@/commons/forms/Select.vue";
 import { RESPONSES } from "@/helpers";
@@ -245,12 +254,14 @@ let valueInputTypeDocument = ref("");
 let valueInputNumberDocument = ref("");
 let valueInputRole = ref("");
 let valueInputFarms = ref("");
+let valueInputEmail = ref("");
 
 let nameUserSystem = ref("");
 let typeDocumentUserSystem = ref("");
 let numberDocumentUserSystem = ref("");
 let farmsUserSystem = ref("");
 let roleUserSystem = ref("");
+let emailUserSystem = ref("");
 let passwordUserSystem = ref("");
 
 let filter = ref("");
@@ -262,6 +273,7 @@ const disableSave = computed(() => {
     !typeDocumentUserSystem.value ||
     !numberDocumentUserSystem.value ||
     !roleUserSystem.value ||
+    !emailUserSystem.value ||
     !passwordUserSystem.value ||
     !farmsUserSystem.value
   ) {
@@ -313,6 +325,15 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
+    name: "email",
+    label: "Correo Electronico",
+    field: "email",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
     name: "role",
     label: "Rol",
     field: "role",
@@ -352,6 +373,10 @@ const getSelectDataRole = (value) => {
   roleUserSystem.value = value;
 };
 
+const getEmailData = (value) => {
+  emailUserSystem.value = value;
+};
+
 const getPasswordData = (value) => {
   passwordUserSystem.value = value;
 };
@@ -369,10 +394,12 @@ const resetValuesForm = () => {
   valueInputNumberDocument.value = "";
   valueInputRole.value = "";
   valueInputFarms.value = "";
+  valueInputEmail.value = "";
   nameUserSystem.value = "";
   typeDocumentUserSystem.value = "";
   numberDocumentUserSystem.value = "";
   roleUserSystem.value = "";
+  emailUserSystem.value = "";
   passwordUserSystem.value = "";
   farmsUserSystem.value = "";
 };
@@ -386,11 +413,13 @@ const editSystemUser = (item) => {
   valueInputNumberDocument.value = item.numdocument;
   valueInputRole.value = item.role;
   valueInputFarms.value = item.farms;
+  valueInputEmail.value = item.email;
   nameUserSystem.value = item.name;
   typeDocumentUserSystem.value = item.tpdocument;
   numberDocumentUserSystem.value = item.numdocument;
   farmsUserSystem.value = item.farms;
   roleUserSystem.value = item.role;
+  emailUserSystem.value = item.email;
   modal.toggleModal();
 };
 
@@ -438,6 +467,7 @@ async function updateDataUserSystem() {
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
         farms: farmsUserSystem.value,
+        email: emailUserSystem.value,
         password: passwordUserSystem.value,
       },
       idFarm.value
@@ -457,6 +487,11 @@ async function updateDataUserSystem() {
       showNotification(
         "negative",
         "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
+      );
+    } else if (response == RESPONSES.EMAILEXIST) {
+      showNotification(
+        "negative",
+        "El email ya esta registrado"
       );
     } else {
       showNotification("positive", "Tipo de pago actualizado correctamente");
@@ -480,6 +515,7 @@ async function postDataUserSystem() {
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
         farms: farmsUserSystem.value,
+        email: emailUserSystem.value,
         password: passwordUserSystem.value,
       },
       idFarm.value
@@ -500,6 +536,11 @@ async function postDataUserSystem() {
       showNotification(
         "negative",
         "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
+      );
+    } else if (response == RESPONSES.EMAILEXIST) {
+      showNotification(
+        "negative",
+        "El email ya esta registrado"
       );
     } else {
       modal.toggleModal();

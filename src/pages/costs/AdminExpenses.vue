@@ -136,8 +136,9 @@
             <Input
               class="q-mb-md"
               label="Descripción"
+              :required="true"
               type="text"
-              :required="false"
+              :ruless="rules"
               :value="valueInputDescription"
               v-model="descriptionActivityExpense"
               @onWrite="getInputDescription"
@@ -145,8 +146,9 @@
             <Input
               class="q-pb-xs"
               label="Valor"
+              :required="true"
               type="text"
-              :required="false"
+              :ruless="rules"
               :value="valueInputWorth"
               v-model="worthActivityExpense"
               @onWrite="getInputObservation"
@@ -206,7 +208,9 @@ const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if (nameActivityExpense.value == "" || worthActivityExpense.value == "") {
+  if (nameActivityExpense.value == "" ||
+      worthActivityExpense.value == "" ||
+      descriptionActivityExpense.value == "") {
     return true;
   } else if (isLoading.value == true) {
     return true;
@@ -342,8 +346,6 @@ const getDataAdminExpenses = async () => {
         item.id = countInactive++;
         inactiveRows.value.push(item);
       }
-      item.description =
-        item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
   } catch {

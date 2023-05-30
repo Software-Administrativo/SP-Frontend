@@ -29,7 +29,7 @@ const postCostsPlanting = async (type, idFarm) => {
       {
         name: type.name,
         description: type.description,
-        value: type.value,
+        worth: type.worth,
       },
       {
         headers: {
@@ -52,7 +52,7 @@ const updateCostsPlanting = async (item, idFarm) => {
       {
         name: item.name,
         description: item.description,
-        value: item.value,
+        worth: item.worth,
       },
       {
         headers: {
