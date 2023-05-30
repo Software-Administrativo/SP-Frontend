@@ -59,13 +59,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editActivityExpenseCosts(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveActivityExpenseCosts(props.row._id)"
                       />
                     </q-btn-group>
@@ -517,7 +517,9 @@ onMounted(() => {
 .icon-check {
   font-size: 25px;
 }
-
+.icon-table {
+  font-size: 18px;
+}
 .container-table {
   border-radius: 15px;
   background-color: white;

@@ -31,17 +31,62 @@
   </div>
 </template>
 <script setup>
-import { onMounted, ref, watch, computed } from "vue";
+import { getEps } from "@/api/maintenance/eps";
+import { getLots } from "@/api/maintenance/lots";
 import { useStorage } from "@/stores/localStorage.js";
+import { computed, onMounted, ref, watch } from "vue";
 
 let stringOptions = [];
 let types = ref([]);
-let model = ref(props.value);
+let model = ref();
 let namesFarms = ref([]);
 
 const storage = useStorage();
 const valueSelect = ref(props.value);
 const filterOptions = ref(stringOptions);
+const { eps } = "";
+
+const props = defineProps({
+  type: {
+    type: String,
+    required: true,
+  },
+  label: {
+    type: String,
+    required: true,
+  },
+  styles: {
+    type: Object,
+    required: false,
+  },
+  required: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  ruless: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
+  value: {
+    required: false,
+    default: "",
+  },
+  message: {
+    type: String,
+    required: false,
+    default: "Tipo requerido",
+  },
+});
+
+const emits = defineEmits({
+  onSelect: null,
+});
+
+const idFarm = computed(() => {
+  return storage.idSelected;
+});
 
 const createValue = (val, done) => {
   if (val.length > 0) {
@@ -87,48 +132,6 @@ const defaultRules = computed(() => {
   }
 });
 
-const props = defineProps({
-  type: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  styles: {
-    type: Object,
-    required: false,
-  },
-  required: {
-    type: Boolean,
-    required: false,
-    default: false,
-  },
-  ruless: {
-    type: Array,
-    required: false,
-    default: () => [],
-  },
-  value: {
-    required: false,
-    default: "",
-  },
-  message: {
-    type: String,
-    required: false,
-    default: "Tipo requerido",
-  },
-});
-
-const emits = defineEmits({
-  onSelect: null,
-});
-
-const idFarm = computed(() => {
-  return storage.idSelected;
-});
-
 onMounted(async () => {
   if (props.type == "documents") {
     types.value = ["CC", "CE", "NIT", "NIP", "NUIP", "PA"];
@@ -139,33 +142,53 @@ onMounted(async () => {
   } else if (props.type === "farms") {
     const isValidateJWT = storage.decodeJwt();
     const farms = isValidateJWT.farms;
-    const names = farms.forEach((element) => {
+    farms.forEach((element) => {
       namesFarms.value.push(element.name);
     });
     types.value = namesFarms.value;
   } else if (props.type === "eps") {
-    // const { eps } = await getEps(idFarm.value);
-    // FALTA PETICION
-    types.value = ["SURA", "SALUD TOTAL"];
+    const { eps } = await getEps(idFarm.value);
+    types.value = eps.map((item) => {
+      return item.name;
+    });
   } else if (props.type === "multiFarms") {
     const isValidateJWT = storage.decodeJwt();
     const farms = isValidateJWT.farms;
-    const names = farms.forEach((element) => {
+    if (!props.value || props.value.length != undefined) {
+      const farms = props.value.map((item) => {
+        return item.name;
+      });
+      model.value = farms;
+    }
+    farms.forEach((element) => {
       namesFarms.value.push(element.name);
     });
     stringOptions = namesFarms.value;
+  } else if (props.type === "lots") {
+    const { lots } = await getLots(idFarm.value);
+    types.value = lots.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "person") {
+    types.value = ["TRABAJADOR", "ADMINISTRADOR"];
   }
 });
 
 watch(model, () => {
-  const idFarm = farms.forEach((element) => {
-    if (element.name == model.value) {
-      valueSelect.value = element._id;
-    }
+  const isValidateJWT = storage.decodeJwt();
+  const farms = isValidateJWT.farms;
+  const farmsSelected = [];
+  model.value.forEach((element) => {
+    farms.forEach((farm) => {
+      if (element === farm.name) {
+        farmsSelected.push(farm);
+      }
+    });
   });
+  valueSelect.value = farmsSelected;
 });
 
-watch(valueSelect, () => {
+watch(valueSelect, async () => {
   emits("onSelect", valueSelect.value);
 });
 

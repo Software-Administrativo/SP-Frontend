@@ -56,13 +56,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editCellarsInventory(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveCellarInventory(props.row._id)"
                       />
                     </q-btn-group>
@@ -510,6 +510,9 @@ onMounted(() => {
 }
 .icon {
   font-size: 1.5rem;
+}
+.icon-table {
+  font-size: 18px;
 }
 .title {
   font-size: var(--font-title);
