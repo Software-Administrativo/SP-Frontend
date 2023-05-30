@@ -56,13 +56,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editStageMaintenance(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveStageMaintenance(props.row._id)"
                       />
                     </q-btn-group>
@@ -116,59 +116,57 @@
     </div>
   </div>
   <template v-if="modal.modalIsOpen">
-    <ModalForm class="modal">
-      <div class="modal-stages">
-        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-        <div class="row q-px-xl">
-          <div class="col-12">
-            <Input
-              class="q-pb-xs"
-              label="Nombre"
-              :required="true"
-              type="text"
-              :ruless="rules"
-              :value="valueInputName"
-              v-model="nameStages"
-              @onWrite="getInputName"
+    <ModalForm>
+      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+      <div class="row q-px-xl">
+        <div class="col-12">
+          <Input
+            class="q-pb-xs"
+            label="Nombre"
+            :required="true"
+            type="text"
+            :ruless="rules"
+            :value="valueInputName"
+            v-model="nameStages"
+            @onWrite="getInputName"
+          />
+          <Select
+            class="q-pb-lg"
+            type="lots"
+            label="Lote"
+            :v-model="lotStages"
+            :required="true"
+            :ruless="rules"
+            :value="valueSelectLot"
+            @onSelect="getSelectLot"
+          />
+          <Input
+            class="q-pb-xs"
+            label="Descripción"
+            type="text"
+            :required="false"
+            :value="valueInputDescription"
+            v-model="descriptionStages"
+            @onWrite="getInputDescription"
+          />
+          <span class="text-required q-pb-sm"
+            >Todos los campos con <span class="text-red">*</span> son
+            obligatorios</span
+          >
+          <div class="row justify-center">
+            <ButtonSave
+              v-if="typeAction"
+              :disable="disableSave"
+              @onClick="postDataStages"
             />
-            <Input
-              class="q-pb-xs"
-              label="Lote"
-              type="text"
-              :required="true"
-              :ruless="rules"
-              :value="valueInputLot"
-              v-model="lotStages"
-              @onWrite="getInputLot"
+            <ButtonSave
+              v-else
+              :disable="disableSave"
+              @onClick="updateDataStage"
             />
-            <Input
-              class="q-pb-xs"
-              label="Descripción"
-              type="text"
-              :required="false"
-              :value="valueInputDescription"
-              v-model="descriptionStages"
-              @onWrite="getInputDescription"
-            />
-            <span class="text-required q-pb-sm"
-              >Todos los campos con <span class="text-red">*</span> son
-              obligatorios</span
-            >
-            <div class="row justify-center">
-              <ButtonSave
-                v-if="typeAction"
-                :disable="disableSave"
-                @onClick="postDataStages"
-              />
-              <ButtonSave
-                v-else
-                :disable="disableSave"
-                @onClick="updateDataStage"
-              />
-            </div>
-            <div class="spinner" v-if="isLoading">
-              <q-spinner-ios color="primary" size="2.5em" />
-            </div>
+          </div>
+          <div class="spinner" v-if="isLoading">
+            <q-spinner-ios color="primary" size="2.5em" />
           </div>
         </div>
       </div>
@@ -183,9 +181,11 @@ import {
   postStage,
   updateStage,
 } from "@/api/maintenance/stages";
+import { getLots } from "@/api/maintenance/lots";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
@@ -224,7 +224,7 @@ let descriptionStages = ref("");
 
 let valueInputName = ref("");
 let valueInputDescription = ref("");
-let valueInputLot = ref("");
+let valueSelectLot = ref("");
 
 const columns = ref([
   {
@@ -287,7 +287,7 @@ const getInputName = (value) => {
   nameStages.value = value;
 };
 
-const getInputLot = (value) => {
+const getSelectLot = (value) => {
   lotStages.value = value;
 };
 
@@ -305,7 +305,7 @@ const clickButton = () => {
 const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
-  valueInputLot.value = "";
+  valueSelectLot.value = "";
   nameStages.value = "";
   lotStages.value = "";
   descriptionStages.value = "";
@@ -316,11 +316,11 @@ const editStageMaintenance = (item) => {
   typeAction.value = false;
   idStage.value = item._id;
   valueInputName.value = item.name;
-  valueInputLot.value = item.lot;
-  valueInputDescription.value = item.description;
   nameStages.value = item.name;
-  lotStages.value = item.lot;
+  valueInputDescription.value = item.description;
   descriptionStages.value = item.description;
+  valueSelectLot.value = item.lot;
+  lotStages.value = item.lot;
   modal.toggleModal();
 };
 
@@ -338,10 +338,18 @@ const getDataStages = async () => {
   loading.value = true;
   try {
     const { stages } = await getStages(idFarm.value);
+    const { lots } = await getLots(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     stages.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let lotStage = item.lot;
+      lots.forEach((item) => {
+        if (item._id == lotStage) {
+          lotStage = item.name;
+        }
+      });
+      item.lot = lotStage;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -360,6 +368,14 @@ const getDataStages = async () => {
 };
 
 async function postDataStages() {
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotStages.value) {
+      lotStages.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
     const stages = await postStage(
@@ -385,6 +401,14 @@ async function postDataStages() {
 }
 
 async function updateDataStage() {
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotStages.value) {
+      lotStages.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
     const response = await updateStage(

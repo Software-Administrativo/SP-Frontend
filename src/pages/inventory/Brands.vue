@@ -56,13 +56,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editBrandInventory(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveBrandInventory(props.row._id)"
                       />
                     </q-btn-group>
@@ -487,12 +487,14 @@ onMounted(() => {
 .title {
   font-size: var(--font-title);
 }
+.icon-table {
+  font-size: 18px;
+}
 .container-table {
   border-radius: 15px;
   height: 80%;
   max-height: 60vh;
   background-color: white;
-  /* border: 2px solid var(--color-gray); */
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }

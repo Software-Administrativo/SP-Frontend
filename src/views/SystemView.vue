@@ -223,10 +223,10 @@ import Password from "@/commons/forms/Password.vue";
 import Select from "@/commons/forms/Select.vue";
 import { RESPONSES } from "@/helpers";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
 
@@ -244,7 +244,7 @@ let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
 let valueInputNumberDocument = ref("");
 let valueInputRole = ref("");
-let valueInputFarms = ref("");
+let valueInputFarms = ref({});
 
 let nameUserSystem = ref("");
 let typeDocumentUserSystem = ref("");
@@ -368,7 +368,7 @@ const resetValuesForm = () => {
   valueInputTypeDocument.value = "";
   valueInputNumberDocument.value = "";
   valueInputRole.value = "";
-  valueInputFarms.value = "";
+  valueInputFarms.value = {};
   nameUserSystem.value = "";
   typeDocumentUserSystem.value = "";
   numberDocumentUserSystem.value = "";
@@ -385,12 +385,25 @@ const editSystemUser = (item) => {
   valueInputTypeDocument.value = item.tpdocument;
   valueInputNumberDocument.value = item.numdocument;
   valueInputRole.value = item.role;
-  valueInputFarms.value = item.farms;
   nameUserSystem.value = item.name;
   typeDocumentUserSystem.value = item.tpdocument;
   numberDocumentUserSystem.value = item.numdocument;
-  farmsUserSystem.value = item.farms;
   roleUserSystem.value = item.role;
+
+  const isValidateJWT = storage.decodeJwt();
+  const farms = isValidateJWT.farms;
+  const farmsUser = item.farms;
+  let farmsUserArray = [];
+  farms.forEach((farm) => {
+    farmsUser.forEach((farmUser) => {
+      if (farm._id == farmUser) {
+        farmsUserArray.push(farm);
+      }
+    });
+  });
+  valueInputFarms.value = farmsUserArray;
+  farmsUserSystem.value = item.farms;
+
   modal.toggleModal();
 };
 
@@ -429,6 +442,11 @@ async function getDataUsers() {
 
 async function updateDataUserSystem() {
   isLoading.value = true;
+
+  const farmsId = farmsUserSystem.value.map((item) => {
+    return item._id;
+  });
+
   try {
     const data = await updateUserSystem(
       {
@@ -437,7 +455,7 @@ async function updateDataUserSystem() {
         tpdocument: typeDocumentUserSystem.value,
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
-        farms: farmsUserSystem.value,
+        farms: farmsId,
         password: passwordUserSystem.value,
       },
       idFarm.value

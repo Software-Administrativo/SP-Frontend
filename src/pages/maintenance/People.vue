@@ -208,11 +208,12 @@
   </template>
 </template>
 <script setup>
+import { getEps } from "@/api/maintenance/eps";
 import {
-  getPeople,
-  postPeople,
-  inactivePeople,
   activePeople,
+  getPeople,
+  inactivePeople,
+  postPeople,
   updatePeople,
 } from "@/api/maintenance/people";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
@@ -220,8 +221,8 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
-import { modalState } from "@/stores/modal.js";
 import { useStorage } from "@/stores/localStorage.js";
+import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
 
@@ -285,7 +286,16 @@ const columns = ref([
   },
   {
     name: "document",
-    label: "Número Documento",
+    label: "Tipo",
+    field: "tpdct",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
+    name: "document",
+    label: "Documento",
     field: "document",
     align: "left",
     sortable: true,
@@ -379,7 +389,7 @@ const resetValuesForm = () => {
   typePeople.value = "";
 };
 
-const editPeopleMaintenance = (item) => {
+const editPeopleMaintenance = async (item) => {
   titleModal.value = "EDITAR PERSONA";
   typeAction.value = false;
   idPeople.value = item._id;
@@ -391,10 +401,11 @@ const editPeopleMaintenance = (item) => {
   valueInputName.value = item.name;
   phonePeople.value = item.phone;
   valueInputPhone.value = item.phone;
-  epsPeople.value = item.eps;
-  valueSelectEps.value = item.eps;
   typePeople.value = item.typePeople;
   valueInputType.value = item.typePeople;
+  epsPeople.value = item.eps;
+  valueSelectEps.value = item.eps;
+
   modal.toggleModal();
 };
 
@@ -412,10 +423,19 @@ async function getDataPeople() {
   loading.value = true;
   try {
     const { people } = await getPeople(idFarm.value);
+    const { eps } = await getEps(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
+
     people.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let epsPeople = item.eps;
+      eps.forEach((item) => {
+        if (item._id == epsPeople) {
+          epsPeople = item.name;
+        }
+      });
+      item.eps = epsPeople;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -432,6 +452,14 @@ async function getDataPeople() {
 }
 
 async function postDataPeople() {
+  const { eps } = await getEps(idFarm.value);
+
+  eps.forEach((item) => {
+    if (item.name == epsPeople.value) {
+      epsPeople.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
     const people = await postPeople(
@@ -457,6 +485,14 @@ async function postDataPeople() {
 }
 
 async function updateDataPeople() {
+  const { eps } = await getEps(idFarm.value);
+
+  eps.forEach((item) => {
+    if (item.name == epsPeople.value) {
+      epsPeople.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
     const people = await updatePeople(
