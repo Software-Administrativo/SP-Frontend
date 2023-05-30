@@ -56,13 +56,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editLotMaintenance(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveLotMaintenance(props.row._id)"
                       />
                     </q-btn-group>
@@ -347,15 +347,6 @@ const columns = ref([
     name: "description",
     label: "Descripción",
     field: "description",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "status",
-    label: "Estado",
-    field: "status",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",

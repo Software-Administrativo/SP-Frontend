@@ -56,13 +56,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editStageMaintenance(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveStageMaintenance(props.row._id)"
                       />
                     </q-btn-group>
@@ -130,15 +130,15 @@
             v-model="nameStages"
             @onWrite="getInputName"
           />
-          <Input
-            class="q-pb-xs"
+          <Select
+            class="q-pb-lg"
+            type="lots"
             label="Lote"
-            type="text"
+            :v-model="lotStages"
             :required="true"
             :ruless="rules"
-            :value="valueInputLot"
-            v-model="lotStages"
-            @onWrite="getInputLot"
+            :value="valueSelectLot"
+            @onSelect="getSelectLot"
           />
           <Input
             class="q-pb-xs"
@@ -181,9 +181,11 @@ import {
   postStage,
   updateStage,
 } from "@/api/maintenance/stages";
+import { getLots } from "@/api/maintenance/lots";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
@@ -222,7 +224,7 @@ let descriptionStages = ref("");
 
 let valueInputName = ref("");
 let valueInputDescription = ref("");
-let valueInputLot = ref("");
+let valueSelectLot = ref("");
 
 const columns = ref([
   {
@@ -285,7 +287,7 @@ const getInputName = (value) => {
   nameStages.value = value;
 };
 
-const getInputLot = (value) => {
+const getSelectLot = (value) => {
   lotStages.value = value;
 };
 
@@ -303,7 +305,7 @@ const clickButton = () => {
 const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
-  valueInputLot.value = "";
+  valueSelectLot.value = "";
   nameStages.value = "";
   lotStages.value = "";
   descriptionStages.value = "";
@@ -314,11 +316,11 @@ const editStageMaintenance = (item) => {
   typeAction.value = false;
   idStage.value = item._id;
   valueInputName.value = item.name;
-  valueInputLot.value = item.lot;
-  valueInputDescription.value = item.description;
   nameStages.value = item.name;
-  lotStages.value = item.lot;
+  valueInputDescription.value = item.description;
   descriptionStages.value = item.description;
+  valueSelectLot.value = item.lot;
+  lotStages.value = item.lot;
   modal.toggleModal();
 };
 
@@ -336,10 +338,18 @@ const getDataStages = async () => {
   loading.value = true;
   try {
     const { stages } = await getStages(idFarm.value);
+    const { lots } = await getLots(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     stages.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let lotStage = item.lot;
+      lots.forEach((item) => {
+        if (item._id == lotStage) {
+          lotStage = item.name;
+        }
+      });
+      item.lot = lotStage;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -358,6 +368,14 @@ const getDataStages = async () => {
 };
 
 async function postDataStages() {
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotStages.value) {
+      lotStages.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
     const stages = await postStage(
@@ -383,6 +401,14 @@ async function postDataStages() {
 }
 
 async function updateDataStage() {
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotStages.value) {
+      lotStages.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
     const response = await updateStage(

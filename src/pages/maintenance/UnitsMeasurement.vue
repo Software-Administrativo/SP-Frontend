@@ -56,13 +56,13 @@
                       <q-btn
                         icon="edit_note"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="editUnitMaintenance(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
-                        class="col text-bold q-pa-none"
+                        class="col text-bold q-pa-none icon-table"
                         @click="inactiveUnitMaintenance(props.row._id)"
                       />
                     </q-btn-group>
