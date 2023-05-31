@@ -253,12 +253,8 @@ let valueInputName = ref("");
 let valueInputTypeDocument = ref("");
 let valueInputNumberDocument = ref("");
 let valueInputRole = ref("");
-<<<<<<< HEAD
-let valueInputFarms = ref({});
-=======
 let valueInputFarms = ref("");
 let valueInputEmail = ref("");
->>>>>>> b8a9d7aa4ece116aa7d0160caec586a4a9a115a9
 
 let nameUserSystem = ref("");
 let typeDocumentUserSystem = ref("");
@@ -397,12 +393,8 @@ const resetValuesForm = () => {
   valueInputTypeDocument.value = "";
   valueInputNumberDocument.value = "";
   valueInputRole.value = "";
-<<<<<<< HEAD
-  valueInputFarms.value = {};
-=======
   valueInputFarms.value = "";
   valueInputEmail.value = "";
->>>>>>> b8a9d7aa4ece116aa7d0160caec586a4a9a115a9
   nameUserSystem.value = "";
   typeDocumentUserSystem.value = "";
   numberDocumentUserSystem.value = "";
@@ -420,35 +412,13 @@ const editSystemUser = (item) => {
   valueInputTypeDocument.value = item.tpdocument;
   valueInputNumberDocument.value = item.numdocument;
   valueInputRole.value = item.role;
-<<<<<<< HEAD
-=======
   valueInputFarms.value = item.farms;
   valueInputEmail.value = item.email;
-  
->>>>>>> b8a9d7aa4ece116aa7d0160caec586a4a9a115a9
   nameUserSystem.value = item.name;
   typeDocumentUserSystem.value = item.tpdocument;
   numberDocumentUserSystem.value = item.numdocument;
   roleUserSystem.value = item.role;
-<<<<<<< HEAD
-
-  const isValidateJWT = storage.decodeJwt();
-  const farms = isValidateJWT.farms;
-  const farmsUser = item.farms;
-  let farmsUserArray = [];
-  farms.forEach((farm) => {
-    farmsUser.forEach((farmUser) => {
-      if (farm._id == farmUser) {
-        farmsUserArray.push(farm);
-      }
-    });
-  });
-  valueInputFarms.value = farmsUserArray;
-  farmsUserSystem.value = item.farms;
-
-=======
   emailUserSystem.value = item.email;
->>>>>>> b8a9d7aa4ece116aa7d0160caec586a4a9a115a9
   modal.toggleModal();
 };
 
@@ -500,12 +470,8 @@ async function updateDataUserSystem() {
         tpdocument: typeDocumentUserSystem.value,
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
-<<<<<<< HEAD
-        farms: farmsId,
-=======
         farms: farmsUserSystem.value,
         email: emailUserSystem.value,
->>>>>>> b8a9d7aa4ece116aa7d0160caec586a4a9a115a9
         password: passwordUserSystem.value,
       },
       idFarm.value
