@@ -34,6 +34,7 @@ const postUser = async (item, idFarm) => {
         numdocument: item.numdocument,
         role: item.role,
         farms: [item.farms],
+        email: item.email,
         password: item.password,
       },
       {
@@ -60,6 +61,7 @@ const updateUserSystem = async (item, idFarm) => {
         numdocument: item.numdocument,
         role: item.role,
         farms: [item.farms],
+        email: item.email,
         password: item.password,
       },
       {
