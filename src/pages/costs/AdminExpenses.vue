@@ -208,9 +208,11 @@ const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if (nameActivityExpense.value == "" ||
-      worthActivityExpense.value == "" ||
-      descriptionActivityExpense.value == "") {
+  if (
+    nameActivityExpense.value == "" ||
+    worthActivityExpense.value == "" ||
+    descriptionActivityExpense.value == ""
+  ) {
     return true;
   } else if (isLoading.value == true) {
     return true;

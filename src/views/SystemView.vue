@@ -493,10 +493,7 @@ async function updateDataUserSystem() {
         "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
       );
     } else if (response == RESPONSES.EMAILEXIST) {
-      showNotification(
-        "negative",
-        "El email ya esta registrado"
-      );
+      showNotification("negative", "El email ya esta registrado");
     } else {
       showNotification("positive", "Tipo de pago actualizado correctamente");
       modal.toggleModal();
@@ -542,10 +539,7 @@ async function postDataUserSystem() {
         "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
       );
     } else if (response == RESPONSES.EMAILEXIST) {
-      showNotification(
-        "negative",
-        "El email ya esta registrado"
-      );
+      showNotification("negative", "El email ya esta registrado");
     } else {
       modal.toggleModal();
       rows.value = [];

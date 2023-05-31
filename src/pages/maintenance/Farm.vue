@@ -118,61 +118,61 @@
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
       <div class="modal-farm">
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            class="q-pb-xs"
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameFarm"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Ubicación"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputAddress"
-            v-model="addressFarm"
-            @onWrite="getInputAddress"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Propietario"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputOwner"
-            v-model="ownerFarm"
-            @onWrite="getInputOwner"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataFarm"
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              class="q-pb-xs"
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameFarm"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataFarm"
+            <Input
+              class="q-pb-xs"
+              label="Ubicación"
+              type="text"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputAddress"
+              v-model="addressFarm"
+              @onWrite="getInputAddress"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-pb-xs"
+              label="Propietario"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputOwner"
+              v-model="ownerFarm"
+              @onWrite="getInputOwner"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataFarm"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataFarm"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </ModalForm>
   </template>
 </template>

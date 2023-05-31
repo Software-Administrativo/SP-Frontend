@@ -30,7 +30,7 @@ const postCostsPlanting = async (item, idFarm) => {
         name: item.name,
         description: item.description,
         worth: item.worth,
-        lot: item.lot
+        lot: item.lot,
       },
       {
         headers: {
@@ -54,7 +54,7 @@ const updateCostsPlanting = async (item, idFarm) => {
         name: item.name,
         description: item.description,
         worth: item.worth,
-        lot: item.lot
+        lot: item.lot,
       },
       {
         headers: {
