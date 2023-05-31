@@ -151,7 +151,7 @@
               :ruless="rules"
               :value="valueInputWorth"
               v-model="worthActivityExpense"
-              @onWrite="getInputObservation"
+              @onWrite="getInputWorth"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -290,7 +290,7 @@ const getInputDescription = (value) => {
   descriptionActivityExpense.value = value;
 };
 
-const getInputObservation = (value) => {
+const getInputWorth = (value) => {
   worthActivityExpense.value = value;
 };
 

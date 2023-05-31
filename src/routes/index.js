@@ -182,6 +182,18 @@ const router = createRouter({
         rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/TransformationView.vue"),
+      children: [
+        {
+          path: "model-transformation",
+          name: "trasformation-model",
+          component: () => import("../pages/transformation/ModelTransformation.vue"),
+        },
+        {
+          path: "cost-transformation",
+          name: "transformation-cost",
+          component: () => import("../pages/transformation/CostTransformation.vue"),
+        },
+      ],
     },
   ],
 });

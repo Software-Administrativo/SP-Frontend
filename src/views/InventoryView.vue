@@ -36,7 +36,7 @@ const itemsListModules = ref([
   },
   {
     label: "Productos",
-    icon: "icon icon-product",
+    icon: "icon icon-inventory",
     name: "inventory-products",
   },
 ]);

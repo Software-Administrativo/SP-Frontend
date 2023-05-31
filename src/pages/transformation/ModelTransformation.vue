@@ -2,11 +2,11 @@
   <div class="q-py-sm table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">Gastos de Siembra</h6>
+      <h6 class="title q-my-lg">Modelos de transformacion</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">
-      <ButtonAdd @onClick="clickButton" label="Crear nuevo gasto de siembra" />
+      <ButtonAdd @onClick="clickButton" label="Registrar nuevo modelo" />
       <div class="container-table q-mt-md q-pa-md" rounded>
         <q-card>
           <q-tabs
@@ -29,7 +29,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Siembra"
+                title="Modelos de transformación"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -57,13 +57,13 @@
                         icon="edit_note"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="editCostsPlantingCosts(props.row)"
+                        @click="editTransformationModel(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="inactiveCostsPlantingCosts(props.row._id)"
+                        @click="inactiveTransformationModels(props.row._id)"
                       />
                     </q-btn-group>
                   </td>
@@ -74,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Actividades"
+                title="Modelos de transformación"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -101,7 +101,7 @@
                       <q-btn
                         text-color="blue-10"
                         class="col q-pa-none"
-                        @click="activeCostsPlantingCosts(props.row._id)"
+                        @click="activeTransformationModels(props.row._id)"
                       >
                         <i class="icon icon-check"></i>
                       </q-btn>
@@ -117,7 +117,7 @@
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
-      <div class="modal-planting">
+      <div class="modal-activity">
         <h6 class="q-my-md text-center">{{ titleModal }}</h6>
         <div class="row q-px-xl">
           <div class="col-12">
@@ -127,36 +127,28 @@
               type="text"
               :ruless="rules"
               :value="valueInputName"
-              v-model="nameActivityExpense"
+              v-model="nameTransformationModel"
               @onWrite="getInputName"
-            />
-            <Select
-              class="q-pb-lg"
-              type="lots"
-              label="Lote"
-              :v-model="lotExpense"
-              :required="true"
-              :ruless="rules"
-              :value="valueSelectLot"
-              @onSelect="getSelectLot"
-            />
-            <Input
-              label="Valor"
-              type="text"
-              :required="true"
-              :ruless="rules"
-              :value="valueInputWorth"
-              v-model="worthActivityExpense"
-              @onWrite="getInputWorth"
             />
             <Input
               class="q-mb-md"
               label="Descripción"
+              :required="true"
               type="text"
-              :required="false"
+              :ruless="rules"
               :value="valueInputDescription"
-              v-model="descriptionActivityExpense"
+              v-model="descriptionTransformationModel"
               @onWrite="getInputDescription"
+            />
+            <Input
+              class="q-pb-xs"
+              label="Valor"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputUnitvalue"
+              v-model="unitvalueTransformationModel"
+              @onWrite="getInputUnitvalue"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -166,12 +158,12 @@
               <ButtonSave
                 v-if="typeAction"
                 :disable="disableSave"
-                @onClick="postDataCostsPlanting"
+                @onClick="postDataTransformationModel"
               />
               <ButtonSave
                 v-else
                 :disable="disableSave"
-                @onClick="updateDataCostsPlanting"
+                @onClick="updateDataTransformationModel"
               />
             </div>
             <div class="spinner" v-if="isLoading">
@@ -185,22 +177,20 @@
 </template>
 <script setup>
 import {
-  activeCostsPlanting,
-  getCostsPlanting,
-  inactiveCostsPlanting,
-  postCostsPlanting,
-  updateCostsPlanting,
-} from "@/api/costs/costsplanting";
+  activeTransformationModel,
+  getTransformationModels,
+  inactiveTransformationModel,
+  postTransformationModel,
+  updateTransformationModel,
+} from "@/api/transformation/modelss";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import Select from "@/commons/forms/Select.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useStorage } from "@/stores/localStorage.js";
-import { getLots } from "@/api/maintenance/lots";
 
 const $q = useQuasar();
 
@@ -210,15 +200,15 @@ const loading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idCostsPlanting = ref();
+const idTransformationModel = ref();
 const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
   if (
-    nameActivityExpense.value == "" ||
-    worthActivityExpense.value == "" ||
-    lotExpense.value == ""
+    nameTransformationModel.value == "" ||
+    descriptionTransformationModel.value == "" ||
+    unitvalueTransformationModel.value == ""
   ) {
     return true;
   } else if (isLoading.value == true) {
@@ -233,15 +223,13 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 let filter = ref("");
 let tab = ref("active");
 
-let nameActivityExpense = ref("");
-let descriptionActivityExpense = ref("");
-let worthActivityExpense = ref("");
-let lotExpense = ref("");
+let nameTransformationModel = ref("");
+let descriptionTransformationModel = ref("");
+let unitvalueTransformationModel = ref("");
 
 let valueInputName = ref("");
-let valueSelectLot = ref("");
 let valueInputDescription = ref("");
-let valueInputWorth = ref("");
+let valueInputUnitvalue = ref("");
 
 const columns = ref([
   {
@@ -272,18 +260,9 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "lot",
-    label: "Lote",
-    field: "lot",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "worth",
-    label: "Valor",
-    field: "worth",
+    name: "unitvalue",
+    label: "Valor unitario",
+    field: "unitvalue",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -301,23 +280,19 @@ const columns = ref([
 ]);
 
 const getInputName = (value) => {
-  nameActivityExpense.value = value;
+  nameTransformationModel.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionActivityExpense.value = value;
+  descriptionTransformationModel.value = value;
 };
 
-const getInputWorth = (value) => {
-  worthActivityExpense.value = value;
-};
-
-const getSelectLot = (value) => {
-  lotExpense.value = value;
+const getInputUnitvalue = (value) => {
+  unitvalueTransformationModel.value = value;
 };
 
 const clickButton = () => {
-  titleModal.value = "REGISTRAR GASTO DE SIEMBRA";
+  titleModal.value = "REGISTRAR MODELO";
   resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
@@ -326,26 +301,22 @@ const clickButton = () => {
 const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
-  valueInputWorth.value = "";
-  valueSelectLot.value = "";
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
-  lotExpense.value = "";
+  valueInputUnitvalue.value = "";
+  nameTransformationModel.value = "";
+  descriptionTransformationModel.value = "";
+  unitvalueTransformationModel.value = "";
 };
 
-const editCostsPlantingCosts = (item) => {
-  titleModal.value = "EDITAR GASTO DE SIEMBRA";
+const editTransformationModel = (item) => {
+  titleModal.value = "EDITAR MODELO";
   typeAction.value = false;
-  idCostsPlanting.value = item._id;
+  idTransformationModel.value = item._id;
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
-  valueInputWorth.value = item.worth;
-  nameActivityExpense.value = item.name;
-  descriptionActivityExpense.value = item.description;
-  worthActivityExpense.value = item.worth;
-  lotExpense.value = item.lot;
-  valueSelectLot.value = item.lot;
+  valueInputUnitvalue.value = item.unitvalue;
+  nameTransformationModel.value = item.name;
+  descriptionTransformationModel.value = item.description;
+  unitvalueTransformationModel.value = item.unitvalue;
   modal.toggleModal();
 };
 
@@ -357,24 +328,16 @@ const showNotification = (type, message) => {
   });
 };
 
-const getDataCostsPLanting = async () => {
+const getDataTransformationModels = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { costs } = await getCostsPlanting(idFarm.value);
-    const { lots } = await getLots(idFarm.value);
+    const { models } = await getTransformationModels(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
-    costs.forEach((item) => {
+    models.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
-      let lotExpense = item.lot;
-      lots.forEach((item) => {
-        if (item._id == lotExpense) {
-          lotExpense = item.name;
-        }
-      });
-      item.lot = lotExpense;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -382,42 +345,30 @@ const getDataCostsPLanting = async () => {
         item.id = countInactive++;
         inactiveRows.value.push(item);
       }
-      item.description =
-        item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
-  } catch (error) {
-    console.log(error);
+  } catch {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 };
 
-async function postDataCostsPlanting() {
+async function postDataTransformationModel() {
   isLoading.value = true;
-  const { lots } = await getLots(idFarm.value);
-
-  lots.forEach((item) => {
-    if (item.name == lotExpense.value) {
-      lotExpense.value = item._id;
-    }
-  });
-
   try {
-    await postCostsPlanting(
+    await postTransformationModel(
       {
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
-        lot: lotExpense.value,
+        name: nameTransformationModel.value,
+        description: descriptionTransformationModel.value,
+        unitvalue: unitvalueTransformationModel.value,
       },
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Gasto de siembra registrado correctamente");
+    showNotification("positive", "Modelo de transformación registrado correctamente");
     modal.toggleModal();
     rows.value = [];
-    getDataCostsPLanting();
+    getDataTransformationModels();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -427,32 +378,26 @@ async function postDataCostsPlanting() {
   }
 }
 
-async function updateDataCostsPlanting() {
+async function updateDataTransformationModel() {
   isLoading.value = true;
-  const { lots } = await getLots(idFarm.value);
-
-  lots.forEach((item) => {
-    if (item.name == lotExpense.value) {
-      lotExpense.value = item._id;
-    }
-  });
-
   try {
-    await updateCostsPlanting(
+    await updateTransformationModel(
       {
-        id: idCostsPlanting.value,
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
-        lot: lotExpense.value,
+        id: idTransformationModel.value,
+        name: nameTransformationModel.value,
+        description: descriptionTransformationModel.value,
+        unitvalue: unitvalueTransformationModel.value,
       },
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Gasto de siembra actualizado correctamente");
+    showNotification(
+      "positive",
+      "Modelo de transformación actualizado correctamente"
+    );
     modal.toggleModal();
     rows.value = [];
-    getDataCostsPLanting();
+    getDataTransformationModels();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -460,35 +405,38 @@ async function updateDataCostsPlanting() {
       "Ocurrió un error, por favor verifique los datos"
     );
   }
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
+  nameTransformationModel.value = "";
+  descriptionTransformationModel.value = "";
+  unitvalueTransformationModel.value = "";
 }
 
-async function activeCostsPlantingCosts(id) {
+async function activeTransformationModels(id) {
   loading.value = true;
   try {
-    const active = await activeCostsPlanting(id, idFarm.value);
-    showNotification("positive", "Gasto de siembra activado correctamente");
+    await activeTransformationModel(id, idFarm.value);
+    showNotification("positive", "Modelo de transformación activado correctamente");
     loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
-    getDataCostsPLanting();
+    getDataTransformationModels();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 }
 
-async function inactiveCostsPlantingCosts(id) {
+async function inactiveTransformationModels(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveCostsPlanting(id, idFarm.value);
+    await inactiveTransformationModel(id, idFarm.value);
     loading.value = false;
-    showNotification("positive", "Gasto de siembra desactivado correctamente");
+    showNotification(
+      "positive",
+      "Modelo de transformación desactivado correctamente"
+    );
     rows.value = [];
     inactiveRows.value = [];
-    getDataCostsPLanting();
+    getDataTransformationModels();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
@@ -500,11 +448,11 @@ const idFarm = computed(() => {
 });
 
 watch(idFarm, () => {
-  getDataCostsPLanting();
+  getDataTransformationModels();
 });
 
 onMounted(() => {
-  getDataCostsPLanting();
+  getDataTransformationModels();
 });
 </script>
 <style scoped>
@@ -518,46 +466,55 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   border-radius: 10px;
 }
-.modal-planting {
+.modal-activity {
   overflow-y: scroll;
   max-height: 450px;
 }
-.modal-planting::-webkit-scrollbar {
+.modal-activity::-webkit-scrollbar {
   display: none;
 }
 .icon-backRoute {
   font-size: 30px;
   padding-right: 20px;
 }
+
 .icon-backRoute:hover {
   cursor: pointer;
 }
+
 .accions-td {
   padding: 0px;
   margin: 0px;
   min-width: 100px;
   max-width: 100px;
 }
+
 .text-required {
   display: inline-block;
   font-size: var(--font-small);
 }
+
 .title {
   font-size: var(--font-title);
 }
+
 .table-container {
   position: relative;
 }
+
 .separator {
   border: 1.8px solid var(--color-gray);
 }
+
 .container-content {
   max-width: 1200px;
   margin: 0 auto;
 }
+
 .icon-table {
   font-size: 18px;
 }
+
 .icon-check {
   font-size: 25px;
 }
@@ -573,39 +530,47 @@ onMounted(() => {
   box-shadow: 2px 3px 3px 0px rgba(0, 0, 0, 0.2);
   overflow-y: scroll;
 }
+
 .container-table::-webkit-scrollbar {
   display: none;
 }
+
 @media (min-width: 0px) and (max-width: 400px) {
   .container-table {
     max-width: 300px;
   }
 }
+
 @media (min-width: 401px) and (max-width: 520px) {
   .container-table {
     max-width: 410px;
   }
 }
+
 @media (min-width: 521px) and (max-width: 620px) {
   .container-table {
     max-width: 510px;
   }
 }
+
 @media (min-width: 621px) and (max-width: 720px) {
   .container-table {
     max-width: 610px;
   }
 }
+
 @media (min-width: 721px) and (max-width: 920px) {
   .container-table {
     max-width: 710px;
   }
 }
+
 @media (min-width: 921px) and (max-width: 1020px) {
   .container-table {
     max-width: 810px;
   }
 }
+
 @media (min-width: 1021px) and (max-width: 1320px) {
   .container-table {
     max-width: 1010px;
