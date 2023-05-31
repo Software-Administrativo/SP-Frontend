@@ -2,14 +2,11 @@
   <div class="q-py-sm table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">Gastos de Actividades</h6>
+      <h6 class="title q-my-lg">Modelos de transformacion</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">
-      <ButtonAdd
-        @onClick="clickButton"
-        label="Crear nuevo gasto de actividad"
-      />
+      <ButtonAdd @onClick="clickButton" label="Registrar nuevo modelo" />
       <div class="container-table q-mt-md q-pa-md" rounded>
         <q-card>
           <q-tabs
@@ -32,7 +29,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Actividades"
+                title="Modelos de transformación"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -60,13 +57,13 @@
                         icon="edit_note"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="editActivityExpenseCosts(props.row)"
+                        @click="editTransformationModel(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="inactiveActivityExpenseCosts(props.row._id)"
+                        @click="inactiveTransformationModels(props.row._id)"
                       />
                     </q-btn-group>
                   </td>
@@ -77,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Actividades"
+                title="Modelos de transformación"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -104,7 +101,7 @@
                       <q-btn
                         text-color="blue-10"
                         class="col q-pa-none"
-                        @click="activeActivityExpenseCosts(props.row._id)"
+                        @click="activeTransformationModels(props.row._id)"
                       >
                         <i class="icon icon-check"></i>
                       </q-btn>
@@ -130,7 +127,7 @@
               type="text"
               :ruless="rules"
               :value="valueInputName"
-              v-model="nameActivityExpense"
+              v-model="nameTransformationModel"
               @onWrite="getInputName"
             />
             <Input
@@ -140,7 +137,7 @@
               type="text"
               :ruless="rules"
               :value="valueInputDescription"
-              v-model="descriptionActivityExpense"
+              v-model="descriptionTransformationModel"
               @onWrite="getInputDescription"
             />
             <Input
@@ -149,9 +146,9 @@
               :required="true"
               type="text"
               :ruless="rules"
-              :value="valueInputWorth"
-              v-model="worthActivityExpense"
-              @onWrite="getInputWorth"
+              :value="valueInputUnitvalue"
+              v-model="unitvalueTransformationModel"
+              @onWrite="getInputUnitvalue"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -161,12 +158,12 @@
               <ButtonSave
                 v-if="typeAction"
                 :disable="disableSave"
-                @onClick="postDataActivityExpense"
+                @onClick="postDataTransformationModel"
               />
               <ButtonSave
                 v-else
                 :disable="disableSave"
-                @onClick="updateDataActivityExpense"
+                @onClick="updateDataTransformationModel"
               />
             </div>
             <div class="spinner" v-if="isLoading">
@@ -180,12 +177,12 @@
 </template>
 <script setup>
 import {
-  activeActivityExpenses,
-  getActivityExpenses,
-  inactiveActivityExpenses,
-  postActivityExpenses,
-  updateActivityExpenses,
-} from "@/api/costs/activityexpenses";
+  activeTransformationModel,
+  getTransformationModels,
+  inactiveTransformationModel,
+  postTransformationModel,
+  updateTransformationModel,
+} from "@/api/transformation/modelss";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
@@ -203,14 +200,16 @@ const loading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idActivityExpense = ref();
+const idTransformationModel = ref();
 const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if (nameActivityExpense.value == "" ||
-      worthActivityExpense.value == "" || 
-      descriptionActivityExpense.value == "") {
+  if (
+    nameTransformationModel.value == "" ||
+    descriptionTransformationModel.value == "" ||
+    unitvalueTransformationModel.value == ""
+  ) {
     return true;
   } else if (isLoading.value == true) {
     return true;
@@ -224,13 +223,13 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 let filter = ref("");
 let tab = ref("active");
 
-let nameActivityExpense = ref("");
-let descriptionActivityExpense = ref("");
-let worthActivityExpense = ref("");
+let nameTransformationModel = ref("");
+let descriptionTransformationModel = ref("");
+let unitvalueTransformationModel = ref("");
 
 let valueInputName = ref("");
 let valueInputDescription = ref("");
-let valueInputWorth = ref("");
+let valueInputUnitvalue = ref("");
 
 const columns = ref([
   {
@@ -261,9 +260,9 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "worth",
-    label: "Valor",
-    field: "worth",
+    name: "unitvalue",
+    label: "Valor unitario",
+    field: "unitvalue",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -281,19 +280,19 @@ const columns = ref([
 ]);
 
 const getInputName = (value) => {
-  nameActivityExpense.value = value;
+  nameTransformationModel.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionActivityExpense.value = value;
+  descriptionTransformationModel.value = value;
 };
 
-const getInputWorth = (value) => {
-  worthActivityExpense.value = value;
+const getInputUnitvalue = (value) => {
+  unitvalueTransformationModel.value = value;
 };
 
 const clickButton = () => {
-  titleModal.value = "REGISTRAR GASTO DE ACITIVIDAD";
+  titleModal.value = "REGISTRAR MODELO";
   resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
@@ -302,22 +301,22 @@ const clickButton = () => {
 const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
-  valueInputWorth.value = "";
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
+  valueInputUnitvalue.value = "";
+  nameTransformationModel.value = "";
+  descriptionTransformationModel.value = "";
+  unitvalueTransformationModel.value = "";
 };
 
-const editActivityExpenseCosts = (item) => {
-  titleModal.value = "EDITAR GASTO DE ACTIVIDAD";
+const editTransformationModel = (item) => {
+  titleModal.value = "EDITAR MODELO";
   typeAction.value = false;
-  idActivityExpense.value = item._id;
+  idTransformationModel.value = item._id;
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
-  valueInputWorth.value = item.worth;
-  nameActivityExpense.value = item.name;
-  descriptionActivityExpense.value = item.description;
-  worthActivityExpense.value = item.worth;
+  valueInputUnitvalue.value = item.unitvalue;
+  nameTransformationModel.value = item.name;
+  descriptionTransformationModel.value = item.description;
+  unitvalueTransformationModel.value = item.unitvalue;
   modal.toggleModal();
 };
 
@@ -329,15 +328,15 @@ const showNotification = (type, message) => {
   });
 };
 
-const getDataActivityExpenses = async () => {
+const getDataTransformationModels = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { activityexpenses } = await getActivityExpenses(idFarm.value);
+    const { models } = await getTransformationModels(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
-    activityexpenses.forEach((item) => {
+    models.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       if (item.status == "Activo") {
         item.id = countActive++;
@@ -354,22 +353,22 @@ const getDataActivityExpenses = async () => {
   }
 };
 
-async function postDataActivityExpense() {
+async function postDataTransformationModel() {
   isLoading.value = true;
   try {
-    const activityexpenses = await postActivityExpenses(
+    await postTransformationModel(
       {
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
+        name: nameTransformationModel.value,
+        description: descriptionTransformationModel.value,
+        unitvalue: unitvalueTransformationModel.value,
       },
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Gasto de actividad registrado correctamente");
+    showNotification("positive", "Modelo de transformación registrado correctamente");
     modal.toggleModal();
     rows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationModels();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -379,26 +378,26 @@ async function postDataActivityExpense() {
   }
 }
 
-async function updateDataActivityExpense() {
+async function updateDataTransformationModel() {
   isLoading.value = true;
   try {
-    const response = await updateActivityExpenses(
+    await updateTransformationModel(
       {
-        id: idActivityExpense.value,
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
+        id: idTransformationModel.value,
+        name: nameTransformationModel.value,
+        description: descriptionTransformationModel.value,
+        unitvalue: unitvalueTransformationModel.value,
       },
       idFarm.value
     );
     isLoading.value = false;
     showNotification(
       "positive",
-      "Gasto de actividad actualizado correctamente"
+      "Modelo de transformación actualizado correctamente"
     );
     modal.toggleModal();
     rows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationModels();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -406,38 +405,38 @@ async function updateDataActivityExpense() {
       "Ocurrió un error, por favor verifique los datos"
     );
   }
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
+  nameTransformationModel.value = "";
+  descriptionTransformationModel.value = "";
+  unitvalueTransformationModel.value = "";
 }
 
-async function activeActivityExpenseCosts(id) {
+async function activeTransformationModels(id) {
   loading.value = true;
   try {
-    const active = await activeActivityExpenses(id, idFarm.value);
-    showNotification("positive", "Gasto de actividad activado correctamente");
+    await activeTransformationModel(id, idFarm.value);
+    showNotification("positive", "Modelo de transformación activado correctamente");
     loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationModels();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 }
 
-async function inactiveActivityExpenseCosts(id) {
+async function inactiveTransformationModels(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveActivityExpenses(id, idFarm.value);
+    await inactiveTransformationModel(id, idFarm.value);
     loading.value = false;
     showNotification(
       "positive",
-      "Gasto de actividad desactivado correctamente"
+      "Modelo de transformación desactivado correctamente"
     );
     rows.value = [];
     inactiveRows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationModels();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
@@ -449,11 +448,11 @@ const idFarm = computed(() => {
 });
 
 watch(idFarm, () => {
-  getDataActivityExpenses();
+  getDataTransformationModels();
 });
 
 onMounted(() => {
-  getDataActivityExpenses();
+  getDataTransformationModels();
 });
 </script>
 <style scoped>

@@ -2,13 +2,13 @@
   <div class="q-py-sm table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">Gastos de Actividades</h6>
+      <h6 class="title q-my-lg">Costos de transformación</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">
       <ButtonAdd
         @onClick="clickButton"
-        label="Crear nuevo gasto de actividad"
+        label="Registar costo de transformación"
       />
       <div class="container-table q-mt-md q-pa-md" rounded>
         <q-card>
@@ -32,7 +32,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Actividades"
+                title="Costos de transformación"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -60,7 +60,7 @@
                         icon="edit_note"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="editActivityExpenseCosts(props.row)"
+                        @click="editTransformationCost(props.row)"
                       />
                       <q-btn
                         icon="highlight_off"
@@ -77,7 +77,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Actividades"
+                title="Costos de transformación"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -120,7 +120,7 @@
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
-      <div class="modal-activity">
+      <div class="modal-transformation">
         <h6 class="q-my-md text-center">{{ titleModal }}</h6>
         <div class="row q-px-xl">
           <div class="col-12">
@@ -130,8 +130,18 @@
               type="text"
               :ruless="rules"
               :value="valueInputName"
-              v-model="nameActivityExpense"
+              v-model="nameTransformationCost"
               @onWrite="getInputName"
+            />
+            <Select
+              class="q-pb-lg"
+              type="lots"
+              label="Lote"
+              :v-model="lotTransformationCost"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectLot"
+              @onSelect="getSelectLot"
             />
             <Input
               class="q-mb-md"
@@ -140,18 +150,18 @@
               type="text"
               :ruless="rules"
               :value="valueInputDescription"
-              v-model="descriptionActivityExpense"
+              v-model="descriptionTransformationCost"
               @onWrite="getInputDescription"
             />
             <Input
               class="q-pb-xs"
-              label="Valor"
+              label="Costo"
               :required="true"
               type="text"
               :ruless="rules"
-              :value="valueInputWorth"
-              v-model="worthActivityExpense"
-              @onWrite="getInputWorth"
+              :value="valueInputCost"
+              v-model="costTransformation"
+              @onWrite="getInputObservation"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -161,7 +171,7 @@
               <ButtonSave
                 v-if="typeAction"
                 :disable="disableSave"
-                @onClick="postDataActivityExpense"
+                @onClick="postDataTransformationCost"
               />
               <ButtonSave
                 v-else
@@ -180,15 +190,17 @@
 </template>
 <script setup>
 import {
-  activeActivityExpenses,
-  getActivityExpenses,
-  inactiveActivityExpenses,
-  postActivityExpenses,
-  updateActivityExpenses,
-} from "@/api/costs/activityexpenses";
+  activeTransformationCost,
+  getTransformationCosts,
+  inactiveTransformationCost,
+  postTransformationCost,
+  updateTransformationCost,
+} from "@/api/transformation/costs";
+import { getLots } from "@/api/maintenance/lots";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
@@ -203,14 +215,16 @@ const loading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idActivityExpense = ref();
+const idTransformationCost = ref();
 const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if (nameActivityExpense.value == "" ||
-      worthActivityExpense.value == "" || 
-      descriptionActivityExpense.value == "") {
+  if (
+    nameTransformationCost.value == "" ||
+    costTransformation.value == "" ||
+    descriptionTransformationCost.value == ""
+  ) {
     return true;
   } else if (isLoading.value == true) {
     return true;
@@ -224,13 +238,15 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 let filter = ref("");
 let tab = ref("active");
 
-let nameActivityExpense = ref("");
-let descriptionActivityExpense = ref("");
-let worthActivityExpense = ref("");
+let nameTransformationCost = ref("");
+let descriptionTransformationCost = ref("");
+let costTransformation = ref("");
+let lotTransformationCost = ref("");
 
 let valueInputName = ref("");
 let valueInputDescription = ref("");
-let valueInputWorth = ref("");
+let valueInputCost = ref("");
+let valueSelectLot = ref("");
 
 const columns = ref([
   {
@@ -252,6 +268,15 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
+    name: "lot",
+    label: "Lote",
+    field: "lot",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
     name: "description",
     label: "Descripción",
     field: "description",
@@ -261,9 +286,9 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "worth",
-    label: "Valor",
-    field: "worth",
+    name: "cost",
+    label: "Costo",
+    field: "cost",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -281,19 +306,23 @@ const columns = ref([
 ]);
 
 const getInputName = (value) => {
-  nameActivityExpense.value = value;
+  nameTransformationCost.value = value;
 };
 
 const getInputDescription = (value) => {
-  descriptionActivityExpense.value = value;
+  descriptionTransformationCost.value = value;
 };
 
-const getInputWorth = (value) => {
-  worthActivityExpense.value = value;
+const getInputObservation = (value) => {
+  costTransformation.value = value;
+};
+
+const getSelectLot = (value) => {
+  lotTransformationCost.value = value;
 };
 
 const clickButton = () => {
-  titleModal.value = "REGISTRAR GASTO DE ACITIVIDAD";
+  titleModal.value = "REGISTRAR COSTO";
   resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
@@ -302,22 +331,26 @@ const clickButton = () => {
 const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
-  valueInputWorth.value = "";
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
+  valueInputCost.value = "";
+  valueSelectLot.value = "";
+  nameTransformationCost.value = "";
+  descriptionTransformationCost.value = "";
+  costTransformation.value = "";
+  lotTransformationCost.value = "";
 };
 
-const editActivityExpenseCosts = (item) => {
-  titleModal.value = "EDITAR GASTO DE ACTIVIDAD";
+const editTransformationCost = (item) => {
+  titleModal.value = "EDITAR COSTO";
   typeAction.value = false;
-  idActivityExpense.value = item._id;
+  idTransformationCost.value = item._id;
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
-  valueInputWorth.value = item.worth;
-  nameActivityExpense.value = item.name;
-  descriptionActivityExpense.value = item.description;
-  worthActivityExpense.value = item.worth;
+  valueInputCost.value = item.cost;
+  nameTransformationCost.value = item.name;
+  descriptionTransformationCost.value = item.description;
+  costTransformation.value = item.cost;
+  valueSelectLot.value = item.lot;
+  lotTransformationCost.value = item.lot;
   modal.toggleModal();
 };
 
@@ -329,16 +362,24 @@ const showNotification = (type, message) => {
   });
 };
 
-const getDataActivityExpenses = async () => {
+const getDataTransformationCosts = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { activityexpenses } = await getActivityExpenses(idFarm.value);
+    const { costs } = await getTransformationCosts(idFarm.value);
+    const { lots } = await getLots(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
-    activityexpenses.forEach((item) => {
+    costs.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let lotTransformation = item.lot;
+      lots.forEach((item) => {
+        if (item._id == lotTransformation) {
+          lotTransformation = item.name;
+        }
+      });
+      item.lot = lotTransformation;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -354,22 +395,34 @@ const getDataActivityExpenses = async () => {
   }
 };
 
-async function postDataActivityExpense() {
+async function postDataTransformationCost() {
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotTransformationCost.value) {
+      lotTransformationCost.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
-    const activityexpenses = await postActivityExpenses(
+    await postTransformationCost(
       {
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
+        name: nameTransformationCost.value,
+        description: descriptionTransformationCost.value,
+        lot: lotTransformationCost.value,
+        cost: costTransformation.value,
       },
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Gasto de actividad registrado correctamente");
+    showNotification(
+      "positive",
+      "Costo de transformación registrado correctamente"
+    );
     modal.toggleModal();
     rows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationCosts();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -380,25 +433,34 @@ async function postDataActivityExpense() {
 }
 
 async function updateDataActivityExpense() {
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotTransformationCost.value) {
+      lotTransformationCost.value = item._id;
+    }
+  });
+
   isLoading.value = true;
   try {
-    const response = await updateActivityExpenses(
+    await updateTransformationCost(
       {
-        id: idActivityExpense.value,
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
+        id: idTransformationCost.value,
+        name: nameTransformationCost.value,
+        description: descriptionTransformationCost.value,
+        lot: lotTransformationCost.value,
+        cost: costTransformation.value,
       },
       idFarm.value
     );
     isLoading.value = false;
     showNotification(
       "positive",
-      "Gasto de actividad actualizado correctamente"
+      "Costo de transformación actualizado correctamente"
     );
     modal.toggleModal();
     rows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationCosts();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -406,20 +468,24 @@ async function updateDataActivityExpense() {
       "Ocurrió un error, por favor verifique los datos"
     );
   }
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
+  nameTransformationCost.value = "";
+  descriptionTransformationCost.value = "";
+  lotTransformationCost.value = "";
+  costTransformation.value = "";
 }
 
 async function activeActivityExpenseCosts(id) {
   loading.value = true;
   try {
-    const active = await activeActivityExpenses(id, idFarm.value);
-    showNotification("positive", "Gasto de actividad activado correctamente");
+    await activeTransformationCost(id, idFarm.value);
+    showNotification(
+      "positive",
+      "Costo de transformación activado correctamente"
+    );
     loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationCosts();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
@@ -429,15 +495,15 @@ async function activeActivityExpenseCosts(id) {
 async function inactiveActivityExpenseCosts(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveActivityExpenses(id, idFarm.value);
+    await inactiveTransformationCost(id, idFarm.value);
     loading.value = false;
     showNotification(
       "positive",
-      "Gasto de actividad desactivado correctamente"
+      "Costo de transformación desactivado correctamente"
     );
     rows.value = [];
     inactiveRows.value = [];
-    getDataActivityExpenses();
+    getDataTransformationCosts();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
@@ -449,11 +515,11 @@ const idFarm = computed(() => {
 });
 
 watch(idFarm, () => {
-  getDataActivityExpenses();
+  getDataTransformationCosts();
 });
 
 onMounted(() => {
-  getDataActivityExpenses();
+  getDataTransformationCosts();
 });
 </script>
 <style scoped>
@@ -467,11 +533,11 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   border-radius: 10px;
 }
-.modal-activity {
+.modal-transformation {
   overflow-y: scroll;
   max-height: 450px;
 }
-.modal-activity::-webkit-scrollbar {
+.modal-transformation::-webkit-scrollbar {
   display: none;
 }
 .icon-backRoute {
