@@ -138,7 +138,7 @@
                 class="col-7 q-pb-xs"
                 label="Número de Documento"
                 :required="true"
-                type="text"
+                type="number"
                 :ruless="rules"
                 :value="valueInputDocument"
                 v-model="documentPeople"
@@ -175,15 +175,15 @@
               type="eps"
               @onSelect="getSelectEps"
             />
-            <Input
+            <Select
               class="q-pb-xs"
               label="Tipo de Persona"
               :required="true"
-              type="text"
+              type="person"
               :ruless="rules"
-              :value="valueInputType"
+              :value="valueSelectType"
               v-model="typePeople"
-              @onWrite="getInputPeople"
+              @onSelect="getSelectPeople"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -272,7 +272,7 @@ let valueInputDocument = ref("");
 let valueInputName = ref("");
 let valueInputPhone = ref("");
 let valueSelectEps = ref("");
-let valueInputType = ref("");
+let valueSelectType = ref("");
 
 const columns = ref([
   {
@@ -369,7 +369,7 @@ const getSelectEps = (value) => {
   epsPeople.value = value;
 };
 
-const getInputPeople = (value) => {
+const getSelectPeople = (value) => {
   typePeople.value = value;
 };
 
@@ -402,7 +402,7 @@ const editPeopleMaintenance = async (item) => {
   phonePeople.value = item.phone;
   valueInputPhone.value = item.phone;
   typePeople.value = item.typePeople;
-  valueInputType.value = item.typePeople;
+  valueSelectType.value = item.typePeople;
   epsPeople.value = item.eps;
   valueSelectEps.value = item.eps;
 

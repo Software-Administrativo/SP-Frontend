@@ -33,6 +33,8 @@
 <script setup>
 import { getEps } from "@/api/maintenance/eps";
 import { getLots } from "@/api/maintenance/lots";
+import { getCategories } from "@/api/inventory/categories";
+import { getBrands } from "@/api/inventory/brands";
 import { useStorage } from "@/stores/localStorage.js";
 import { computed, onMounted, ref, watch } from "vue";
 
@@ -44,7 +46,6 @@ let namesFarms = ref([]);
 const storage = useStorage();
 const valueSelect = ref(props.value);
 const filterOptions = ref(stringOptions);
-const { eps } = "";
 
 const props = defineProps({
   type: {
@@ -171,6 +172,39 @@ onMounted(async () => {
     });
   } else if (props.type === "person") {
     types.value = ["TRABAJADOR", "ADMINISTRADOR"];
+  } else if (props.type === "typeLot") {
+    types.value = ["PADRE", "HIJO", "PADRE-HIJO"];
+  } else if (props.type === "fatherLot") {
+    const { lots } = await getLots(idFarm.value);
+    const fatherLots = [];
+    lots.forEach((item) => {
+      if (item.classlote === "PADRE") {
+        fatherLots.push(item.name);
+      }
+    });
+    types.value = fatherLots;
+  } else if (props.type === "lotState") {
+    const statesLot = [
+      "DISPONIBLE",
+      "POR SEMBRAR",
+      "EN SIEMBRA",
+      "POR RECOLECTAR",
+      "POR FERTILIZAR",
+    ];
+    types.value = statesLot;
+  } else if (props.type === "soildState") {
+    const soilLot = ["FERTIL", "INFERTIL"];
+    types.value = soilLot;
+  } else if (props.type === "category") {
+    const { category } = await getCategories(idFarm.value);
+    types.value = category.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "mark") {
+    const { mark } = await getBrands(idFarm.value);
+    types.value = mark.map((item) => {
+      return item.name;
+    });
   }
 });
 

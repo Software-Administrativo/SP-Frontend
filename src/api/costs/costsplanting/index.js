@@ -21,15 +21,16 @@ const getCostsPlanting = async (idFarm) => {
   }
 };
 
-const postCostsPlanting = async (type, idFarm) => {
+const postCostsPlanting = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
       `/costs/costsplanting/register`,
       {
-        name: type.name,
-        description: type.description,
-        worth: type.worth,
+        name: item.name,
+        description: item.description,
+        worth: item.worth,
+        lot: item.lot
       },
       {
         headers: {
@@ -53,6 +54,7 @@ const updateCostsPlanting = async (item, idFarm) => {
         name: item.name,
         description: item.description,
         worth: item.worth,
+        lot: item.lot
       },
       {
         headers: {

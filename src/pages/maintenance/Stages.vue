@@ -264,15 +264,6 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "status",
-    label: "Estado",
-    field: "status",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "Acciones",
     label: "Acciones",
     field: "acciones",
@@ -368,6 +359,7 @@ const getDataStages = async () => {
 };
 
 async function postDataStages() {
+  isLoading.value = true;
   const { lots } = await getLots(idFarm.value);
 
   lots.forEach((item) => {
@@ -376,9 +368,8 @@ async function postDataStages() {
     }
   });
 
-  isLoading.value = true;
   try {
-    const stages = await postStage(
+    await postStage(
       {
         name: nameStages.value,
         lot: lotStages.value,
@@ -401,6 +392,7 @@ async function postDataStages() {
 }
 
 async function updateDataStage() {
+  isLoading.value = true;
   const { lots } = await getLots(idFarm.value);
 
   lots.forEach((item) => {
@@ -409,9 +401,8 @@ async function updateDataStage() {
     }
   });
 
-  isLoading.value = true;
   try {
-    const response = await updateStage(
+    await updateStage(
       {
         id: idStage.value,
         name: nameStages.value,

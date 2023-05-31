@@ -130,6 +130,25 @@
               v-model="nameActivityExpense"
               @onWrite="getInputName"
             />
+            <Select
+              class="q-pb-lg"
+              type="lots"
+              label="Lote"
+              :v-model="lotExpense"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectLot"
+              @onSelect="getSelectLot"
+            />
+            <Input
+              label="Valor"
+              type="text"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputWorth"
+              v-model="worthActivityExpense"
+              @onWrite="getInputObservation"
+            />
             <Input
               class="q-mb-md"
               label="Descripción"
@@ -138,15 +157,6 @@
               :value="valueInputDescription"
               v-model="descriptionActivityExpense"
               @onWrite="getInputDescription"
-            />
-            <Input
-              class="q-pb-xs"
-              label="Valor"
-              type="text"
-              :required="false"
-              :value="valueInputWorth"
-              v-model="worthActivityExpense"
-              @onWrite="getInputObservation"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -187,8 +197,10 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
+import Select from "@/commons/forms/Select.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useStorage } from "@/stores/localStorage.js";
+import { getLots } from "@/api/maintenance/lots";
 
 const $q = useQuasar();
 
@@ -203,7 +215,11 @@ const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
-  if (nameActivityExpense.value == "" || worthActivityExpense.value == "") {
+  if (
+    nameActivityExpense.value == "" ||
+    worthActivityExpense.value == "" ||
+    lotExpense.value == ""
+  ) {
     return true;
   } else if (isLoading.value == true) {
     return true;
@@ -220,8 +236,10 @@ let tab = ref("active");
 let nameActivityExpense = ref("");
 let descriptionActivityExpense = ref("");
 let worthActivityExpense = ref("");
+let lotExpense = ref("");
 
 let valueInputName = ref("");
+let valueSelectLot = ref("");
 let valueInputDescription = ref("");
 let valueInputWorth = ref("");
 
@@ -294,6 +312,10 @@ const getInputObservation = (value) => {
   worthActivityExpense.value = value;
 };
 
+const getSelectLot = (value) => {
+  lotExpense.value = value;
+};
+
 const clickButton = () => {
   titleModal.value = "REGISTRAR GASTO DE SIEMBRA";
   resetValuesForm();
@@ -305,9 +327,11 @@ const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputDescription.value = "";
   valueInputWorth.value = "";
+  valueSelectLot.value = "";
   nameActivityExpense.value = "";
   descriptionActivityExpense.value = "";
   worthActivityExpense.value = "";
+  lotExpense.value = "";
 };
 
 const editCostsPlantingCosts = (item) => {
@@ -320,6 +344,8 @@ const editCostsPlantingCosts = (item) => {
   nameActivityExpense.value = item.name;
   descriptionActivityExpense.value = item.description;
   worthActivityExpense.value = item.worth;
+  lotExpense.value = item.lot;
+  valueSelectLot.value = item.lot;
   modal.toggleModal();
 };
 
@@ -337,10 +363,18 @@ const getDataCostsPLanting = async () => {
   loading.value = true;
   try {
     const { costs } = await getCostsPlanting(idFarm.value);
+    const { lots } = await getLots(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     costs.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let lotExpense = item.lot;
+      lots.forEach((item) => {
+        if (item._id == lotExpense) {
+          lotExpense = item.name;
+        }
+      });
+      item.lot = lotExpense;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -352,7 +386,8 @@ const getDataCostsPLanting = async () => {
         item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
-  } catch {
+  } catch (error) {
+    console.log(error);
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
@@ -360,12 +395,21 @@ const getDataCostsPLanting = async () => {
 
 async function postDataCostsPlanting() {
   isLoading.value = true;
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotExpense.value) {
+      lotExpense.value = item._id;
+    }
+  });
+
   try {
-    const costs = await postCostsPlanting(
+    await postCostsPlanting(
       {
         name: nameActivityExpense.value,
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
+        lot: lotExpense.value,
       },
       idFarm.value
     );
@@ -385,13 +429,22 @@ async function postDataCostsPlanting() {
 
 async function updateDataCostsPlanting() {
   isLoading.value = true;
+  const { lots } = await getLots(idFarm.value);
+
+  lots.forEach((item) => {
+    if (item.name == lotExpense.value) {
+      lotExpense.value = item._id;
+    }
+  });
+
   try {
-    const response = await updateCostsPlanting(
+    await updateCostsPlanting(
       {
         id: idCostsPlanting.value,
         name: nameActivityExpense.value,
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
+        lot: lotExpense.value,
       },
       idFarm.value
     );

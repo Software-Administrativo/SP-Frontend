@@ -130,25 +130,15 @@
               v-model="nameProducts"
               @onWrite="getInputName"
             />
-            <Input
-              class="q-pb-xs"
-              label="Categoria"
-              :required="true"
-              type="text"
-              :ruless="rules"
-              :value="valueInputCategorie"
-              v-model="categorieProducts"
-              @onWrite="getInputCategorie"
-            />
-            <Input
-              class="q-pb-xs"
+            <Select
+              class="q-pb-lg"
               label="Marca"
               :required="true"
-              type="text"
+              type="mark"
               :ruless="rules"
               :value="valueInputBrand"
               v-model="brandProducts"
-              @onWrite="getInputBrand"
+              @onSelect="getInputBrand"
             />
             <Input
               class="q-pb-xs"
@@ -166,8 +156,8 @@
               :ruless="rules"
               type="text"
               :value="valueInputDescription"
-              v-model="descriptionProduct"
-              @onWrite="getInputName"
+              v-model="descriptionProducts"
+              @onWrite="getInputDescription"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -203,9 +193,11 @@ import {
   updateProduct,
 } from "@/api/inventory/products";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
+import { getBrands } from "@/api/inventory/brands";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import { RESPONSES } from "@/helpers";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
@@ -224,13 +216,12 @@ const isLoading = ref(false);
 
 const disableSave = computed(() => {
   if (
-    nameProducts.value != "" ||
-    categorieProducts.value != "" ||
-    brandProducts.value != "" ||
-    amountProducts.value != "" ||
-    descriptionProduct.value != ""
+    !nameProducts.value ||
+    !descriptionProducts.value ||
+    !brandProducts.value ||
+    !amountProducts.value
   ) {
-    return false;
+    return true;
   } else if (isLoading.value == true) {
     return true;
   } else {
@@ -241,12 +232,10 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");
 let nameProducts = ref("");
-let categorieProducts = ref("");
 let brandProducts = ref("");
 let amountProducts = ref("");
-let descriptionProduct = ref("");
+let descriptionProducts = ref("");
 let valueInputName = ref("");
-let valueInputCategorie = ref("");
 let valueInputBrand = ref("");
 let valueInputAmount = ref("");
 let valueInputDescription = ref("");
@@ -268,15 +257,6 @@ const columns = ref([
     name: "name",
     label: "Nombre",
     field: "name",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "category",
-    label: "Categoria",
-    field: "category",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -324,12 +304,12 @@ const getInputName = (value) => {
   nameProducts.value = value;
 };
 
-const getInputCategorie = (value) => {
-  categorieProducts.value = value;
-};
-
 const getInputBrand = (value) => {
   brandProducts.value = value;
+};
+
+const getInputDescription = (value) => {
+  descriptionProducts.value = value;
 };
 
 const getInputAmount = (value) => {
@@ -339,15 +319,13 @@ const getInputAmount = (value) => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR PRODUCTOS";
   valueInputName.value = "";
-  valueInputCategorie.value = "";
   valueInputBrand.value = "";
   valueInputAmount.value = "";
   valueInputDescription.value = "";
   typeAction.value = true;
   modal.toggleModal();
   nameProducts.value = "";
-  descriptionProduct.value = "";
-  categorieProducts.value = "";
+  descriptionProducts.value = "";
   brandProducts.value = "";
   amountProducts.value = "";
 };
@@ -357,13 +335,11 @@ const editProductsInventory = (item) => {
   typeAction.value = false;
   idProducts.value = item._id;
   valueInputName.value = item.name;
-  valueInputCategorie.value = item.category;
   valueInputBrand.value = item.mark;
   valueInputAmount.value = item.amount;
   valueInputDescription.value = item.description;
   nameProducts.value = item.name;
-  categorieProducts.value = item.categories;
-  descriptionProduct.value = item.description;
+  descriptionProducts.value = item.description;
   brandProducts.value = item.brand;
   amountProducts.value = item.amount;
   modal.toggleModal();
@@ -383,10 +359,16 @@ const getDataProducts = async () => {
   loading.value = true;
   try {
     const { product } = await getProducts(idFarm.value);
+    const { mark } = await getBrands(idFarm.value);
+
     let countActive = 1;
     let countInactive = 1;
+
     product.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+
+      item.mark = mark.find((element) => element._id == item.mark).name;
+
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -407,13 +389,12 @@ async function postDataProduct() {
   const products = await postProduct(
     {
       name: nameProducts.value,
-      category: categorieProducts.value,
       mark: brandProducts.value,
       amount: amountProducts.value,
       description:
-        descriptionProduct.value == ""
+        descriptionProducts.value == ""
           ? "No registra"
-          : descriptionProduct.value,
+          : descriptionProducts.value,
     },
     idFarm.value
   );
@@ -435,7 +416,6 @@ async function updateDataProduct() {
     {
       id: idProducts.value,
       name: nameProducts.value,
-      categories: categorieProducts.value,
       brand: brandProducts.value,
       amount: amountProducts.value,
     },
@@ -450,10 +430,6 @@ async function updateDataProduct() {
   } else {
     showNotification("negative", "Ocurrió un error");
   }
-  nameProducts.value = "";
-  brandProducts.value = "";
-  categorieProducts.value = "";
-  amountProducts.value = "";
 }
 
 async function activeProductInventory(id) {

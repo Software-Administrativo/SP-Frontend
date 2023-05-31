@@ -118,60 +118,60 @@
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
       <div class="modal-brands">
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameBrands"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Categoria"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputCategory"
-            v-model="categoryBrands"
-            @onWrite="getInputCategory"
-          />
-          <Input
-            class="q-mb-xs"
-            label="Descripción"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputDescription"
-            v-model="descriptionBrands"
-            @onWrite="getInputDescription"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataBrand"
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameBrands"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataBrand"
+            <Select
+              class="q-pb-lg"
+              label="Categoria"
+              :required="true"
+              type="category"
+              :ruless="rules"
+              :value="valueSelectCategory"
+              v-model="categoryBrands"
+              @onSelect="getSelectCategory"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Input
+              class="q-mb-xs"
+              label="Descripción"
+              type="text"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputDescription"
+              v-model="descriptionBrands"
+              @onWrite="getInputDescription"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataBrand"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataBrand"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </ModalForm>
   </template>
 </template>
@@ -184,9 +184,11 @@ import {
   updateBrand,
 } from "@/api/inventory/brands";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
+import { getCategories } from "@/api/inventory/categories";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import Select from "@/commons/forms/Select.vue";
 import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
@@ -203,16 +205,12 @@ const idBrands = ref();
 const storage = useStorage();
 
 const disableSave = computed(() => {
-  if (
-    nameBrands.value != "" ||
-    categoryBrands.value != "" ||
-    descriptionBrands.value != ""
-  ) {
+  if (!nameBrands.value || !descriptionBrands.value) {
     return true;
   } else if (isLoading.value == true) {
     return true;
   } else {
-    return true;
+    return false;
   }
 });
 const rules = [(v) => !!v || "Este campo es requerido"];
@@ -222,7 +220,7 @@ let nameBrands = ref("");
 let categoryBrands = ref("");
 let descriptionBrands = ref("");
 let valueInputName = ref("");
-let valueInputCategory = ref("");
+let valueSelectCategory = ref("");
 let valueInputDescription = ref("");
 let tab = ref("active");
 
@@ -280,7 +278,7 @@ const getInputName = (value) => {
   nameBrands.value = value;
 };
 
-const getInputCategory = (value) => {
+const getSelectCategory = (value) => {
   categoryBrands.value = value;
 };
 
@@ -291,7 +289,7 @@ const getInputDescription = (value) => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR MARCAS";
   valueInputName.value = "";
-  valueInputCategory.value = "";
+  valueSelectCategory.value = "";
   valueInputDescription.value = "";
   typeAction.value = true;
   modal.toggleModal();
@@ -305,7 +303,7 @@ const editBrandInventory = (item) => {
   typeAction.value = false;
   idBrands.value = item._id;
   valueInputName.value = item.name;
-  valueInputCategory.value = item.category;
+  valueSelectCategory.value = item.category;
   valueInputDescription.value = item.description;
   nameBrands.value = item.name;
   categoryBrands.value = item.category;
@@ -327,10 +325,19 @@ const getDataBrands = async () => {
   loading.value = true;
   try {
     const { mark } = await getBrands(idFarm.value);
+    const { category } = await getCategories(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
+
     mark.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+
+      category.forEach((element) => {
+        if (item.category == element._id) {
+          item.category = element.name;
+        }
+      });
+
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -349,8 +356,17 @@ const getDataBrands = async () => {
 
 async function postDataBrand() {
   isLoading.value = true;
+
+  const { category } = await getCategories(idFarm.value);
+
+  category.forEach((item) => {
+    if (item.name == categoryBrands.value) {
+      categoryBrands.value = item._id;
+    }
+  });
+
   try {
-    const brands = await postBrand(
+    await postBrand(
       {
         name: nameBrands.value,
         category: categoryBrands.value,
@@ -370,8 +386,17 @@ async function postDataBrand() {
 
 async function updateDataBrand() {
   isLoading.value = true;
+
+  const { category } = await getCategories(idFarm.value);
+
+  category.forEach((item) => {
+    if (item.name == categoryBrands.value) {
+      categoryBrands.value = item._id;
+    }
+  });
+
   try {
-    const response = await updateBrand(
+    await updateBrand(
       {
         id: idBrands.value,
         name: nameBrands.value,

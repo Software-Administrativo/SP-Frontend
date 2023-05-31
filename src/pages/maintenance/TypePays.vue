@@ -241,15 +241,6 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "status",
-    label: "Estado",
-    field: "status",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "Acciones",
     label: "Acciones",
     field: "acciones",
@@ -331,7 +322,7 @@ async function getDataTypePays() {
 async function postDataTypePays() {
   isLoading.value = true;
   try {
-    const pays = await postTypePay(
+    await postTypePay(
       {
         name: nameTypePays.value,
         description: descriptionTypePays.value,
@@ -355,7 +346,7 @@ async function postDataTypePays() {
 async function updateDataTypePays() {
   isLoading.value = true;
   try {
-    const response = await updateTypePay(
+    await updateTypePay(
       {
         id: idTypePays.value,
         name: nameTypePays.value,
@@ -382,7 +373,7 @@ async function updateDataTypePays() {
 async function activePayMaintenance(id) {
   loading.value = true;
   try {
-    const active = await activeTypePay(id, idFarm.value);
+    await activeTypePay(id, idFarm.value);
     showNotification("positive", "Tipo de pago activado correctamente");
     loading.value = false;
     rows.value = [];
@@ -397,7 +388,7 @@ async function activePayMaintenance(id) {
 async function inactivePayMaintenance(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveTypePay(id, idFarm.value);
+    await inactiveTypePay(id, idFarm.value);
     loading.value = false;
     showNotification("positive", "Tipo de pago desactivado correctamente");
     rows.value = [];

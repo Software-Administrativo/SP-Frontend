@@ -118,100 +118,111 @@
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
       <div class="modal-lots">
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            class="q-pb-xs"
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameLots"
-            @onWrite="getInputName"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Tamaño"
-            type="number"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputAreaSize"
-            v-model="areaSizeLots"
-            @onWrite="getInputAreaSize"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Estado del lote"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputLoteState"
-            v-model="lotStateLots"
-            @onWrite="getInputLoteState"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Estado del suelo"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputSoildState"
-            v-model="soildStateLots"
-            @onWrite="getInputSoildState"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Clase"
-            type="text"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputClass"
-            v-model="classLots"
-            @onWrite="getInputClass"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Densidad de siembra"
-            type="number"
-            :required="true"
-            :ruless="rules"
-            :value="valueInputSowingDensity"
-            v-model="sowingDensityLots"
-            @onWrite="getInputSowingDensity"
-          />
-          <Input
-            class="q-pb-xs"
-            label="Descripción"
-            type="text"
-            :required="false"
-            :value="valueInputDescription"
-            v-model="descriptionLots"
-            @onWrite="getInputDescription"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataLot"
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              class="q-pb-xs"
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameLots"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataLot"
+            <Input
+              class="q-pb-xs"
+              label="Tamaño"
+              type="number"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputAreaSize"
+              v-model="areaSizeLots"
+              @onWrite="getInputAreaSize"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <Select
+              class="q-pb-lg"
+              label="Estado del lote"
+              type="lotState"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectLoteState"
+              v-model="lotStateLots"
+              @onSelect="getSelectLoteState"
+            />
+            <Select
+              class="q-pb-lg"
+              label="Estado del suelo"
+              type="soildState"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectSoildState"
+              v-model="soildStateLots"
+              @onSelect="getSelectSoildState"
+            />
+            <Select
+              class="q-pb-lg"
+              label="Clase"
+              type="typeLot"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectClass"
+              v-model="classLots"
+              @onSelect="getSelectClass"
+            />
+            <Select
+              v-if="classLots == 'HIJO' || classLots == 'PADRE-HIJO'"
+              class="q-pb-lg"
+              label="Lote padre"
+              type="fatherLot"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectFather"
+              v-model="fatherLot"
+              @onSelect="getSelectFather"
+            />
+            <Input
+              class="q-pb-xs"
+              label="Densidad de siembra"
+              type="number"
+              :required="true"
+              :ruless="rules"
+              :value="valueInputSowingDensity"
+              v-model="sowingDensityLots"
+              @onWrite="getInputSowingDensity"
+            />
+            <Input
+              class="q-pb-xs"
+              label="Descripción"
+              type="text"
+              :required="false"
+              :value="valueInputDescription"
+              v-model="descriptionLots"
+              @onWrite="getInputDescription"
+            />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataLot"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataLot"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </ModalForm>
   </template>
 </template>
@@ -229,6 +240,7 @@ import Input from "@/commons/forms/Input.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
+import Select from "@/commons/forms/Select.vue";
 import { computed, onMounted, ref, watch } from "vue";
 import { useStorage } from "@/stores/localStorage.js";
 
@@ -246,12 +258,12 @@ const isLoading = ref(false);
 
 const disableSave = computed(() => {
   if (
-    nameLots.value == "" ||
-    areaSizeLots.value == "" ||
-    lotStateLots.value == "" ||
-    soildStateLots.value == "" ||
-    classLots.value ||
-    sowingDensityLots.value
+    (!nameLots.value,
+    !areaSizeLots.value,
+    !lotStateLots.value,
+    !soildStateLots.value,
+    !classLots.value,
+    !sowingDensityLots.value)
   ) {
     return true;
   } else if (isLoading.value == true) {
@@ -272,14 +284,16 @@ let soildStateLots = ref("");
 let classLots = ref("");
 let sowingDensityLots = ref("");
 let descriptionLots = ref("");
+let fatherLot = ref("");
 
 let valueInputName = ref("");
 let valueInputAreaSize = ref("");
-let valueInputLoteState = ref("");
-let valueInputSoildState = ref("");
-let valueInputClass = ref("");
+let valueSelectLoteState = ref("");
+let valueSelectSoildState = ref("");
+let valueSelectClass = ref("");
 let valueInputSowingDensity = ref("");
 let valueInputDescription = ref("");
+let valueSelectFather = ref("");
 
 const columns = ref([
   {
@@ -310,15 +324,6 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "lotestate",
-    label: "Estado del lote",
-    field: "lotestate",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
     name: "soildstate",
     label: "Estado del suelo",
     field: "soildstate",
@@ -330,7 +335,16 @@ const columns = ref([
   {
     name: "classlot",
     label: "Clase",
-    field: "classlot",
+    field: "classlote",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
+    name: "fatherlot",
+    label: "Lote padre",
+    field: "fatherlot",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -340,15 +354,6 @@ const columns = ref([
     name: "sowingdensity",
     label: "Densidad de siembra",
     field: "sowingdensity",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "description",
-    label: "Descripción",
-    field: "description",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -373,15 +378,15 @@ const getInputAreaSize = (value) => {
   areaSizeLots.value = value;
 };
 
-const getInputLoteState = (value) => {
+const getSelectLoteState = (value) => {
   lotStateLots.value = value;
 };
 
-const getInputSoildState = (value) => {
+const getSelectSoildState = (value) => {
   soildStateLots.value = value;
 };
 
-const getInputClass = (value) => {
+const getSelectClass = (value) => {
   classLots.value = value;
 };
 
@@ -391,6 +396,10 @@ const getInputSowingDensity = (value) => {
 
 const getInputDescription = (value) => {
   descriptionLots.value = value;
+};
+
+const getSelectFather = (value) => {
+  fatherLot.value = value;
 };
 
 const clickButton = () => {
@@ -403,9 +412,9 @@ const clickButton = () => {
 const resetValuesForm = () => {
   valueInputName.value = "";
   valueInputAreaSize.value = "";
-  valueInputLoteState.value = "";
-  valueInputSoildState.value = "";
-  valueInputClass.value = "";
+  valueSelectLoteState.value = "";
+  valueSelectSoildState.value = "";
+  valueSelectClass.value = "";
   valueInputSowingDensity.value = "";
   valueInputDescription.value = "";
   nameLots.value = "";
@@ -423,9 +432,9 @@ const editLotMaintenance = (item) => {
   idLot.value = item._id;
   valueInputName.value = item.name;
   valueInputAreaSize.value = item.areasize;
-  valueInputLoteState.value = item.lotestate;
-  valueInputSoildState.value = item.soildstate;
-  valueInputClass.value = item.classlot;
+  valueSelectLoteState.value = item.lotestate;
+  valueSelectSoildState.value = item.soildstate;
+  valueSelectClass.value = item.classlot;
   valueInputSowingDensity.value = item.sowingdensity;
   valueInputDescription.value = item.description;
   nameLots.value = item.name;
@@ -476,13 +485,14 @@ const getDataLots = async () => {
 async function postDataLot() {
   isLoading.value = true;
   try {
-    const lots = await postLot(
+    await postLot(
       {
         name: nameLots.value,
         areasize: areaSizeLots.value,
         lotestate: lotStateLots.value,
         soildstate: soildStateLots.value,
-        classlot: classLots.value,
+        classlote: classLots.value,
+        fatherlot: fatherLot.value,
         sowingdensity: sowingDensityLots.value,
         description: descriptionLots.value,
       },
@@ -494,7 +504,7 @@ async function postDataLot() {
     rows.value = [];
     getDataLots();
   } catch {
-    loading.value = false;
+    isLoading.value = false;
     showNotification(
       "negative",
       "Ocurrió un error, por favor verifique los datos"
@@ -513,6 +523,7 @@ async function updateDataLot() {
         lotestate: lotStateLots.value,
         soildstate: soildStateLots.value,
         classlot: classLots.value,
+        fatherlot: fatherlot.value,
         sowingdensity: sowingDensityLots.value,
         description: descriptionLots.value,
       },
@@ -530,13 +541,6 @@ async function updateDataLot() {
       "Ocurrió un error, por favor verifique los datos"
     );
   }
-  nameLots.value = "";
-  areaSizeLots.value = "";
-  lotStateLots.value = "";
-  soildStateLots.value = "";
-  classLots.value = "";
-  sowingDensityLots.value = "";
-  descriptionLots.value = "";
 }
 
 async function activeLotMaintenance(id) {

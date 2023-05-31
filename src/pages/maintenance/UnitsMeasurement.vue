@@ -118,50 +118,50 @@
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
       <div class="modal-units">
-      <h6 class="q-my-md text-center">{{ titleModal }}</h6>
-      <div class="row q-px-xl">
-        <div class="col-12">
-          <Input
-            class="q-pb-xs"
-            label="Nombre"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputName"
-            v-model="nameUnitsMeasurement"
-            @onWrite="getInputName"
-          />
-          <Input
-            label="Tipo de Unidad"
-            :required="true"
-            type="text"
-            :ruless="rules"
-            :value="valueInputUnitType"
-            v-model="unitTypeUnitsMeasurement"
-            @onWrite="getInputunittype"
-          />
-          <span class="text-required q-pb-sm"
-            >Todos los campos con <span class="text-red">*</span> son
-            obligatorios</span
-          >
-          <div class="row justify-center">
-            <ButtonSave
-              v-if="typeAction"
-              :disable="disableSave"
-              @onClick="postDataUnitMeasurement"
+        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <div class="row q-px-xl">
+          <div class="col-12">
+            <Input
+              class="q-pb-xs"
+              label="Nombre"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputName"
+              v-model="nameUnitsMeasurement"
+              @onWrite="getInputName"
             />
-            <ButtonSave
-              v-else
-              :disable="disableSave"
-              @onClick="updateDataUnitMeasurement"
+            <Input
+              label="Tipo de Unidad"
+              :required="true"
+              type="text"
+              :ruless="rules"
+              :value="valueInputUnitType"
+              v-model="unitTypeUnitsMeasurement"
+              @onWrite="getInputunittype"
             />
-          </div>
-          <div class="spinner" v-if="isLoading">
-            <q-spinner-ios color="primary" size="2.5em" />
+            <span class="text-required q-pb-sm"
+              >Todos los campos con <span class="text-red">*</span> son
+              obligatorios</span
+            >
+            <div class="row justify-center">
+              <ButtonSave
+                v-if="typeAction"
+                :disable="disableSave"
+                @onClick="postDataUnitMeasurement"
+              />
+              <ButtonSave
+                v-else
+                :disable="disableSave"
+                @onClick="updateDataUnitMeasurement"
+              />
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </ModalForm>
   </template>
 </template>
@@ -241,15 +241,6 @@ const columns = ref([
     name: "unittype",
     label: "Tipo de unidad",
     field: "unittype",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "status",
-    label: "Estado",
-    field: "status",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",

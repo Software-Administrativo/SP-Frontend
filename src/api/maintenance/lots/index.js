@@ -21,19 +21,21 @@ const getLots = async (idFarm) => {
   }
 };
 
-const postLot = async (type, idFarm) => {
+const postLot = async (item, idFarm) => {
+  console.log(item);
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
       `/maintenance/lots/register`,
       {
-        name: type.name,
-        areasize: type.areasize,
-        lotestate: type.lotestate,
-        soildstate: type.soildstate,
-        classlote: type.classlote,
-        sowingdensity: type.sowingdensity,
-        description: type.description,
+        name: item.name,
+        areasize: item.areasize,
+        lotestate: item.lotestate,
+        soildstate: item.soildstate,
+        classlote: item.classlote,
+        fatherlot: item.fatherlot,
+        sowingdensity: item.sowingdensity,
+        description: item.description,
       },
       {
         headers: {
@@ -59,6 +61,7 @@ const updateLot = async (item, idFarm) => {
         lotestate: item.lotestate,
         soildstate: item.soildstate,
         classlote: item.classlote,
+        fatherlot: item.fatherlot,
         sowingdensity: item.sowingdensity,
         description: item.description,
       },
