@@ -21,7 +21,7 @@ const routeName = computed(() => {
 const itemsListModules = ref([
   {
     label: "Bodegas",
-    icon: "icon icon-wineries",
+    icon: "icon icon-home",
     name: "inventory-cellars",
   },
   {

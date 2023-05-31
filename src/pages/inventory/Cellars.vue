@@ -141,10 +141,10 @@
               @onWrite="getInputTypeContract"
             />
             <Input
-              class="q-mb-md"
               label="Descripción"
               type="text"
-              :required="false"
+              :required="true"
+              :ruless="rules"
               :value="valueInputDescription"
               v-model="descriptionCellars"
               @onWrite="getInputDescription"
@@ -153,7 +153,7 @@
               class="q-pb-xs"
               label="Valor"
               :required="true"
-              type="text"
+              type="number"
               :ruless="rules"
               :value="valueInputValue"
               v-model="valueCellars"
@@ -255,9 +255,9 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "typecontract",
+    name: "tpcontract",
     label: "Tipo Contrato",
-    field: "tpcontrato",
+    field: "tpcontract",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -275,7 +275,7 @@ const columns = ref([
   {
     name: "value",
     label: "Valor",
-    field: "valor",
+    field: "worth",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -327,13 +327,13 @@ const editCellarsInventory = (item) => {
   typeAction.value = false;
   idCellars.value = item._id;
   valueInputName.value = item.name;
-  valueInputTypeContract.value = item.tpcontrato;
+  valueInputTypeContract.value = item.tpcontract;
   valueInputDescription.value = item.description;
-  valueInputValue.value = item.valor;
+  valueInputValue.value = item.worth;
   nameCellars.value = item.name;
-  typeContractCellars.value = item.tpcontrato;
+  typeContractCellars.value = item.tpcontract;
   descriptionCellars.value = item.description;
-  valueCellars.value = item.valor;
+  valueCellars.value = item.worth;
   modal.toggleModal();
 };
 
@@ -377,9 +377,9 @@ async function postDataCellar() {
     const cellars = await postCellar(
       {
         name: nameCellars.value,
-        tpcontrato: typeContractCellars.value,
+        tpcontract: typeContractCellars.value,
         description: descriptionCellars.value,
-        valor: valueCellars.value,
+        worth: valueCellars.value,
       },
       idFarm.value
     );
@@ -402,9 +402,9 @@ async function updateDataCellar() {
       {
         id: idCellars.value,
         name: nameCellars.value,
-        tpcontrato: typeContractCellars.value,
+        tpcontract: typeContractCellars.value,
         description: descriptionCellars.value,
-        valor: valueCellars.value,
+        worth: valueCellars.value,
       },
       idFarm.value
     );
