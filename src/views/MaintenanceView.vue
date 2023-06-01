@@ -66,6 +66,11 @@ const itemsListModules = ref([
     icon: "icon icon-persons",
     name: "maintenance-people",
   },
+  {
+    label: "Clientes",
+    icon: "icon icon-persons",
+    name: "maintenance-clients",
+  },
 ]);
 </script>
 

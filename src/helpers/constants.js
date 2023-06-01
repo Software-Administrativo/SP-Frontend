@@ -8,6 +8,7 @@ const RESPONSES = Object.freeze({
     "La contraseña debe tener al menos una letra mayuscula, una minuscula y un numero",
   ERROROPERATION: "No fue posible terminar la operacion",
   EMAILEXIST: "El usuario ya existe por email",
+  LENGHTDOCUMENT:"El documento es muy corto"
 });
 
 export { RESPONSES };
