@@ -65,13 +65,13 @@ const paths = [
   {
     name: "Pedidos",
     path: "/order",
-    icon: "icon icon-order",
+    icon: "icon icon-transformation",
     rol: ["ADMIN", "SUPER"],
   },
   {
     name: "Transformación",
     path: "/transformation",
-    icon: "icon icon-transformation",
+    icon: "icon icon-order",
     rol: ["ADMIN", "SUPER"],
   },
   {
