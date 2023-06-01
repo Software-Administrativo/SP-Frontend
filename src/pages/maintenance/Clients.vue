@@ -387,7 +387,7 @@ const getDataClients = async () => {
 async function postDataClient() {
   isLoading.value = true;
   try {
-    await postClients(
+    const data = await postClients(
       {
         name: nameClient.value,
         phone: phoneClient.value,
@@ -397,10 +397,16 @@ async function postDataClient() {
       idFarm.value
     );
     isLoading.value = false;
+    let response = data?.response?.data?.errors[0]?.msg;
+
+    if (response == RESPONSES.LENGHTDOCUMENT) {
+      showNotification("negative", "El documento es muy corto");
+    } else {
     showNotification("positive", "Cliente registrado correctamente");
     modal.toggleModal();
     rows.value = [];
     getDataClients();
+    }
   } catch {
     isLoading.value = false;
     showNotification(
