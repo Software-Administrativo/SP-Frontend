@@ -145,6 +145,11 @@ const router = createRouter({
           name: "maintenance-people",
           component: () => import("../pages/maintenance/People.vue"),
         },
+        {
+          path: "clients",
+          name: "maintenance-clients",
+          component: () => import("../pages/maintenance/Clients.vue"),
+        },
       ],
     },
     {
