@@ -156,10 +156,15 @@ onMounted(async () => {
     const isValidateJWT = storage.decodeJwt();
     const farms = isValidateJWT.farms;
     if (!props.value || props.value.length != undefined) {
-      const farms = props.value.map((item) => {
-        return item.name;
+      let idFarms = props.value;
+      let farmsSelected = [];
+      farms.forEach((element) => {
+        if (idFarms.includes(element._id)) {
+          farmsSelected.push(element.name);
+        }
       });
-      model.value = farms;
+
+      model.value = farmsSelected;
     }
     farms.forEach((element) => {
       namesFarms.value.push(element.name);

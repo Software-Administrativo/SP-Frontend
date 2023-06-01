@@ -458,8 +458,11 @@ async function getDataUsers() {
 async function updateDataUserSystem() {
   isLoading.value = true;
 
-  const farmsId = farmsUserSystem.value.map((item) => {
-    return item._id;
+  let farms = farmsUserSystem.value;
+  let farmsSelected = [];
+
+  farms.forEach((item) => {
+    farmsSelected.push(item._id);
   });
 
   try {
@@ -470,7 +473,7 @@ async function updateDataUserSystem() {
         tpdocument: typeDocumentUserSystem.value,
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
-        farms: farmsUserSystem.value,
+        farms: farmsSelected,
         email: emailUserSystem.value,
         password: passwordUserSystem.value,
       },
@@ -508,6 +511,14 @@ async function updateDataUserSystem() {
 
 async function postDataUserSystem() {
   isLoading.value = true;
+
+  let farms = farmsUserSystem.value;
+  let farmsSelected = [];
+
+  farms.forEach((item) => {
+    farmsSelected.push(item._id);
+  });
+
   try {
     const data = await postUser(
       {
@@ -515,7 +526,7 @@ async function postDataUserSystem() {
         tpdocument: typeDocumentUserSystem.value,
         numdocument: numberDocumentUserSystem.value,
         role: roleUserSystem.value,
-        farms: farmsUserSystem.value,
+        farms: farmsSelected,
         email: emailUserSystem.value,
         password: passwordUserSystem.value,
       },
