@@ -11,15 +11,28 @@
 </template>
 <script setup>
 import { modalState } from "@/stores/modal.js";
+import { modalShowState } from "@/stores/details.js";
 
 const modal = modalState();
+const modalShow = modalShowState();
 
 const props = defineProps({
-  show: String,
+  show: {
+    type: String,
+    required: false,
+  },
+  showDetail: {
+    type: Boolean,
+    required: false,
+  },
 });
 
 function toggle() {
-  modal.toggleModal();
+  if (props.showDetail == true) {
+    modalShow.toggleSHowDetailsModal();
+  } else {
+    modal.toggleModal();
+  }
 }
 </script>
 <style scoped>
