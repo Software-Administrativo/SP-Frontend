@@ -117,4 +117,21 @@ const activeUser = async (id, idFarm) => {
   }
 };
 
-export { getUsers, inactiveUser, activeUser, postUser, updateUserSystem };
+const postForgotPassword = async (item) => {
+  try {
+    const { data } = await sugarAxios.post(
+      `/users/requestresetpass`,
+      {
+        email: item.email
+      },
+    );
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+
+export { getUsers, inactiveUser, activeUser, postUser, updateUserSystem,
+  postForgotPassword, 
+};

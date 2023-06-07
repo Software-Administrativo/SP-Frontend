@@ -1,6 +1,6 @@
 <template>
   <q-layout class="container-view">
-    <Header v-if="routeName != 'sign-in'"></Header>
+    <Header v-if="routeName != 'sign-in' && routeName !='forgotpassword' && routeName !='newpassword'"></Header>
     <div class="row">
       <Sidebar
         class="col-2"
@@ -10,7 +10,7 @@
       ></Sidebar>
       <DefaultSidebar
         v-if="
-          isUserLoggedIn && menu.menuIsOpen == false && routeName != 'sign-in'
+          isUserLoggedIn && menu.menuIsOpen == false && routeName != 'sign-in' && routeName !='forgotpassword' && routeName !='newpassword'
         "
       ></DefaultSidebar>
       <div :style="viewRouter">
@@ -49,7 +49,7 @@
 import Header from "@/modules/header/Header.vue";
 import Sidebar from "@/modules/sidebar/Sidebar.vue";
 import { menuState } from "@/stores/menu";
-import { computed, ref, onMounted } from "vue";
+import { computed, ref } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import DefaultSidebar from "../modules/sidebar/DefaultSidebar.vue";
 import { useStorage } from "@/stores/localStorage";
@@ -88,19 +88,21 @@ const routeName = computed(() => {
 });
 
 const viewRouter = computed(() => {
-  if (menu.menuIsOpen && routeName.value != "sign-in") {
+  if (menu.menuIsOpen && routeName.value != "sign-in" && routeName.value != "forgotpassword" && routeName.value != "newpassword") {
     return "width: calc(100% - 230px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else if (
     !menu.menuIsOpen &&
     isUserLoggedIn &&
-    routeName.value != "sign-in"
+    routeName.value != "sign-in" &&
+    routeName.value != "forgotpassword" &&
+    routeName.value != "newpassword"
   ) {
     return "width: calc(100% - 70px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   }
 });
 
 const viewContainer = computed(() => {
-  if (routeName.value == "sign-in") {
+  if (routeName.value == "sign-in" || routeName.value == "forgotpassword" || routeName.value == "newpassword") {
     return "width: 100vw; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else {
     return "width: 90%; max-width: 1500px;";

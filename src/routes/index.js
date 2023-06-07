@@ -200,6 +200,16 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: "/forgotpassword",
+      name: "forgotpassword",
+      component: () => import("../pages/forgot-password/Mail.vue")
+    },
+    {
+      path: "/newpassword/:token",
+      name: "newpassword",
+      component: () => import("../pages/forgot-password/NewPassword.vue")
+    },
   ],
 });
 

@@ -28,7 +28,7 @@
     </div>
     <div class="col-12">
       <div class="forgot-password-link">
-        <a href="#">¿Olvidaste la contraseña?</a>
+        <router-link to="/forgotpassword">¿Olvidaste la contraseña?</router-link>
       </div>
     </div>
   </div>
