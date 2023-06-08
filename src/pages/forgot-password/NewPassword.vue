@@ -12,15 +12,15 @@
         <div class="form column">
           <h3 class="q-mb-md">Recupera tu contraseña</h3>
           <h5 class="text-grey q-mt-xs q-mb-md">Ingresa tu nueva contraseña</h5>
-          <Input
+          <!-- <Input
             class="input q-mb-md"
             label="Contraseña"
             type="text"
             :ruless="rules"
             :required="true"
             v-model="password"
-            @keyup="validatePasswords"
             @onWrite="getInputPassword"
+            
           />
           <Input
             class="input q-mb-md"
@@ -29,9 +29,45 @@
             :ruless="rules"
             :required="true"
             v-model="confirmPassword"
-            @keyup="validatePasswords"
             @onWrite="getInputConfirmPassword"
+          /> -->
+
+          <q-input 
+          v-model="password" 
+          filled 
+          :type="isPwd ? 'password' : 'text'" 
+          hint="Password with toggle"
+          error-message="Las contraseñas no coinciden"
+          :error="!isValid"
+          @keyup="validatePasswords"
+          >
+          <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
           />
+        </template>
+      </q-input>
+
+          <q-input 
+          v-model="confirmPassword" 
+          filled 
+          :type="isPwd ? 'password' : 'text'" 
+          hint="Password with toggle"
+          error-message="Las contraseñas no coinciden"
+          :error="!isValid"
+          @keyup="validatePasswords"
+          >
+        <template v-slot:append>
+          <q-icon
+            :name="isPwd ? 'visibility_off' : 'visibility'"
+            class="cursor-pointer"
+            @click="isPwd = !isPwd"
+          />
+        </template>
+      </q-input>
+
           <template v-if="isInactive">
             <q-btn 
             disable 
@@ -41,7 +77,7 @@
           </template>
           <template v-else>
             <q-btn 
-            @click="postChangePassword"
+            @click="postDataPassword"
             class="btn-login text-white full-width q-mt-lg"
               >Enviar</q-btn
             >
@@ -71,23 +107,28 @@ const props = defineProps({
   },
 });
 
+const isPwd = ref(true)
+
 const $q = useQuasar();
 const $router = useRouter();
 const password = ref("");
 const confirmPassword = ref("");
 let token = null
 
-let passwordMatch = ref(true);
+const isValid = ref(true)
 
 const rules = [
   (v) => !!v || "Este campo es requerido",
   () => passwordMatch.value || "Las contraseñas no coinciden",
 ];
 
-
+const passwordMatch = computed(() => {
+    return password.value === confirmPassword.value;
+  });
 
 const validatePasswords = () => {
-  passwordMatch.value = password.value === confirmPassword.value;
+  if(password.value != confirmPassword.value) isValid.value = false
+  else isValid.value = true
 };
 
 const isInactive = computed(() => {
