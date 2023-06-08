@@ -57,20 +57,33 @@
                         icon="visibility"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="showOrderOrder(props.row)"
-                      />
+                        @click="showOrderDetails(props.row)"
+                      >
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Ver detalles
+                        </q-tooltip>
+                      </q-btn>
                       <q-btn
+                        v-if="props.row.statuspay == 'PENDIENTE'"
                         icon="payment"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
                         @click="payOrderUser(props.row._id)"
-                      />
+                      >
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Marcar como pago
+                        </q-tooltip>
+                      </q-btn>
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
                         @click="inactiveOrderUser(props.row._id)"
-                      />
+                      >
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Cancelar
+                        </q-tooltip>
+                      </q-btn>
                     </q-btn-group>
                   </td>
                 </template>
@@ -107,9 +120,12 @@
                       <q-btn
                         text-color="blue-10"
                         class="col q-pa-none"
-                        @click="activeSystemUser(props.row._id)"
+                        @click="activeOrderUser(props.row._id)"
                       >
                         <i class="icon icon-check"></i>
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Activar
+                        </q-tooltip>
                       </q-btn>
                     </q-btn-group>
                   </td>
@@ -129,12 +145,11 @@
           <div class="col-12">
             <Select
               label="Cliente"
-              type="text"
+              type="client"
               :required="true"
               :ruless="rules"
-              :value="valueNameUserClient"
-              v-model="nameUserClient"
-              @onWrite="getSelectClient"
+              v-model="userClient"
+              @onSelect="getSelectClient"
             />
 
             <div class="q-pt-md">
@@ -143,7 +158,6 @@
                 filled
                 dense
                 v-model="date"
-                :value="valueDate"
                 mask="date"
                 :rules="['date']"
               >
@@ -170,7 +184,16 @@
               </q-input>
             </div>
 
-            <div class="q-pb-sm column">
+            <Select
+              type="state"
+              :ruless="rules"
+              :required="true"
+              label="Estado de orden"
+              v-model="stateOrder"
+              @onSelect="getSelectState"
+            ></Select>
+
+            <div class="q-pt-lg q-pb-sm column">
               <span>Detalle del pedido:</span>
               <div class="column">
                 <q-table
@@ -182,7 +205,28 @@
                   :columns="columnsShow"
                   :rows-per-page-options="[5, 10, 20]"
                   hide-bottom
-                />
+                >
+                  <template v-slot:body-cell-Acciones="props">
+                    <td class="accions-td">
+                      <q-btn-group
+                        class="full-width full-height"
+                        outline
+                        square
+                      >
+                        <q-btn
+                          text-color="blue-10"
+                          class="col q-pa-none"
+                          icon="delete"
+                          @click="deleteItemOrder(props.row)"
+                        >
+                          <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                            Eliminar
+                          </q-tooltip>
+                        </q-btn>
+                      </q-btn-group>
+                    </td>
+                  </template>
+                </q-table>
               </div>
             </div>
 
@@ -193,7 +237,9 @@
               @click="showModalOrder()"
             />
 
-            <div><span>Total:</span><span class="total">500</span></div>
+            <div>
+              <span>Total:</span><span class="total">{{ valueTotal }}</span>
+            </div>
 
             <span class="text-required q-py-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -201,14 +247,8 @@
             >
             <div class="row justify-center q-mt-sm">
               <ButtonSave
-                v-if="typeAction"
                 :disable="disableSave"
-                @onClick="postDataUserSystem"
-              />
-              <ButtonSave
-                v-else
-                :disable="disableSave"
-                @onClick="updateDataUserSystem"
+                @onClick="postDataOrderSystem"
               />
             </div>
             <div class="spinner" v-if="isLoading">
@@ -223,7 +263,7 @@
   <template v-if="showModalOrderValue">
     <ModalForm class="modal" show="false">
       <div class="modalSystem">
-        <h6 class="q-my-md text-center">{{ titleModal }}</h6>
+        <h6 class="q-my-md q-pt-lg text-center">{{ titleModal }}</h6>
         <div class="row q-px-xl">
           <div class="col-12">
             <Select
@@ -232,18 +272,7 @@
               :required="true"
               label="Producto"
               v-model="productItem"
-              :value="valueProductItem"
               @onSelect="getSelectModel"
-            ></Select>
-            <Select
-              class="q-mt-lg"
-              type="state"
-              :ruless="rules"
-              :required="true"
-              label="Estado de orden"
-              v-model="stateOrder"
-              :value="valueStateOrder"
-              @onSelect="getSelectState"
             ></Select>
             <Input
               class="q-mt-lg"
@@ -252,14 +281,21 @@
               type="number"
               :ruless="rules"
               v-model="quantity"
-              :value="valueQuantity"
               @onWrite="getInputQuantity"
             />
             <div class="row q-mt-xs buttons-modal">
-              <q-btn class="q-mx-sm" @click="showRegisterItem()"
+              <q-btn class="q-mx-sm button-one" @click="showRegisterItem()"
                 >Cancelar</q-btn
               >
-              <q-btn class="q-mx-sm" @click="saveRegisterItem()">Agregar</q-btn>
+              <q-btn
+                class="q-mx-sm button-one"
+                @click="saveRegisterItem()"
+                :disable="disableSaveItem"
+                >Agregar</q-btn
+              >
+            </div>
+            <div class="spinner" v-if="isLoading">
+              <q-spinner-ios color="primary" size="2.5em" />
             </div>
           </div>
         </div>
@@ -324,7 +360,6 @@ import {
   getOrders,
   inactiveOrder,
   postOrder,
-  updateOrder,
   payOrder,
 } from "@/api/orders";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
@@ -332,10 +367,10 @@ import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
-import { RESPONSES } from "@/helpers";
 import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { modalShowState } from "@/stores/details.js";
+import { getClients } from "@/api/maintenance/clientss";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
 import { getTransformationModels } from "@/api/transformation/modelss";
@@ -344,37 +379,52 @@ const $q = useQuasar();
 
 const modal = modalState();
 const modalShow = modalShowState();
-const idOrder = ref();
 const titleModal = ref("");
 const loading = ref(false);
 const isLoading = ref(false);
-const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
 const showRows = ref([]);
 const storage = useStorage();
 const showModalOrderValue = ref(false);
 
-let valueSelectClient = ref("");
 let orderValue = ref("");
+let itemsOrder = ref([]);
 
 let date = ref("");
 let productItem = ref("");
-let nameUserClient = ref("");
+let userClient = ref("");
 let stateOrder = ref("");
-let quantity = ref();
-
-let valueDate = ref("");
-let valueQuantity = ref("");
-let valueStateOrder = ref("");
-let valueProductItem = ref("");
-let valueNameUserClient = ref("");
+let quantity = ref(0);
 
 let filter = ref("");
 let tab = ref("active");
 
+const valueTotal = computed(() => {
+  let total = 0;
+  showRows.value.forEach((item) => {
+    total += item.cost;
+  });
+  return total;
+});
+
+const disableSaveItem = computed(() => {
+  if (!productItem.value || !quantity.value) {
+    return true;
+  } else if (isLoading.value == true) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
 const disableSave = computed(() => {
-  if (!nameUserClient.value) {
+  if (
+    !userClient.value ||
+    showRows.value.length == 0 ||
+    !date.value ||
+    !stateOrder.value
+  ) {
     return true;
   } else if (isLoading.value == true) {
     return true;
@@ -387,12 +437,12 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 
 const columnsShow = ref([
   {
-    name: "id",
-    label: "Código",
-    field: "id",
+    name: "Acciones",
+    field: "acciones",
     align: "left",
     sortable: true,
     headerStyle: "font-weight: bold;",
+    style: "width: 10px",
   },
   {
     name: "name",
@@ -476,8 +526,14 @@ const columns = ref([
   },
 ]);
 
+const deleteItemOrder = (value) => {
+  console.log(value);
+  // const index = showRows.value.findIndex((item) => item.id == value);
+  // showRows.value.splice(index, 1);
+};
+
 const getSelectClient = (value) => {
-  nameUserClient.value = value;
+  userClient.value = value;
 };
 
 const getSelectModel = (value) => {
@@ -493,21 +549,23 @@ const getInputQuantity = (value) => {
 };
 
 const saveRegisterItem = async () => {
+  isLoading.value = true;
   const { models } = await getTransformationModels(idFarm.value);
+  isLoading.value = false;
   showModalOrderValue.value = false;
-  let count = 1;
   let newRow = {};
 
-  models.forEach((element) => {
-    console.log(element.name);
+  models.forEach((element, i) => {
     if (element.name == productItem.value) {
       newRow = {
-        id: count++,
+        codigo: i,
+        id: element._id,
         name: productItem.value,
         unitvalue: element.unitvalue,
-        quantity: quantity.value,
+        quantity: parseInt(quantity.value),
         cost: element.unitvalue * quantity.value,
       };
+      console.log(newRow);
       showRows.value.push(newRow);
     }
   });
@@ -521,7 +579,6 @@ const showModalOrder = () => {
 const clickButton = () => {
   titleModal.value = "REGISTRAR PEDIDO";
   resetValuesForm();
-  typeAction.value = true;
   modal.toggleModal();
 };
 
@@ -531,15 +588,18 @@ const showRegisterItem = () => {
 };
 
 const resetValuesForm = () => {
-  valueSelectClient.value = "";
-  nameUserClient.value = "";
+  userClient.value = "";
+  date.value = "";
+  stateOrder.value = "";
   showRows.value = [];
+  itemsOrder.value = [];
 };
 
-const showOrderOrder = (item) => {
+const showOrderDetails = (item) => {
   let count = 1;
   titleModal.value = "DETALLE DE LA ORDEN";
   orderValue.value = item;
+  console.log(orderValue.value);
   let products = item.models;
   products.forEach((item) => {
     item.id = count++;
@@ -563,125 +623,73 @@ async function getAllOrders() {
 
   try {
     const { orders } = await getOrders(idFarm.value);
-
+    loading.value = false;
     let countActive = 1;
     let countInactive = 1;
-    orders.forEach((item) => {
-      item.status = item.status ? "Inactivo" : "Activo";
-      if (item.status == "Activo") {
-        item.id = countActive++;
-        rows.value.push(item);
-      } else {
-        item.id = countInactive++;
-        inactiveRows.value.push(item);
-      }
-      item.client = item.client.name;
-      item.dateorder = item.dateorder.slice(0, item.dateorder.indexOf("T"));
-    });
-
-    loading.value = false;
+    if (orders) {
+      orders.forEach((item) => {
+        item.status = item.status ? "Inactivo" : "Activo";
+        if (item.status == "Activo") {
+          item.id = countActive++;
+          rows.value.push(item);
+        } else {
+          item.id = countInactive++;
+          inactiveRows.value.push(item);
+        }
+        item.client = item.client.name;
+        item.dateorder = item.dateorder.slice(0, item.dateorder.indexOf("T"));
+      });
+    }
   } catch {
+    loading.value = false;
     showNotification("negative", "Ocurrió un error al obtener las ordenes");
   }
 }
 
-async function updateDataUserSystem() {
-  isLoading.value = true;
+async function postDataOrderSystem() {
+  let order = {};
 
-  let farms = farmsUserSystem.value;
-  let farmsSelected = [];
-
-  farms.forEach((item) => {
-    farmsSelected.push(item._id);
+  showRows.value.forEach((item) => {
+    order = {
+      id: item.id,
+      quantity: item.quantity,
+    };
+    itemsOrder.value.push(order);
   });
 
-  try {
-    const data = await updateOrder(
-      {
-        id: idOrder.value,
-        name: nameUserClient.value,
-      },
-      idFarm.value
-    );
-    isLoading.value = false;
+  isLoading.value = true;
 
-    let response = data?.response?.data?.errors[0]?.msg;
+  const { client } = await getClients(idFarm.value);
 
-    if (response == RESPONSES.USEREXIST) {
-      showNotification("negative", "El usuario ya existe");
-    } else if (response == RESPONSES.LENGTHPASSWORD) {
-      showNotification(
-        "negative",
-        "La contraseña debe tener de 6 a 20 carácteres"
-      );
-    } else if (response == RESPONSES.RULESPASSWORD) {
-      showNotification(
-        "negative",
-        "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
-      );
-    } else if (response == RESPONSES.EMAILEXIST) {
-      showNotification("negative", "El email ya esta registrado");
-    } else {
-      showNotification("positive", "Tipo de pago actualizado correctamente");
-      modal.toggleModal();
-      rows.value = [];
-      getAllOrders();
+  client.forEach((item) => {
+    if (item.name == userClient.value) {
+      userClient.value = item._id;
     }
-  } catch {
-    isLoading.value = false;
-    showNotification("negative", "Ocurrió un error");
-  }
-}
-
-async function postDataUserSystem() {
-  isLoading.value = true;
-
-  let farms = farmsUserSystem.value;
-  let farmsSelected = [];
-
-  farms.forEach((item) => {
-    farmsSelected.push(item._id);
   });
 
   try {
-    const data = await postOrder(
+    await postOrder(
       {
-        name: nameUserClient.value,
+        models: itemsOrder.value,
+        client: userClient.value,
+        dateorder: date.value,
+        statusorder: stateOrder.value,
       },
       idFarm.value
     );
 
     isLoading.value = false;
-
-    let response = data?.response?.data?.errors[0]?.msg;
-
-    if (response == RESPONSES.USEREXIST) {
-      showNotification("negative", "El usuario ya existe");
-    } else if (response == RESPONSES.LENGTHPASSWORD) {
-      showNotification(
-        "negative",
-        "La contraseña debe tener de 6 a 20 carácteres"
-      );
-    } else if (response == RESPONSES.RULESPASSWORD) {
-      showNotification(
-        "negative",
-        "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
-      );
-    } else if (response == RESPONSES.EMAILEXIST) {
-      showNotification("negative", "El email ya esta registrado");
-    } else {
-      modal.toggleModal();
-      rows.value = [];
-      showNotification("positive", "Usuario registrado correctamente");
-      getAllOrders();
-    }
+    modal.toggleModal();
+    rows.value = [];
+    showNotification("positive", "Usuario registrado correctamente");
+    getAllOrders();
   } catch (error) {
     isLoading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 }
 
-async function activeSystemUser(id) {
+async function activeOrderUser(id) {
   loading.value = true;
   try {
     await activeOrder(id, idFarm.value);
@@ -741,6 +749,10 @@ onMounted(() => {
 <style scoped>
 .buttons-modal {
   margin-left: 18%;
+}
+.button-one:hover {
+  background-color: var(--color-blue);
+  color: white;
 }
 .spinner {
   position: absolute;
