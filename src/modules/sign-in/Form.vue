@@ -26,6 +26,11 @@
         :required="true"
       />
     </div>
+    <div class="col-12">
+      <div class="forgot-password-link">
+        <router-link to="/forgotpassword">¿Olvidaste la contraseña?</router-link>
+      </div>
+    </div>
   </div>
   <span class="invalidateData" v-if="props.error"
     >Credenciales Incorrectas</span
@@ -114,4 +119,5 @@ const getPasswordData = (value) => {
   border-radius: 5px;
   padding: 5px 15px;
 }
+
 </style>
