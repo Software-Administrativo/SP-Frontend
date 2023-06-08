@@ -131,7 +131,22 @@ const postForgotPassword = async (item) => {
   }
 };
 
+const postChangePassword = async (item) => {
+  try {
+    const { data } = await sugarAxios.post(
+      `/users/changePassword`,
+      {
+        password: item.password,
+        token: item.token
+      },
+    );
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
 
 export { getUsers, inactiveUser, activeUser, postUser, updateUserSystem,
-  postForgotPassword, 
+  postForgotPassword, postChangePassword 
 };

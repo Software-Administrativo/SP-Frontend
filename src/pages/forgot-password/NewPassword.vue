@@ -2,7 +2,6 @@
   <section class="row background-sugar">
     <div class="col-md-6 col-12 window-height bg-white q-pa-md">
       <div class="row">
-        <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
         <img
           class="image-size"
           src="../../assets/sign-in/sign-in-logo.svg"
@@ -14,30 +13,36 @@
           <h3 class="q-mb-md">Recupera tu contraseña</h3>
           <h5 class="text-grey q-mt-xs q-mb-md">Ingresa tu nueva contraseña</h5>
           <Input
-            class="q-mb-md"
+            class="input q-mb-md"
             label="Contraseña"
             type="text"
             :ruless="rules"
             :required="true"
             v-model="password"
+            @keyup="validatePasswords"
             @onWrite="getInputPassword"
           />
           <Input
-            class="q-mb-md"
+            class="input q-mb-md"
             label="Verifica la contraseña"
             type="text"
             :ruless="rules"
             :required="true"
             v-model="confirmPassword"
+            @keyup="validatePasswords"
             @onWrite="getInputConfirmPassword"
           />
           <template v-if="isInactive">
-            <q-btn disable class="btn-login text-white full-width q-mt-lg"
+            <q-btn 
+            disable 
+            class="btn-login text-white full-width q-mt-lg"
               >Enviar</q-btn
             >
           </template>
           <template v-else>
-            <q-btn class="btn-login text-white full-width q-mt-lg"
+            <q-btn 
+            @click="postChangePassword"
+            class="btn-login text-white full-width q-mt-lg"
               >Enviar</q-btn
             >
           </template>
@@ -52,18 +57,11 @@
 </template>
 
 <script setup>
-import { postForgotPassword } from "@/api/system";
-import { ref, computed } from "vue";
+import { postChangePassword } from "@/api/system";
+import { ref, computed,onBeforeMount } from "vue";
 import Input from "@/commons/forms/Input.vue";
-
-const password = ref("");
-const confirmPassword = ref("");
-
-
-
-const isInactive = computed(() => {
-  return email.value === "";
-});
+import { useQuasar } from "quasar"
+import { useRouter } from "vue-router";
 
 const props = defineProps({
   error: {
@@ -71,6 +69,38 @@ const props = defineProps({
     required: false,
     default: false,
   },
+});
+
+const $q = useQuasar();
+const $router = useRouter();
+const password = ref("");
+const confirmPassword = ref("");
+let token = null
+
+let passwordMatch = ref(true);
+
+const rules = [
+  (v) => !!v || "Este campo es requerido",
+  () => passwordMatch.value || "Las contraseñas no coinciden",
+];
+
+
+
+const validatePasswords = () => {
+  passwordMatch.value = password.value === confirmPassword.value;
+};
+
+const isInactive = computed(() => {
+  return (password.value === "" || confirmPassword.value === "")
+});
+
+
+onBeforeMount(() => {
+  //validar si en la ruta viene un id
+  token = $router.currentRoute.value.params.token
+  if(token == null || token == ""){
+    $router.replace('/')
+  }
 });
 
 const isLoading = ref(false);
@@ -93,14 +123,12 @@ const showNotification = (type, message) => {
   async function postDataPassword() {
     isLoading.value = true;
     try {
-      await postNewPassword({
-        email: email.value,
+      await postChangePassword({
+        token,
+        password: password.value,
       });
       isLoading.value = false;
-      showNotification("positive", "Email enviado correctamente");
-      modal.toggleModal();
-      rows.value = [];
-      getDataEps();
+      showNotification("positive", "Contraseña cambiada con exito");
     } catch {
       isLoading.value = false;
       showNotification(
@@ -113,6 +141,9 @@ const showNotification = (type, message) => {
 
 </script>
 <style scoped>
+.input{
+  width: 50%;
+}
 .background-sugar {
   background: url(../../assets/sign-in/image-background.png);
   background-position: center center;
@@ -123,7 +154,6 @@ const showNotification = (type, message) => {
 }
 
 .image-size {
-  margin-top: 1%;
   width: 40%;
   max-width: 193px;
   height: 100%;
@@ -132,7 +162,6 @@ const showNotification = (type, message) => {
 .form-container {
   height: calc(100% - 150px);
 }
-
 .form {
   width: 60%;
 }
@@ -142,14 +171,6 @@ const showNotification = (type, message) => {
 .spinner {
   margin: 0 auto;
   margin-top: 25px;
-}
-.icon-backRoute {
-  font-size: 30px;
-  padding-right: 20px;
-}
-
-.icon-backRoute:hover {
-  cursor: pointer;
 }
 .invalidateData {
   background-color: rgba(255, 0, 0, 0.288);

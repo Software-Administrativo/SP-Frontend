@@ -16,6 +16,7 @@
           <Email
             label="Email"
             :required="true"
+            :value="valueEmail"
             v-model="email"
             @onEmail="getInputEmail"
           />
@@ -52,9 +53,13 @@ import { postForgotPassword } from "@/api/system";
 import { ref, computed } from "vue";
 import Email from "@/commons/forms/Email.vue";
 import { useQuasar } from "quasar"
+import { useRouter } from "vue-router";
 
 const $q = useQuasar();
 const email = ref("");
+const $router = useRouter();
+
+const valueEmail = ref("");
 
 const isInactive = computed(() => {
   return email.value === "";
@@ -82,6 +87,7 @@ const getInputEmail = (value) => {
   });
 };
 
+
 async function postDataEmail() {
   isLoading.value = true;
   try {
@@ -92,6 +98,9 @@ async function postDataEmail() {
     );
     isLoading.value = false;
     showNotification("positive", "Email enviado correctamente");
+    setTimeout(() => {
+    $router.back();
+  }, 2000);
   } catch {
     isLoading.value = false;
     showNotification(
