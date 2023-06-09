@@ -226,6 +226,22 @@ onMounted(async () => {
     types.value = client.map((item) => {
       return item.name;
     });
+  } else if (props.type === "reports") {
+    types.value = [
+      "Reporte Anual",
+      "Reporte de Inventario",
+      "Consolidado Mensual",
+    ];
+  } else if (props.type === "years") {
+    // let today = new Date();
+    // let year = today.getFullYear();
+    let year = 2022;
+    let inital = 2021;
+    let years = [];
+    for (let i = inital; inital <= year; i++) {
+      years.push(i);
+    }
+    types.value = years;
   }
 });
 
