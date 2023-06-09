@@ -74,7 +74,7 @@
               <q-table
                 flat
                 bordered
-                title="Modelos de transformación"
+                title="Modelos"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -131,7 +131,6 @@
               @onWrite="getInputName"
             />
             <Input
-              class="q-mb-md"
               label="Descripción"
               :required="true"
               type="text"
@@ -365,7 +364,10 @@ async function postDataTransformationModel() {
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Modelo de transformación registrado correctamente");
+    showNotification(
+      "positive",
+      "Modelo de transformación registrado correctamente"
+    );
     modal.toggleModal();
     rows.value = [];
     getDataTransformationModels();
@@ -414,7 +416,10 @@ async function activeTransformationModels(id) {
   loading.value = true;
   try {
     await activeTransformationModel(id, idFarm.value);
-    showNotification("positive", "Modelo de transformación activado correctamente");
+    showNotification(
+      "positive",
+      "Modelo de transformación activado correctamente"
+    );
     loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
