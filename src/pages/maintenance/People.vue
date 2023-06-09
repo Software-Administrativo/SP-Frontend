@@ -59,13 +59,21 @@
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
                         @click="editPeopleMaintenance(props.row)"
-                      />
+                      >
+                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Editar
+                        </q-tooltip>
+                      </q-btn>
                       <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
                         @click="inactivePeopleMaintenance(props.row._id)"
-                      />
+                      >
+                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Desactivar
+                        </q-tooltip>
+                      </q-btn>
                     </q-btn-group>
                   </td>
                 </template>
@@ -106,6 +114,9 @@
                         @click="activePeopleMaintenance(props.row._id)"
                       >
                         <i class="icon icon-check"></i>
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Activar
+                        </q-tooltip>
                       </q-btn>
                     </q-btn-group>
                   </td>
@@ -342,7 +353,7 @@ const columns = ref([
     name: "Acciones",
     label: "Acciones",
     field: "acciones",
-    align: "left",
+    align: "center",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
     style: "font-size: var(--font-large);",
