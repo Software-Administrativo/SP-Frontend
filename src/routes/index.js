@@ -160,6 +160,18 @@ const router = createRouter({
         rol: ["ADMIN", "SUPER"],
       },
       component: () => import("../views/OrderView.vue"),
+      children: [
+        {
+          path: "history",
+          name: "order-history",
+          component: () => import("../pages/order/History.vue"),
+        },
+        {
+          path: "queue",
+          name: "order-queue",
+          component: () => import("../pages/order/Queue.vue"),
+        },
+      ]
     },
     {
       path: "/report",

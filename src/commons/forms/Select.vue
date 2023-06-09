@@ -35,6 +35,8 @@ import { getEps } from "@/api/maintenance/eps";
 import { getLots } from "@/api/maintenance/lots";
 import { getCategories } from "@/api/inventory/categories";
 import { getBrands } from "@/api/inventory/brands";
+import { getClients } from "@/api/maintenance/clientss";
+import { getTransformationModels } from "@/api/transformation/modelss";
 import { useStorage } from "@/stores/localStorage.js";
 import { computed, onMounted, ref, watch } from "vue";
 
@@ -208,6 +210,20 @@ onMounted(async () => {
   } else if (props.type === "mark") {
     const { mark } = await getBrands(idFarm.value);
     types.value = mark.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "models") {
+    const { models } = await getTransformationModels(idFarm.value);
+    types.value = models.map((item) => {
+      if (item.status != 1) {
+        return item.name;
+      }
+    });
+  } else if (props.type === "state") {
+    types.value = ["PENDIENTE", "ENTREGADO"];
+  } else if (props.type === "client") {
+    const { client } = await getClients(idFarm.value);
+    types.value = client.map((item) => {
       return item.name;
     });
   }

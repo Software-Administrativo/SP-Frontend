@@ -29,40 +29,10 @@ const postOrder = async (item, idFarm) => {
     const { data } = await sugarAxios.post(
       `/orders/register`,
       {
-        name: item.name,
-        tpdocument: item.tpdocument,
-        numdocument: item.numdocument,
-        role: item.role,
-        farms: [item.farms],
-        email: item.email,
-        password: item.password,
-      },
-      {
-        headers: {
-          token: tokenExist,
-          farm: idFarm,
-        },
-      }
-    );
-    return data;
-  } catch (error) {
-    return error;
-  }
-};
-
-const updateOrder = async (item, idFarm) => {
-  try {
-    const tokenExist = getToken();
-    const { data } = await sugarAxios.put(
-      `/orders/update/${item.id}`,
-      {
-        name: item.name,
-        tpdocument: item.tpdocument,
-        numdocument: item.numdocument,
-        role: item.role,
-        farms: [item.farms],
-        email: item.email,
-        password: item.password,
+        models: item.models,
+        client: item.client,
+        dateorder: item.dateorder,
+        statusorder: item.statusorder,
       },
       {
         headers: {
@@ -137,4 +107,4 @@ const payOrder = async (id, idFarm) => {
   }
 }
 
-export { getOrders, inactiveOrder, activeOrder, postOrder, updateOrder, payOrder };
+export { getOrders, inactiveOrder, activeOrder, postOrder, payOrder };
