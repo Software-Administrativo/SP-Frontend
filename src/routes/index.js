@@ -171,6 +171,11 @@ const router = createRouter({
           name: "order-queue",
           component: () => import("../pages/order/Queue.vue"),
         },
+        {
+          path: "pays",
+          name: "order-pays",
+          component: () => import("../pages/order/Pays.vue"),
+        },
       ]
     },
     {

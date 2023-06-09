@@ -107,4 +107,24 @@ const payOrder = async (id, idFarm) => {
   }
 }
 
-export { getOrders, inactiveOrder, activeOrder, postOrder, payOrder };
+const deliverOrder = async (id, idFarm) => {
+  try {
+    const tokenExist = getToken();
+
+    const { data } = await sugarAxios.put(
+      `/orders/deliver/${id}`,
+      {},
+      {
+        headers: {
+          token: tokenExist,
+          farm: idFarm,
+        },
+      }
+    );
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export { getOrders, inactiveOrder, activeOrder, postOrder, payOrder, deliverOrder };

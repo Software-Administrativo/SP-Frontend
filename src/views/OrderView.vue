@@ -29,6 +29,11 @@ const itemsListModules = ref([
     icon: "icon icon-tages",
     name: "order-queue",
   },
+  {
+    label: "Pendientes de pago",
+    icon: "icon icon-cost",
+    name: "order-pays",
+  },
 ]);
 </script>
 

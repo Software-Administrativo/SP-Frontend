@@ -2,50 +2,67 @@
   <div class="q-py-md table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">HISTORIAL DE PEDIDOS</h6>
+      <h6 class="title q-my-lg">PENDIENTES DE PAGO</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">
       <div class="container-table q-mt-md q-pa-md" rounded>
-        <q-separator />
-        <q-table
-          flat
-          bordered
-          title="Pedidos"
-          row-key="id"
-          :rows="rows"
-          :columns="columns"
-          :filter="filter"
-          :loading="loading"
-          :rows-per-page-options="[5, 10, 20]"
-        >
-          <template v-slot:top-right>
-            <q-input
-              borderless
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Buscar"
-            >
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-          <template v-slot:body-cell-Acciones="props">
-            <td class="accions-td">
-              <q-btn-group class="full-width full-height" outline square>
-                <q-btn
-                  icon="visibility"
-                  text-color="blue-10"
-                  class="col text-bold q-pa-none icon-table"
-                  @click="showOrderDetails(props.row)"
-                >
-                </q-btn>
-              </q-btn-group>
-            </td>
-          </template>
-        </q-table>
+        <q-card>
+          <q-separator />
+
+          <q-table
+            flat
+            bordered
+            title="Pedidos"
+            row-key="id"
+            :rows="rows"
+            :columns="columns"
+            :filter="filter"
+            :loading="loading"
+            :rows-per-page-options="[5, 10, 20]"
+          >
+            <template v-slot:top-right>
+              <q-input
+                borderless
+                dense
+                debounce="300"
+                v-model="filter"
+                placeholder="Buscar"
+              >
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </template>
+            <template v-slot:body-cell-Acciones="props">
+              <td class="accions-td">
+                <q-btn-group class="full-width full-height" outline square>
+                  <q-btn
+                    icon="visibility"
+                    text-color="blue-10"
+                    class="col text-bold q-pa-none icon-table"
+                    @click="showOrderDetails(props.row)"
+                  >
+                    <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                      Ver detalles
+                    </q-tooltip>
+                  </q-btn>
+                  <q-btn
+                    v-if="props.row.statuspay == 'PENDIENTE'"
+                    icon="payment"
+                    text-color="blue-10"
+                    class="col text-bold q-pa-none icon-table"
+                    @click="payOrderUser(props.row._id)"
+                  >
+                    <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                      Marcar como pago
+                    </q-tooltip>
+                  </q-btn>
+                </q-btn-group>
+              </td>
+            </template>
+          </q-table>
+        </q-card>
       </div>
     </div>
   </div>
@@ -102,7 +119,7 @@
   </template>
 </template>
 <script setup>
-import { getOrders } from "@/api/orders";
+import { getOrders, payOrder } from "@/api/orders";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { useStorage } from "@/stores/localStorage.js";
 import { modalShowState } from "@/stores/details.js";
@@ -215,6 +232,7 @@ const columns = ref([
 ]);
 
 const showOrderDetails = (item) => {
+  showRows.value = [];
   let count = 1;
   titleModal.value = "DETALLE DE LA ORDEN";
   orderValue.value = item;
@@ -243,11 +261,10 @@ async function getAllOrders() {
     const { orders } = await getOrders(idFarm.value);
     loading.value = false;
     let countActive = 1;
-
     if (orders) {
       orders.forEach((item) => {
         item.status = item.status ? "Inactivo" : "Activo";
-        if (item.statusorder == "ENTREGADO") {
+        if (item.statuspay == "PENDIENTE") {
           item.id = countActive++;
           rows.value.push(item);
         }
@@ -258,6 +275,21 @@ async function getAllOrders() {
   } catch {
     loading.value = false;
     showNotification("negative", "Ocurrió un error al obtener las ordenes");
+  }
+}
+
+async function payOrderUser(id) {
+  loading.value = true;
+  try {
+    await payOrder(id, idFarm.value);
+    showNotification("positive", "Pedido pagado correctamente");
+    loading.value = false;
+    rows.value = [];
+    inactiveRows.value = [];
+    getAllOrders();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error al verificar el pago");
   }
 }
 
