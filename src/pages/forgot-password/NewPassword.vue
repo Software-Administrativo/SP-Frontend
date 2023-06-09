@@ -137,7 +137,15 @@ async function postDataPassword() {
     
     let response = data?.response?.data?.errors[0]?.msg;
 
-    if (response == RESPONSES.LENGTHPASSWORD) {
+    if (response == RESPONSES.TOKENINVALID) {
+      showNotification(
+        "negative",
+        "Este enlace ya vencio, el tiempo de duración es de 10 minutos"
+      );
+      setTimeout(() => {
+      $router.push({ name: "sign-in"});
+    }, 2000);
+    } else if (response == RESPONSES.LENGTHPASSWORD) {
       showNotification(
         "negative",
         "La contraseña debe tener de 6 a 20 carácteres"
