@@ -1,18 +1,18 @@
 <template>
-  <h1>Hola pdf</h1>
+  <div id="exportFile">
+    <div>holaaaaaaaaa</div>
+  </div>
 </template>
 <script setup>
-import { modalState } from "@/stores/modal.js";
-import { modalShowState } from "@/stores/details.js";
-
-const modal = modalState();
-const modalShow = modalShowState();
-
 const props = defineProps({
-  propertiesPdf: {
+  data: {
     type: Object,
     required: false,
   },
 });
 </script>
-<style scoped></style>
+<style scoped>
+#exportFile {
+  display: none;
+}
+</style>

@@ -37,16 +37,16 @@ import { getCategories } from "@/api/inventory/categories";
 import { getBrands } from "@/api/inventory/brands";
 import { getClients } from "@/api/maintenance/clientss";
 import { getTransformationModels } from "@/api/transformation/modelss";
-import { useStorage } from "@/stores/localStorage.js";
 import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@/stores/localStorage.js";
 
 let stringOptions = [];
 let types = ref([]);
 let model = ref();
 let namesFarms = ref([]);
 
-const storage = useStorage();
 const valueSelect = ref(props.value);
+const storage = useStorage();
 const filterOptions = ref(stringOptions);
 
 const props = defineProps({
@@ -233,13 +233,13 @@ onMounted(async () => {
       "Consolidado Mensual",
     ];
   } else if (props.type === "years") {
-    // let today = new Date();
-    // let year = today.getFullYear();
-    let year = 2022;
-    let inital = 2021;
+    let year = 2023;
     let years = [];
-    for (let i = inital; inital <= year; i++) {
+
+    let i = 2023;
+    while (i <= year) {
       years.push(i);
+      i++;
     }
     types.value = years;
   }

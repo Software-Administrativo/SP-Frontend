@@ -387,7 +387,6 @@ const getDataCostsPLanting = async () => {
     });
     loading.value = false;
   } catch (error) {
-    console.log(error);
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
