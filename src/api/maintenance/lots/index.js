@@ -22,7 +22,6 @@ const getLots = async (idFarm) => {
 };
 
 const postLot = async (item, idFarm) => {
-  console.log(item);
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
