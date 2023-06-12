@@ -99,4 +99,18 @@ const activeFarm = async (id) => {
   }
 };
 
-export { getFarms, postFarm, updateFarm, inactiveFarm, activeFarm };
+const getFarmId = async (id) => {
+  try {
+    const tokenExist = getToken();
+    const { data } = await sugarAxios.get(`/maintenance/farm/${id}`, {
+      headers: {
+        token: tokenExist,
+      },
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+}
+
+export { getFarms, postFarm, updateFarm, inactiveFarm, activeFarm, getFarmId };
