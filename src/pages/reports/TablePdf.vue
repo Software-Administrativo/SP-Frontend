@@ -1,6 +1,6 @@
 <template>
   <div id="exportFile">
-    <div>holaaaaaaaaa</div>
+    <div>{{ props.data }}</div>
   </div>
 </template>
 <script setup>
@@ -13,6 +13,6 @@ const props = defineProps({
 </script>
 <style scoped>
 #exportFile {
-  display: none;
+  /* display: none; */
 }
 </style>

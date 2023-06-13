@@ -130,6 +130,7 @@ import Doughnut from "@/pages/reports/Doughnut.vue";
 import Bar from "@/pages/reports/Bar.vue";
 import { useQuasar } from "quasar";
 import { getFarmId } from "@/api/maintenance/farm";
+import { getAllInventory, getAnualReport, getMonthReport } from "@/api/reports";
 import { useStorage } from "@/stores/localStorage.js";
 import html2pdf from "html2pdf.js";
 
@@ -141,7 +142,7 @@ let dateTwo = ref("");
 let nameFarm = ref("");
 let addressFarm = ref("");
 let ownerFarm = ref("");
-let dataTable = ref("");
+let dataTable = ref([]);
 
 let valueBoolean = true;
 
@@ -195,34 +196,54 @@ const customDateValidation = (v) => {
   return true;
 };
 
+async function getInfoReport() {
+  if (typeReport.value == "Reporte Anual") {
+    const data = await getAnualReport(yearReport.value, idFarm.value);
+    dataTable.value = data;
+  } else if (typeReport.value == "Reporte de Inventario") {
+    const data = await getAllInventory(idFarm.value);
+    dataTable.value = data;
+  } else if (typeReport.value == "Consolidado Mensual") {
+    const data = await getMonthReport(
+      {
+        fstart: dateOne.value,
+        fend: dateTwo.value,
+      },
+      idFarm.value
+    );
+    dataTable.value = data;
+  }
+}
+
 async function generateFile() {
-  const notif = $q.notify({
-    type: "ongoing",
-    message: "Generando pdf...",
-    position: "top",
-  });
+  await getInfoReport();
+  // const notif = $q.notify({
+  //   type: "ongoing",
+  //   message: "Generando pdf...",
+  //   position: "top",
+  // });
 
-  const tableExport = document.getElementById("exportFile");
-  const elementoClonado = tableExport.cloneNode(true);
-  elementoClonado.style.display = "block";
-  const options = {
-    margin: 0.5,
-    filename: "Informe.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 3 },
-    jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
-  };
+  // const tableExport = document.getElementById("exportFile");
+  // const elementoClonado = tableExport.cloneNode(true);
+  // elementoClonado.style.display = "block";
+  // const options = {
+  //   margin: 0.5,
+  //   filename: "Informe.pdf",
+  //   image: { type: "jpeg", quality: 0.98 },
+  //   html2canvas: { scale: 3 },
+  //   jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+  // };
 
-  html2pdf().from(elementoClonado).set(options).save();
+  // html2pdf().from(elementoClonado).set(options).save();
 
-  notif({
-    type: "positive",
-    message: "Tu archivo se ha generado correctamente",
-    timeout: 1000,
-    position: "top",
-  });
+  // notif({
+  //   type: "positive",
+  //   message: "Tu archivo se ha generado correctamente",
+  //   timeout: 1000,
+  //   position: "top",
+  // });
 
-  elementoClonado.remove();
+  // elementoClonado.remove();
 }
 
 async function getFarmIdData() {
