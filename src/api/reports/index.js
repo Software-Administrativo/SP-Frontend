@@ -48,7 +48,7 @@ const getAllInventory = async (idFarm) => {
   try {
     const tokenExist = getToken();
 
-    const { data } = await sugarAxios.get(`/reports/currentmonth`, {
+    const { data } = await sugarAxios.get(`/reports/getinventory`, {
       headers: {
         token: tokenExist,
         farm: idFarm,
@@ -85,7 +85,7 @@ const getAnualReport = async (year, idFarm) => {
 const getMonthReport = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
-    const { data } = await sugarAxios.post(
+    const data = await sugarAxios.post(
       `/reports/reportyearmonth`,
       {
         fstart: item.fstart,
