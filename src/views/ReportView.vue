@@ -207,11 +207,10 @@ async function getInfoReport() {
     );
     let responses = response?.data?.errors[0]?.msg;
     if (responses == RESPONSES.DATEERROR) {
-      $q.notify({
-        type: "negative",
-        message: "La fecha inicial debe ser menor a la fecha final",
-        position: "top",
-      });
+      showNotification(
+        "negative",
+        "La fecha inicial debe ser menor a la fecha final"
+      );
       test.value = true;
     } else {
       dataTable.value = [data];
@@ -225,11 +224,10 @@ async function generateFile() {
   if (test.value == true) {
     return;
   } else {
-    const notif = $q.notify({
-      type: "ongoing",
-      message: "Generando pdf...",
-      position: "top",
-    });
+    showNotification(
+      "ongoing",
+      "Generando pdf, por favor espere un momento..."
+    );
 
     const tableExport = document.getElementById("exportFile");
     const elementoClonado = tableExport.cloneNode(true);
@@ -244,7 +242,7 @@ async function generateFile() {
 
     html2pdf().from(elementoClonado).set(options).save();
 
-    notif({
+    $q.notify({
       type: "positive",
       message: "Tu archivo se ha generado correctamente",
       timeout: 1000,
@@ -265,6 +263,14 @@ async function getFarmIdData() {
 const idFarm = computed(() => {
   return storage.idSelected;
 });
+
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
 
 onMounted(() => {
   getFarmIdData();

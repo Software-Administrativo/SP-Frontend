@@ -1,7 +1,16 @@
 <template>
   <div class="container">
     <span class="title">Pedidos Mensuales</span>
-    <Bar class="bar" id="bar" :data="dataBar" :options="optionsBar" />
+    <div class="spinner" v-if="isLoading">
+      <q-spinner-ios color="primary" size="2.5em" />
+    </div>
+    <Bar
+      v-if="!isLoading"
+      class="bar"
+      id="bar"
+      :data="dataBar"
+      :options="optionsBar"
+    />
   </div>
 </template>
 
@@ -31,6 +40,8 @@ ChartJS.register(
   ArcElement
 );
 
+let isLoading = ref(false);
+
 const storage = useStorage();
 
 const dataBar = ref({
@@ -48,65 +59,87 @@ const optionsBar = {
 };
 
 const getDataBar = async () => {
-  const { data } = await postAllordersyear(idFarm.value);
-  dataBar.value = {
-    labels: [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ],
-    datasets: [
-      {
-        label: "Pedidos",
-        backgroundColor: [
-          "#B9E7FF",
-          "#315d96",
-          "#48A5F3",
-          "#C6C6D1",
-          "#2766a9",
-          "#B9E7FF",
-          "#315d96",
-          "#48A5F3",
-          "#C6C6D1",
-          "#2766a9",
-          "#B9E7FF",
-        ],
-        data: [
-          data.allorders[0].totalOrdersPay,
-          data.allorders[1].totalOrdersPay,
-          data.allorders[2].totalOrdersPay,
-          data.allorders[3].totalOrdersPay,
-          data.allorders[4].totalOrdersPay,
-          data.allorders[5].totalOrdersPay,
-          data.allorders[6].totalOrdersPay,
-          data.allorders[7].totalOrdersPay,
-          data.allorders[8].totalOrdersPay,
-          data.allorders[9].totalOrdersPay,
-          data.allorders[10].totalOrdersPay,
-          data.allorders[11].totalOrdersPay,
-        ],
-      },
-    ],
-  };
+  isLoading.value = true;
+  try {
+    const { data } = await postAllordersyear(idFarm.value);
+    isLoading.value = false;
+    dataBar.value = {
+      labels: [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ],
+      datasets: [
+        {
+          label: "Pedidos",
+          backgroundColor: [
+            "#B9E7FF",
+            "#315d96",
+            "#48A5F3",
+            "#C6C6D1",
+            "#2766a9",
+            "#B9E7FF",
+            "#315d96",
+            "#48A5F3",
+            "#C6C6D1",
+            "#2766a9",
+            "#B9E7FF",
+          ],
+          data: [
+            data.allorders[0].totalOrdersPay,
+            data.allorders[1].totalOrdersPay,
+            data.allorders[2].totalOrdersPay,
+            data.allorders[3].totalOrdersPay,
+            data.allorders[4].totalOrdersPay,
+            data.allorders[5].totalOrdersPay,
+            data.allorders[6].totalOrdersPay,
+            data.allorders[7].totalOrdersPay,
+            data.allorders[8].totalOrdersPay,
+            data.allorders[9].totalOrdersPay,
+            data.allorders[10].totalOrdersPay,
+            data.allorders[11].totalOrdersPay,
+          ],
+        },
+      ],
+    };
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error al desactivar el usuario");
+  }
 };
 
 const idFarm = computed(() => {
   return storage.idSelected;
 });
 
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
+
 onMounted(async () => {
   getDataBar();
 });
 </script>
 <style scoped>
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 50px;
+}
 .container {
   padding: 20px;
 }

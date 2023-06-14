@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <span class="title">Balances del Mes</span>
+    <div class="spinner" v-if="isLoading">
+      <q-spinner-ios color="primary" size="2.5em" />
+    </div>
     <Doughnut
+      v-if="!isLoading"
       class="doughnut"
       id="doughnut-chart"
       :options="optionsDougnut"
@@ -36,6 +40,8 @@ ChartJS.register(
   ArcElement
 );
 
+let isLoading = ref(false);
+
 const storage = useStorage();
 
 const dataDoughnut = ref({
@@ -49,34 +55,41 @@ const dataDoughnut = ref({
 });
 
 const getDataDoughnut = async () => {
-  const data = await getDoughnut(idFarm.value);
-  dataDoughnut.value = {
-    labels: [
-      "Actividades",
-      "Transformación",
-      "Plantación",
-      "Administración",
-      "Pedidos",
-    ],
-    datasets: [
-      {
-        backgroundColor: [
-          "#B9E7FF",
-          "#315d96",
-          "#48A5F3",
-          "#C6C6D1",
-          "#2766a9",
-        ],
-        data: [
-          data.totalActivityExpenses,
-          data.totalTransformationCosts,
-          data.totalPlantationCosts,
-          data.totalAdministrativeCosts,
-          data.totalOrders,
-        ],
-      },
-    ],
-  };
+  isLoading.value = true;
+  try {
+    const data = await getDoughnut(idFarm.value);
+    isLoading.value = false;
+    dataDoughnut.value = {
+      labels: [
+        "Actividades",
+        "Transformación",
+        "Plantación",
+        "Administración",
+        "Pedidos",
+      ],
+      datasets: [
+        {
+          backgroundColor: [
+            "#B9E7FF",
+            "#315d96",
+            "#48A5F3",
+            "#C6C6D1",
+            "#2766a9",
+          ],
+          data: [
+            data.totalActivityExpenses,
+            data.totalTransformationCosts,
+            data.totalPlantationCosts,
+            data.totalAdministrativeCosts,
+            data.totalOrders,
+          ],
+        },
+      ],
+    };
+  } catch {
+    isLoading.value = false;
+    showNotification("negative", "Ocurrió un error al desactivar el usuario");
+  }
 };
 
 const optionsDougnut = {
@@ -88,11 +101,26 @@ const idFarm = computed(() => {
   return storage.idSelected;
 });
 
+const showNotification = (type, message) => {
+  $q.notify({
+    type: type,
+    message: message,
+    position: "top",
+  });
+};
+
 onMounted(async () => {
   getDataDoughnut();
 });
 </script>
 <style scoped>
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 50px;
+}
 .container {
   padding: 20px;
 }
