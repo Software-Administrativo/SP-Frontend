@@ -28,7 +28,9 @@
     </div>
     <div class="col-12">
       <div class="forgot-password-link">
-        <router-link to="/forgotpassword">¿Olvidaste la contraseña?</router-link>
+        <router-link class="forgotpassword" to="/forgotpassword"
+          >¿Olvidaste la contraseña?</router-link
+        >
       </div>
     </div>
   </div>
@@ -111,6 +113,9 @@ const getPasswordData = (value) => {
 };
 </script>
 <style scoped>
+.forgotpassword {
+  color: #0068a5;
+}
 .btn-login {
   background-color: #0068a5;
 }
@@ -119,5 +124,4 @@ const getPasswordData = (value) => {
   border-radius: 5px;
   padding: 5px 15px;
 }
-
 </style>
