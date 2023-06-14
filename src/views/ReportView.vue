@@ -224,10 +224,12 @@ async function generateFile() {
   if (test.value == true) {
     return;
   } else {
-    showNotification(
-      "ongoing",
-      "Generando pdf, por favor espere un momento..."
-    );
+    const notif = $q.notify({
+      type: "ongoing",
+      message: "Generando pdf, por favor espere un momento...",
+      timeout: 1000,
+      position: "top",
+    });
 
     const tableExport = document.getElementById("exportFile");
     const elementoClonado = tableExport.cloneNode(true);
@@ -242,7 +244,7 @@ async function generateFile() {
 
     html2pdf().from(elementoClonado).set(options).save();
 
-    $q.notify({
+    notif({
       type: "positive",
       message: "Tu archivo se ha generado correctamente",
       timeout: 1000,
