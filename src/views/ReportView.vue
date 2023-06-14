@@ -63,7 +63,7 @@
               v-model="dateTwo"
               mask="date"
               :disable="disabledDate"
-              :rules="['date', customDateValidation]"
+              :rules="['date']"
             >
               <template v-slot:append>
                 <q-icon name="event" class="cursor-pointer">
@@ -120,7 +120,7 @@
       </div>
     </div>
   </div>
-  <TablePdf :data="dataTable" />
+  <TablePdf :data="dataTable" :type="typeReport" />
 </template>
 <script setup>
 import { ref, computed, onMounted } from "vue";
@@ -130,8 +130,10 @@ import Doughnut from "@/pages/reports/Doughnut.vue";
 import Bar from "@/pages/reports/Bar.vue";
 import { useQuasar } from "quasar";
 import { getFarmId } from "@/api/maintenance/farm";
+import { getAllInventory, getAnualReport, getMonthReport } from "@/api/reports";
 import { useStorage } from "@/stores/localStorage.js";
 import html2pdf from "html2pdf.js";
+import { RESPONSES } from "@/helpers";
 
 let typeReport = ref("");
 let yearReport = ref("");
@@ -141,9 +143,9 @@ let dateTwo = ref("");
 let nameFarm = ref("");
 let addressFarm = ref("");
 let ownerFarm = ref("");
-let dataTable = ref("");
+let dataTable = ref([]);
 
-let valueBoolean = true;
+const test = ref(false);
 
 const $q = useQuasar();
 const storage = useStorage();
@@ -160,7 +162,7 @@ const disabled = computed(() => {
       return false;
     }
   } else if (typeReport.value == "Consolidado Mensual") {
-    if (!dateOne.value || !dateTwo.value || valueBoolean != false) {
+    if (!dateOne.value || !dateTwo.value) {
       return true;
     } else {
       return false;
@@ -186,43 +188,71 @@ const disabledDate = computed(() => {
   }
 });
 
-const customDateValidation = (v) => {
-  if (v < dateOne.value) {
-    valueBoolean = false;
-    return "La fecha no puede ser menor a la fecha inicial";
+async function getInfoReport() {
+  if (typeReport.value == "Reporte Anual") {
+    const { data } = await getAnualReport(yearReport.value, idFarm.value);
+    dataTable.value = data;
+  } else if (typeReport.value == "Reporte de Inventario") {
+    const data = await getAllInventory(idFarm.value);
+    dataTable.value = data;
+  } else if (typeReport.value == "Consolidado Mensual") {
+    let dataStart = dateOne.value.replace(/\//g, "-");
+    let dataEnd = dateTwo.value.replace(/\//g, "-");
+    const { data, response } = await getMonthReport(
+      {
+        fstart: dataStart,
+        fend: dataEnd,
+      },
+      idFarm.value
+    );
+    let responses = response?.data?.errors[0]?.msg;
+    if (responses == RESPONSES.DATEERROR) {
+      $q.notify({
+        type: "negative",
+        message: "La fecha inicial debe ser menor a la fecha final",
+        position: "top",
+      });
+      test.value = true;
+    } else {
+      dataTable.value = [data];
+      test.value = false;
+    }
   }
-  valueBoolean = true;
-  return true;
-};
+}
 
 async function generateFile() {
-  const notif = $q.notify({
-    type: "ongoing",
-    message: "Generando pdf...",
-    position: "top",
-  });
+  await getInfoReport();
+  if (test.value == true) {
+    return;
+  } else {
+    const notif = $q.notify({
+      type: "ongoing",
+      message: "Generando pdf...",
+      position: "top",
+    });
 
-  const tableExport = document.getElementById("exportFile");
-  const elementoClonado = tableExport.cloneNode(true);
-  elementoClonado.style.display = "block";
-  const options = {
-    margin: 0.5,
-    filename: "Informe.pdf",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 3 },
-    jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
-  };
+    const tableExport = document.getElementById("exportFile");
+    const elementoClonado = tableExport.cloneNode(true);
+    elementoClonado.style.display = "block";
+    const options = {
+      margin: 0.5,
+      filename: `${typeReport.value}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 3 },
+      jsPDF: { unit: "in", format: "letter", orientation: "landscape" },
+    };
 
-  html2pdf().from(elementoClonado).set(options).save();
+    html2pdf().from(elementoClonado).set(options).save();
 
-  notif({
-    type: "positive",
-    message: "Tu archivo se ha generado correctamente",
-    timeout: 1000,
-    position: "top",
-  });
+    notif({
+      type: "positive",
+      message: "Tu archivo se ha generado correctamente",
+      timeout: 1000,
+      position: "top",
+    });
 
-  elementoClonado.remove();
+    elementoClonado.remove();
+  }
 }
 
 async function getFarmIdData() {
