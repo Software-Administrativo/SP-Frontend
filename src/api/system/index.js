@@ -33,7 +33,7 @@ const postUser = async (item, idFarm) => {
         tpdocument: item.tpdocument,
         numdocument: item.numdocument,
         role: item.role,
-        farms: [item.farms],
+        farms: item.farms,
         email: item.email,
         password: item.password,
       },
@@ -60,7 +60,7 @@ const updateUserSystem = async (item, idFarm) => {
         tpdocument: item.tpdocument,
         numdocument: item.numdocument,
         role: item.role,
-        farms: [item.farms],
+        farms: item.farms,
         email: item.email,
         password: item.password,
       },
@@ -147,6 +147,7 @@ const postChangePassword = async (item) => {
 };
 
 
-export { getUsers, inactiveUser, activeUser, postUser, updateUserSystem,
-  postForgotPassword, postChangePassword 
+export {
+  getUsers, inactiveUser, activeUser, postUser, updateUserSystem,
+  postForgotPassword, postChangePassword
 };
