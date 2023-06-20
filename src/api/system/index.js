@@ -119,12 +119,9 @@ const activeUser = async (id, idFarm) => {
 
 const postForgotPassword = async (item) => {
   try {
-    const { data } = await sugarAxios.post(
-      `/users/requestresetpass`,
-      {
-        email: item.email
-      },
-    );
+    const { data } = await sugarAxios.post(`/users/requestresetpass`, {
+      email: item.email,
+    });
     return data;
   } catch (error) {
     return error;
@@ -133,21 +130,22 @@ const postForgotPassword = async (item) => {
 
 const postChangePassword = async (item) => {
   try {
-    const { data } = await sugarAxios.post(
-      `/users/changePassword`,
-      {
-        password: item.password,
-        token: item.token
-      },
-    );
+    const { data } = await sugarAxios.post(`/users/changePassword`, {
+      password: item.password,
+      token: item.token,
+    });
     return data;
   } catch (error) {
     return error;
   }
 };
 
-
 export {
-  getUsers, inactiveUser, activeUser, postUser, updateUserSystem,
-  postForgotPassword, postChangePassword
+  getUsers,
+  inactiveUser,
+  activeUser,
+  postUser,
+  updateUserSystem,
+  postForgotPassword,
+  postChangePassword,
 };

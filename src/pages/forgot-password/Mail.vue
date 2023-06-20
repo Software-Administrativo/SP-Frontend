@@ -52,7 +52,7 @@
 import { postForgotPassword } from "@/api/system";
 import { ref, computed } from "vue";
 import Email from "@/commons/forms/Email.vue";
-import { useQuasar } from "quasar"
+import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 
 const $q = useQuasar();
@@ -76,10 +76,10 @@ const props = defineProps({
 const isLoading = ref(false);
 
 const getInputEmail = (value) => {
-  email.value = value
+  email.value = value;
 };
 
-  const showNotification = (type, message) => {
+const showNotification = (type, message) => {
   $q.notify({
     type: type,
     message: message,
@@ -87,20 +87,17 @@ const getInputEmail = (value) => {
   });
 };
 
-
 async function postDataEmail() {
   isLoading.value = true;
   try {
-    await postForgotPassword(
-      {
-        email: email.value,
-      }
-    );
+    await postForgotPassword({
+      email: email.value,
+    });
     isLoading.value = false;
     showNotification("positive", "Email enviado correctamente");
     setTimeout(() => {
-    $router.back();
-  }, 2000);
+      $router.back();
+    }, 2000);
   } catch {
     isLoading.value = false;
     showNotification(
@@ -109,7 +106,6 @@ async function postDataEmail() {
     );
   }
 }
-
 </script>
 <style scoped>
 .background-sugar {

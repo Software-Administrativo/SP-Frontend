@@ -35,6 +35,15 @@ const router = createRouter({
       },
     },
     {
+      path: "/configuration",
+      name: "configuration",
+      component: () => import("../pages/initial-configuration/steps.vue"),
+      meta: {
+        requiresAuth: true,
+        rol: ["ADMIN", "SUPER"],
+      },
+    },
+    {
       path: "/cost",
       name: "cost",
       component: () => import("../views/CostView.vue"),
@@ -176,7 +185,7 @@ const router = createRouter({
           name: "order-pays",
           component: () => import("../pages/order/Pays.vue"),
         },
-      ]
+      ],
     },
     {
       path: "/report",
@@ -208,24 +217,26 @@ const router = createRouter({
         {
           path: "model-transformation",
           name: "trasformation-model",
-          component: () => import("../pages/transformation/ModelTransformation.vue"),
+          component: () =>
+            import("../pages/transformation/ModelTransformation.vue"),
         },
         {
           path: "cost-transformation",
           name: "transformation-cost",
-          component: () => import("../pages/transformation/CostTransformation.vue"),
+          component: () =>
+            import("../pages/transformation/CostTransformation.vue"),
         },
       ],
     },
     {
       path: "/forgotpassword",
       name: "forgotpassword",
-      component: () => import("../pages/forgot-password/Mail.vue")
+      component: () => import("../pages/forgot-password/Mail.vue"),
     },
     {
       path: "/newpassword/:token",
       name: "newpassword",
-      component: () => import("../pages/forgot-password/NewPassword.vue")
+      component: () => import("../pages/forgot-password/NewPassword.vue"),
     },
   ],
 });

@@ -1,6 +1,12 @@
 <template>
   <q-layout class="container-view">
-    <Header v-if="routeName != 'sign-in' && routeName !='forgotpassword' && routeName !='newpassword'"></Header>
+    <Header
+      v-if="
+        routeName != 'sign-in' &&
+        routeName != 'forgotpassword' &&
+        routeName != 'newpassword'
+      "
+    ></Header>
     <div class="row">
       <Sidebar
         class="col-2"
@@ -10,7 +16,11 @@
       ></Sidebar>
       <DefaultSidebar
         v-if="
-          isUserLoggedIn && menu.menuIsOpen == false && routeName != 'sign-in' && routeName !='forgotpassword' && routeName !='newpassword'
+          isUserLoggedIn &&
+          menu.menuIsOpen == false &&
+          routeName != 'sign-in' &&
+          routeName != 'forgotpassword' &&
+          routeName != 'newpassword'
         "
       ></DefaultSidebar>
       <div :style="viewRouter">
@@ -88,7 +98,12 @@ const routeName = computed(() => {
 });
 
 const viewRouter = computed(() => {
-  if (menu.menuIsOpen && routeName.value != "sign-in" && routeName.value != "forgotpassword" && routeName.value != "newpassword") {
+  if (
+    menu.menuIsOpen &&
+    routeName.value != "sign-in" &&
+    routeName.value != "forgotpassword" &&
+    routeName.value != "newpassword"
+  ) {
     return "width: calc(100% - 230px); min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else if (
     !menu.menuIsOpen &&
@@ -102,7 +117,11 @@ const viewRouter = computed(() => {
 });
 
 const viewContainer = computed(() => {
-  if (routeName.value == "sign-in" || routeName.value == "forgotpassword" || routeName.value == "newpassword") {
+  if (
+    routeName.value == "sign-in" ||
+    routeName.value == "forgotpassword" ||
+    routeName.value == "newpassword"
+  ) {
     return "width: 100vw; min-width: 300px; overflow: hidden; display: grid; justify-items: center;";
   } else {
     return "width: 90%; max-width: 1500px;";

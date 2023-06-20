@@ -105,7 +105,7 @@ const payOrder = async (id, idFarm) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 const deliverOrder = async (id, idFarm) => {
   try {
@@ -125,6 +125,13 @@ const deliverOrder = async (id, idFarm) => {
   } catch (error) {
     return error;
   }
-}
+};
 
-export { getOrders, inactiveOrder, activeOrder, postOrder, payOrder, deliverOrder };
+export {
+  getOrders,
+  inactiveOrder,
+  activeOrder,
+  postOrder,
+  payOrder,
+  deliverOrder,
+};

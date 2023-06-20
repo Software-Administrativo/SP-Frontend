@@ -59,7 +59,7 @@
                         class="col text-bold q-pa-none icon-table"
                         @click="editClientMaintenance(props.row)"
                       >
-                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Editar
                         </q-tooltip>
                       </q-btn>
@@ -69,7 +69,7 @@
                         class="col text-bold q-pa-none icon-table"
                         @click="inactiveClientMaintenance(props.row._id)"
                       >
-                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Desactivar
                         </q-tooltip>
                       </q-btn>
@@ -413,10 +413,10 @@ async function postDataClient() {
     if (response == RESPONSES.LENGHTDOCUMENT) {
       showNotification("negative", "El documento es muy corto");
     } else {
-    showNotification("positive", "Cliente registrado correctamente");
-    modal.toggleModal();
-    rows.value = [];
-    getDataClients();
+      showNotification("positive", "Cliente registrado correctamente");
+      modal.toggleModal();
+      rows.value = [];
+      getDataClients();
     }
   } catch {
     isLoading.value = false;
@@ -447,10 +447,10 @@ async function updateDataClient() {
     if (response == RESPONSES.LENGHTDOCUMENT) {
       showNotification("negative", "El documento es muy corto");
     } else {
-    showNotification("positive", "Cliente actualizado correctamente");
-    modal.toggleModal();
-    rows.value = [];
-    getDataClients();
+      showNotification("positive", "Cliente actualizado correctamente");
+      modal.toggleModal();
+      rows.value = [];
+      getDataClients();
     }
   } catch {
     isLoading.value = false;

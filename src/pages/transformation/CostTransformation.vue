@@ -62,7 +62,7 @@
                         class="col text-bold q-pa-none icon-table"
                         @click="editTransformationCost(props.row)"
                       >
-                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Editar
                         </q-tooltip>
                       </q-btn>
@@ -72,7 +72,7 @@
                         class="col text-bold q-pa-none icon-table"
                         @click="inactiveActivityExpenseCosts(props.row._id)"
                       >
-                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Desactivar
                         </q-tooltip>
                       </q-btn>

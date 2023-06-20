@@ -59,7 +59,7 @@
                         class="col text-bold q-pa-none icon-table"
                         @click="editProductsInventory(props.row)"
                       >
-                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Editar
                         </q-tooltip>
                       </q-btn>
@@ -69,7 +69,7 @@
                         class="col text-bold q-pa-none icon-table"
                         @click="inactiveProductInventory(props.row._id)"
                       >
-                      <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Desactivar
                         </q-tooltip>
                       </q-btn>
@@ -113,7 +113,7 @@
                       >
                         <i class="icon icon-check"></i>
                         <q-tooltip class="bg-indigo" :offset="[10, 10]">
-                          Activar 
+                          Activar
                         </q-tooltip>
                       </q-btn>
                     </q-btn-group>

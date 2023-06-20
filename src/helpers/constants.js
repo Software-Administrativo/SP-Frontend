@@ -10,7 +10,7 @@ const RESPONSES = Object.freeze({
   EMAILEXIST: "El usuario ya existe por email",
   LENGHTDOCUMENT: "El documento es muy corto",
   TOKENINVALID: "Token invalido",
-  DATEERROR: "La fecha inicial debe ser menor a la fecha final"
+  DATEERROR: "La fecha inicial debe ser menor a la fecha final",
 });
 
 export { RESPONSES };

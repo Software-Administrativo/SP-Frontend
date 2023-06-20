@@ -111,6 +111,6 @@ const getFarmId = async (id) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 export { getFarms, postFarm, updateFarm, inactiveFarm, activeFarm, getFarmId };

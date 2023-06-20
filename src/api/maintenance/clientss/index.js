@@ -107,4 +107,10 @@ const activeClients = async (id, idFarm) => {
   }
 };
 
-export { getClients, postClients, inactiveClients, activeClients, updateClients };
+export {
+  getClients,
+  postClients,
+  inactiveClients,
+  activeClients,
+  updateClients,
+};

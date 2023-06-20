@@ -134,7 +134,7 @@ async function postDataPassword() {
       password: password.value,
     });
     isLoading.value = false;
-    
+
     let response = data?.response?.data?.errors[0]?.msg;
 
     if (response == RESPONSES.TOKENINVALID) {
@@ -143,8 +143,8 @@ async function postDataPassword() {
         "Este enlace ya vencio, el tiempo de duración es de 10 minutos"
       );
       setTimeout(() => {
-      $router.push({ name: "sign-in"});
-    }, 2000);
+        $router.push({ name: "sign-in" });
+      }, 2000);
     } else if (response == RESPONSES.LENGTHPASSWORD) {
       showNotification(
         "negative",
@@ -156,10 +156,11 @@ async function postDataPassword() {
         "La contraseña debe tener una letra mayúscula, una letra minúscula y un número"
       );
     } else {
-    showNotification("positive", "Contraseña cambiada con exito");
-    setTimeout(() => {
-      $router.push({ name: "sign-in"});
-    }, 2000);}
+      showNotification("positive", "Contraseña cambiada con exito");
+      setTimeout(() => {
+        $router.push({ name: "sign-in" });
+      }, 2000);
+    }
   } catch {
     isLoading.value = false;
     showNotification(

@@ -29,7 +29,7 @@ const postAllordersyear = async (idFarm) => {
     const data = await sugarAxios.post(
       `/reports/allordersyear`,
       {
-        year: "2023"
+        year: "2023",
       },
       {
         headers: {
@@ -58,7 +58,7 @@ const getAllInventory = async (idFarm) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 const getAnualReport = async (year, idFarm) => {
   try {
@@ -67,7 +67,7 @@ const getAnualReport = async (year, idFarm) => {
     const data = await sugarAxios.post(
       `/reports/annualreport`,
       {
-        year: year
+        year: year,
       },
       {
         headers: {
@@ -80,7 +80,7 @@ const getAnualReport = async (year, idFarm) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 const getMonthReport = async (item, idFarm) => {
   try {
@@ -89,7 +89,7 @@ const getMonthReport = async (item, idFarm) => {
       `/reports/reportyearmonth`,
       {
         fstart: item.fstart,
-        fend: item.fend
+        fend: item.fend,
       },
       {
         headers: {
@@ -102,12 +102,12 @@ const getMonthReport = async (item, idFarm) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 export {
   getDoughnut,
   postAllordersyear,
   getAllInventory,
   getAnualReport,
-  getMonthReport
+  getMonthReport,
 };
