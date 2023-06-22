@@ -21,6 +21,8 @@ const getProducts = async (idFarm) => {
 };
 
 const postProduct = async (type, idFarm) => {
+  console.log('data send',type)
+  
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
@@ -41,6 +43,7 @@ const postProduct = async (type, idFarm) => {
     );
     return data;
   } catch (error) {
+    console.log(error);
     return error;
   }
 };

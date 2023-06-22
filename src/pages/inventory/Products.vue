@@ -151,11 +151,21 @@
               v-model="brandProducts"
               @onSelect="getInputBrand"
             />
+            <Select
+              class="q-pb-lg"
+              label="Categoria"
+              :required="true"
+              type="category"
+              :ruless="rules"
+              :value="valueInputCategory"
+              v-model="categoryProducts"
+              @onSelect="getInputCategory"
+            />
             <Input
               class="q-pb-xs"
               label="Cantidad"
               :required="true"
-              type="text"
+              type="number"
               :ruless="rules"
               :value="valueInputAmount"
               v-model="amountProducts"
@@ -205,6 +215,7 @@ import {
 } from "@/api/inventory/products";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import { getBrands } from "@/api/inventory/brands";
+import { getCategories } from "@/api/inventory/categories";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
 import { RESPONSES } from "@/helpers";
@@ -244,10 +255,12 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 let filter = ref("");
 let nameProducts = ref("");
 let brandProducts = ref("");
+let categoryProducts = ref("");
 let amountProducts = ref("");
 let descriptionProducts = ref("");
 let valueInputName = ref("");
 let valueInputBrand = ref("");
+let valueInputCategory = ref("");
 let valueInputAmount = ref("");
 let valueInputDescription = ref("");
 let tab = ref("active");
@@ -319,6 +332,10 @@ const getInputBrand = (value) => {
   brandProducts.value = value;
 };
 
+const getInputCategory = (value) =>{
+  categoryProducts.value = value;
+}
+
 const getInputDescription = (value) => {
   descriptionProducts.value = value;
 };
@@ -331,6 +348,7 @@ const clickButton = () => {
   titleModal.value = "REGISTRAR PRODUCTOS";
   valueInputName.value = "";
   valueInputBrand.value = "";
+  valueInputCategory.value = "";
   valueInputAmount.value = "";
   valueInputDescription.value = "";
   typeAction.value = true;
@@ -338,6 +356,7 @@ const clickButton = () => {
   nameProducts.value = "";
   descriptionProducts.value = "";
   brandProducts.value = "";
+  categoryProducts.value = "";
   amountProducts.value = "";
 };
 
@@ -347,11 +366,13 @@ const editProductsInventory = (item) => {
   idProducts.value = item._id;
   valueInputName.value = item.name;
   valueInputBrand.value = item.mark;
+  valueInputCategory.value = item.category
   valueInputAmount.value = item.amount;
   valueInputDescription.value = item.description;
   nameProducts.value = item.name;
   descriptionProducts.value = item.description;
   brandProducts.value = item.brand;
+  categoryProducts.value = item.category
   amountProducts.value = item.amount;
   modal.toggleModal();
 };
@@ -396,11 +417,29 @@ const getDataProducts = async () => {
 };
 
 async function postDataProduct() {
+  const { category } = await getCategories(idFarm.value)
+  const { mark } = await getBrands(idFarm.value)
+
+  
+  category.forEach((item) => {
+    if (item.name == categoryProducts.value) {
+      categoryProducts.value = item._id;
+    }
+  });
+  
+  mark.forEach((item) => {
+    if (item.name == brandProducts.value) {
+      brandProducts.value = item._id;
+    }
+  });
+
   isLoading.value = true;
+
   const products = await postProduct(
     {
       name: nameProducts.value,
       mark: brandProducts.value,
+      category: categoryProducts.value,
       amount: amountProducts.value,
       description:
         descriptionProducts.value == ""
