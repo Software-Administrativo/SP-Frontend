@@ -7,7 +7,7 @@ import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   // GitHub Pages
-  base: "/SP-Frontend/",
+/*   base: "/SP-Frontend/", */
   resolve: {
     // Alias de las carpetas
     alias: {
