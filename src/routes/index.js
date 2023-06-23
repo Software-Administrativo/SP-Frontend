@@ -37,7 +37,7 @@ const router = createRouter({
     {
       path: "/configuration",
       name: "configuration",
-      component: () => import("../pages/initial-configuration/steps.vue"),
+      component: () => import("../pages/initial-configuration/Steps.vue"),
       meta: {
         requiresAuth: true,
         rol: ["ADMIN", "SUPER"],

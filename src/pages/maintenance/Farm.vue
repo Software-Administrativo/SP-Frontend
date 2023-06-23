@@ -225,6 +225,7 @@ const disableSave = computed(() => {
     return false;
   }
 });
+
 const rules = [(v) => !!v || "Este campo es requerido"];
 
 let filter = ref("");

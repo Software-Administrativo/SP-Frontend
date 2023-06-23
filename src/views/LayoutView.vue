@@ -1,6 +1,7 @@
 <template>
   <q-layout class="container-view">
     <Header
+      :routename="routeName"
       v-if="
         routeName != 'sign-in' &&
         routeName != 'forgotpassword' &&
@@ -12,7 +13,11 @@
         class="col-2"
         @onRoute="clickButton($event)"
         :style="sidebar"
-        v-if="menu.menuIsOpen == true && routeName != 'sign-in'"
+        v-if="
+          menu.menuIsOpen == true &&
+          routeName != 'sign-in' &&
+          routeName != 'configuration'
+        "
       ></Sidebar>
       <DefaultSidebar
         v-if="
@@ -20,13 +25,14 @@
           menu.menuIsOpen == false &&
           routeName != 'sign-in' &&
           routeName != 'forgotpassword' &&
-          routeName != 'newpassword'
+          routeName != 'newpassword' &&
+          routeName != 'configuration'
         "
       ></DefaultSidebar>
       <div :style="viewRouter">
         <div :style="viewContainer">
           <router-view></router-view>
-          <template v-if="selectFarm !== false">
+          <template v-if="selectFarm !== false && viewSteps != false">
             <ModalForm show="false">
               <div class="column q-px-xl q-pt-lg q-mb-sm">
                 <span class="title-farm">Para continuar</span>
@@ -64,6 +70,7 @@ import { RouterView, useRoute } from "vue-router";
 import DefaultSidebar from "../modules/sidebar/DefaultSidebar.vue";
 import { useStorage } from "@/stores/localStorage";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import Steps from "@/pages/initial-configuration/Steps.vue";
 import Select from "@/commons/forms/Select.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 
@@ -77,6 +84,15 @@ const getSelectData = (value) => {
   farmSelected.value = value;
   disableSave.value = false;
 };
+
+const viewSteps = computed(() => {
+  const exitFarm = storage.decodeJwt();
+  if (exitFarm.farms.length == 0) {
+    return false;
+  } else {
+    return true;
+  }
+});
 
 const saveInfo = () => {
   storage.setFarm(farmSelected.value);

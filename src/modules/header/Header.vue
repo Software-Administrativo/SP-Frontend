@@ -8,6 +8,7 @@
         icon="menu"
         class="text-white"
         @click="toggle()"
+        v-if="props.routename != 'configuration'"
       />
       <span class="name-farm">{{ nameFarm }}</span>
       <q-space></q-space>
@@ -28,6 +29,13 @@
 import { menuState } from "@/stores/menu";
 import { useStorage } from "@/stores/localStorage";
 import { computed } from "vue";
+
+const props = defineProps({
+  routename: {
+    type: String,
+    required: false,
+  },
+});
 
 const storage = useStorage();
 

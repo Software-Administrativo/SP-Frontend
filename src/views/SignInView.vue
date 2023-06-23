@@ -49,7 +49,12 @@ const validateIfUserExist = async (data) => {
   } else {
     isLoading.value = false;
     storage.addStorage(validateDataUser.token);
-    router.push({ name: "home" });
+    const exitFarm = storage.decodeJwt();
+    if (exitFarm.farms.length == 0) {
+      router.push({ name: "configuration" });
+    } else {
+      router.push({ name: "home" });
+    }
   }
 };
 
