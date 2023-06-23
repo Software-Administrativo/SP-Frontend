@@ -5,7 +5,7 @@
     <q-separator class="separator" />
 
     <div class="row container-content q-pt-lg">
-      <div class="column col-5 container-report">
+      <div class="column col-xs-12 col-sm-5 container-report">
         <div class="section-reports">
           <span class="title-section">Informes</span>
           <Select
@@ -115,7 +115,7 @@
       <div class="col-7">
         <div class="back">
           <Doughnut />
-          <Bar />
+          <Bar :style="visibilityBar" />
         </div>
       </div>
     </div>
@@ -185,6 +185,12 @@ const disabledDate = computed(() => {
     return true;
   } else {
     return false;
+  }
+});
+
+const visibilityBar = computed(() => {
+  if (window.screen.height < 870) {
+    return "display: none";
   }
 });
 

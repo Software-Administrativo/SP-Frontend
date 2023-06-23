@@ -1,5 +1,6 @@
 // Importamos la instancia de axios
 import { sugarAxios } from "../global";
+import { RESPONSES } from "@/helpers";
 
 /**
  * @param: typeDocument, documentUser, password
@@ -13,8 +14,8 @@ const validateUser = async ({ typeDocument, documentUser, password }) => {
       password: password,
     });
     return data;
-  } catch (error) {
-    return data;
+  } catch {
+    return RESPONSES.WRONG;
   }
 };
 

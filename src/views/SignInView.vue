@@ -29,7 +29,7 @@ import { validateUser } from "@/api/sign-in";
 import { RESPONSES } from "@/helpers";
 import Form from "@/modules/sign-in/Form.vue";
 import { useStorage } from "@/stores/localStorage.js";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 // Data
@@ -43,7 +43,7 @@ const validateIfUserExist = async (data) => {
   isValidate.value = false;
   isLoading.value = true;
   const validateDataUser = await validateUser(data);
-  if (validateDataUser.msg == RESPONSES.WRONG) {
+  if (validateDataUser == RESPONSES.WRONG) {
     isLoading.value = false;
     isValidate.value = true;
   } else {
@@ -52,6 +52,10 @@ const validateIfUserExist = async (data) => {
     router.push({ name: "home" });
   }
 };
+
+onMounted(() => {
+  storage.deleteStorage;
+});
 </script>
 <style scoped>
 .background-sugar {

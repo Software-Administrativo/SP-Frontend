@@ -33,7 +33,7 @@ export const useStorage = defineStore(
       const decodeToken = storage.decodeJwt();
       const farms = decodeToken.farms;
 
-      const farmsExist = farms.forEach((item) => {
+      farms.forEach((item) => {
         if (item.name == data) {
           idSelected.value = item._id;
         }
