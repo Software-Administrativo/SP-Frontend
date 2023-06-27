@@ -31,7 +31,7 @@ const postLot = async (item, idFarm) => {
         areasize: item.areasize,
         lotestate: item.lotestate,
         soildstate: item.soildstate,
-        classlote: item.classlote,
+        classlote: item.classlot,
         fatherlot: item.fatherlot,
         sowingdensity: item.sowingdensity,
         description: item.description,
@@ -50,6 +50,7 @@ const postLot = async (item, idFarm) => {
 };
 
 const updateLot = async (item, idFarm) => {
+  console.log(item);
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.put(
@@ -59,7 +60,7 @@ const updateLot = async (item, idFarm) => {
         areasize: item.areasize,
         lotestate: item.lotestate,
         soildstate: item.soildstate,
-        classlote: item.classlote,
+        classlote: item.classlot,
         fatherlot: item.fatherlot,
         sowingdensity: item.sowingdensity,
         description: item.description,

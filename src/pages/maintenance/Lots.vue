@@ -495,6 +495,10 @@ const getDataLots = async () => {
 
 async function postDataLot() {
   isLoading.value = true;
+  const { lots } = await getLots(idFarm.value);
+
+  const lotId = lots.find((item) => item.name == fatherLot.value)._id;
+
   try {
     await postLot(
       {
@@ -502,8 +506,8 @@ async function postDataLot() {
         areasize: areaSizeLots.value,
         lotestate: lotStateLots.value,
         soildstate: soildStateLots.value,
-        classlote: classLots.value,
-        fatherlot: fatherLot.value,
+        classlot: classLots.value,
+        fatherlot: lotId,
         sowingdensity: sowingDensityLots.value,
         description: descriptionLots.value,
       },
@@ -524,9 +528,11 @@ async function postDataLot() {
 }
 
 async function updateDataLot() {
-  isLoading.value = true;
+  const { lots } = await getLots(idFarm.value);
+  const lotId = lots.find((item) => item.name == fatherLot.value)._id;
+
   try {
-    const response = await updateLot(
+    await updateLot(
       {
         id: idLot.value,
         name: nameLots.value,
@@ -534,7 +540,7 @@ async function updateDataLot() {
         lotestate: lotStateLots.value,
         soildstate: soildStateLots.value,
         classlot: classLots.value,
-        fatherlot: fatherlot.value,
+        fatherlot: lotId,
         sowingdensity: sowingDensityLots.value,
         description: descriptionLots.value,
       },
@@ -545,8 +551,9 @@ async function updateDataLot() {
     modal.toggleModal();
     rows.value = [];
     getDataLots();
-  } catch {
+  } catch (error) {
     isLoading.value = false;
+    console.log(error);
     showNotification(
       "negative",
       "Ocurrió un error, por favor verifique los datos"
@@ -557,7 +564,7 @@ async function updateDataLot() {
 async function activeLotMaintenance(id) {
   loading.value = true;
   try {
-    const active = await activeLot(id, idFarm.value);
+    await activeLot(id, idFarm.value);
     showNotification("positive", "Eps activada correctamente");
     loading.value = false;
     rows.value = [];
@@ -571,7 +578,7 @@ async function activeLotMaintenance(id) {
 
 async function inactiveLotMaintenance(id) {
   try {
-    const inactive = await inactiveLot(id, idFarm.value);
+    await inactiveLot(id, idFarm.value);
     loading.value = false;
     showNotification("positive", "Eps desactivada correctamente");
     rows.value = [];
