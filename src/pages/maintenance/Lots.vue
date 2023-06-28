@@ -248,12 +248,12 @@ import {
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import Select from "@/commons/forms/Select.vue";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
 
@@ -428,6 +428,7 @@ const resetValuesForm = () => {
   valueSelectClass.value = "";
   valueInputSowingDensity.value = "";
   valueInputDescription.value = "";
+  valueSelectFather.value = "";
   nameLots.value = "";
   areaSizeLots.value = "";
   lotStateLots.value = "";
@@ -435,6 +436,7 @@ const resetValuesForm = () => {
   classLots.value = "";
   sowingDensityLots.value = "";
   descriptionLots.value = "";
+  fatherLot.value = "";
 };
 
 const editLotMaintenance = (item) => {
@@ -445,14 +447,16 @@ const editLotMaintenance = (item) => {
   valueInputAreaSize.value = item.areasize;
   valueSelectLoteState.value = item.lotestate;
   valueSelectSoildState.value = item.soildstate;
-  valueSelectClass.value = item.classlot;
+  valueSelectClass.value = item.classlote;
   valueInputSowingDensity.value = item.sowingdensity;
   valueInputDescription.value = item.description;
+  valueSelectFather.value = item.fatherlot;
+  fatherLot.value = item.fatherlot;
   nameLots.value = item.name;
   areaSizeLots.value = item.areasize;
   lotStateLots.value = item.lotestate;
   soildStateLots.value = item.soildstate;
-  classLots.value = item.classlot;
+  classLots.value = item.classlote;
   sowingDensityLots.value = item.sowingdensity;
   descriptionLots.value = item.description;
   modal.toggleModal();
@@ -476,6 +480,13 @@ const getDataLots = async () => {
     let countInactive = 1;
     lots.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let fatherLotId = item.fatherlot;
+      lots.forEach((item) => {
+        if (item._id == fatherLotId) {
+          fatherLotId = item.name;
+        }
+      });
+      item.fatherlot = fatherLotId;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
