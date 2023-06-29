@@ -144,8 +144,16 @@
               v-model="nameActivityExpense"
               @onWrite="getInputName"
             />
+            <Select
+              class="q-pb-md"
+              @onSelect="getSelectSpent"
+              type="spent"
+              :required="true"
+              label="Tipo de gasto"
+              :ruless="rules"
+              :value="valueSelectSpent"
+            />
             <Input
-              class="q-mb-md"
               label="Descripción"
               :required="true"
               type="text"
@@ -197,14 +205,16 @@ import {
   postAdminExpenses,
   updateAdminExpenses,
 } from "@/api/costs/adminexpenses";
+import { getTypeSpents } from "@/api/maintenance/type-spents";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
 
@@ -240,7 +250,9 @@ let tab = ref("active");
 let nameActivityExpense = ref("");
 let descriptionActivityExpense = ref("");
 let worthActivityExpense = ref("");
+let spentActivityExpense = ref("");
 
+let valueSelectSpent = ref("");
 let valueInputName = ref("");
 let valueInputDescription = ref("");
 let valueInputWorth = ref("");
@@ -259,6 +271,15 @@ const columns = ref([
     name: "name",
     label: "Nombre",
     field: "name",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
+    name: "spent",
+    label: "Tipo de gasto",
+    field: "spent",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -305,6 +326,10 @@ const getInputWorth = (value) => {
   worthActivityExpense.value = value;
 };
 
+const getSelectSpent = (value) => {
+  spentActivityExpense.value = value;
+};
+
 const clickButton = () => {
   titleModal.value = "REGISTRAR GASTO ADMINISTRATIVO";
   resetValuesForm();
@@ -319,6 +344,8 @@ const resetValuesForm = () => {
   nameActivityExpense.value = "";
   descriptionActivityExpense.value = "";
   worthActivityExpense.value = "";
+  valueSelectSpent.value = "";
+  spentActivityExpense.value = "";
 };
 
 const editAdminExpenseCosts = (item) => {
@@ -327,10 +354,12 @@ const editAdminExpenseCosts = (item) => {
   idAdminExpense.value = item._id;
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
+  spentActivityExpense.value = item.spent;
   valueInputWorth.value = item.worth;
   nameActivityExpense.value = item.name;
   descriptionActivityExpense.value = item.description;
   worthActivityExpense.value = item.worth;
+  valueSelectSpent.value = item.spent;
   modal.toggleModal();
 };
 
@@ -348,10 +377,18 @@ const getDataAdminExpenses = async () => {
   loading.value = true;
   try {
     const { adminExpenses } = await getAdminExpenses(idFarm.value);
+    const { spents } = await getTypeSpents(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     adminExpenses.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+      let spentsType = item.spent._id;
+      spents.forEach((item) => {
+        if (item._id == spentsType) {
+          spentsType = item.name;
+        }
+      });
+      item.spent = spentsType;
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -369,12 +406,19 @@ const getDataAdminExpenses = async () => {
 
 async function postDataAdminExpense() {
   isLoading.value = true;
+  const { spents } = await getTypeSpents(idFarm.value);
+  spents.forEach((item) => {
+    if (item.name == spentActivityExpense.value) {
+      spentActivityExpense.value = item._id;
+    }
+  });
   try {
-    const adminExpenses = await postAdminExpenses(
+    await postAdminExpenses(
       {
         name: nameActivityExpense.value,
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
+        spent: spentActivityExpense.value,
       },
       idFarm.value
     );
@@ -397,13 +441,21 @@ async function postDataAdminExpense() {
 
 async function updateDataAdminExpense() {
   isLoading.value = true;
+  const { spents } = await getTypeSpents(idFarm.value);
+
+  spents.forEach((item) => {
+    if (item.name == spentActivityExpense.value) {
+      spentActivityExpense.value = item._id;
+    }
+  });
   try {
-    const response = await updateAdminExpenses(
+    await updateAdminExpenses(
       {
         id: idAdminExpense.value,
         name: nameActivityExpense.value,
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
+        spent: spentActivityExpense.value,
       },
       idFarm.value
     );
@@ -430,7 +482,7 @@ async function updateDataAdminExpense() {
 async function activeAdminExpenseCosts(id) {
   loading.value = true;
   try {
-    const active = await activeAdminExpenses(id, idFarm.value);
+    await activeAdminExpenses(id, idFarm.value);
     showNotification("positive", "Gasto administrativo activado correctamente");
     loading.value = false;
     rows.value = [];
@@ -445,7 +497,7 @@ async function activeAdminExpenseCosts(id) {
 async function inactiveAdminExpenseCosts(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveAdminExpenses(id, idFarm.value);
+    await inactiveAdminExpenses(id, idFarm.value);
     loading.value = false;
     showNotification(
       "positive",

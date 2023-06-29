@@ -1,5 +1,5 @@
-import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
+import { sugarAxios } from "../../global";
 
 /**
  * data: data type spents
@@ -7,7 +7,6 @@ import { getToken } from "@/helpers";
  */
 
 const getTypeSpents = async (idFarm) => {
-  const tokenExist = getToken();
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.get(`/maintenance/spents`, {
@@ -105,9 +104,6 @@ const activeTypeSpent = async (id, idFarm) => {
 };
 
 export {
-  getTypeSpents,
-  postTypeSpent,
-  activeTypeSpent,
-  inactiveTypeSpent,
-  updateTypeSpent,
+  activeTypeSpent, getTypeSpents, inactiveTypeSpent, postTypeSpent, updateTypeSpent
 };
+

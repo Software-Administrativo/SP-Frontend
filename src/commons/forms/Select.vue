@@ -31,14 +31,16 @@
   </div>
 </template>
 <script setup>
+import { getBrands } from "@/api/inventory/brands";
+import { getCategories } from "@/api/inventory/categories";
+import { getClients } from "@/api/maintenance/clientss";
 import { getEps } from "@/api/maintenance/eps";
 import { getLots } from "@/api/maintenance/lots";
-import { getCategories } from "@/api/inventory/categories";
-import { getBrands } from "@/api/inventory/brands";
-import { getClients } from "@/api/maintenance/clientss";
+import { getTypeLabors } from "@/api/maintenance/type-labors";
+import { getTypeSpents } from "@/api/maintenance/type-spents";
 import { getTransformationModels } from "@/api/transformation/modelss";
-import { computed, onMounted, ref, watch } from "vue";
 import { useStorage } from "@/stores/localStorage.js";
+import { computed, onMounted, ref, watch } from "vue";
 
 let stringOptions = [];
 let types = ref([]);
@@ -242,6 +244,16 @@ onMounted(async () => {
       i++;
     }
     types.value = years;
+  } else if (props.type === "work") {
+    const { works } = await getTypeLabors(idFarm.value);
+    types.value = works.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "spent") {
+    const { spents } = await getTypeSpents(idFarm.value);
+    types.value = spents.map((item) => {
+      return item.name;
+    });
   }
 });
 

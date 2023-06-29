@@ -151,6 +151,15 @@
               :value="valueSelectLot"
               @onSelect="getSelectLot"
             />
+            <Select
+              class="q-pb-md"
+              @onSelect="getSelectSpent"
+              type="spent"
+              :required="true"
+              label="Tipo de gasto"
+              :ruless="rules"
+              :value="valueSelectSpent"
+            />
             <Input
               label="Valor"
               type="text"
@@ -202,16 +211,17 @@ import {
   postCostsPlanting,
   updateCostsPlanting,
 } from "@/api/costs/costsplanting";
+import { getLots } from "@/api/maintenance/lots";
+import { getTypeSpents } from "@/api/maintenance/type-spents";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
-import Select from "@/commons/forms/Select.vue";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
-import { getLots } from "@/api/maintenance/lots";
 
 const $q = useQuasar();
 
@@ -248,7 +258,9 @@ let nameActivityExpense = ref("");
 let descriptionActivityExpense = ref("");
 let worthActivityExpense = ref("");
 let lotExpense = ref("");
+let spentActivityExpense = ref("");
 
+let valueSelectSpent = ref("");
 let valueInputName = ref("");
 let valueSelectLot = ref("");
 let valueInputDescription = ref("");
@@ -268,6 +280,15 @@ const columns = ref([
     name: "name",
     label: "Nombre",
     field: "name",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
+    name: "spent",
+    label: "Tipo de gasto",
+    field: "spent",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -327,6 +348,10 @@ const getSelectLot = (value) => {
   lotExpense.value = value;
 };
 
+const getSelectSpent = (value) => {
+  spentActivityExpense.value = value;
+};
+
 const clickButton = () => {
   titleModal.value = "REGISTRAR GASTO DE SIEMBRA";
   resetValuesForm();
@@ -343,6 +368,8 @@ const resetValuesForm = () => {
   descriptionActivityExpense.value = "";
   worthActivityExpense.value = "";
   lotExpense.value = "";
+  valueSelectSpent.value = "";
+  spentActivityExpense.value = "";
 };
 
 const editCostsPlantingCosts = (item) => {
@@ -353,10 +380,12 @@ const editCostsPlantingCosts = (item) => {
   valueInputDescription.value = item.description;
   valueInputWorth.value = item.worth;
   nameActivityExpense.value = item.name;
+  spentActivityExpense.value = item.spent;
   descriptionActivityExpense.value = item.description;
   worthActivityExpense.value = item.worth;
   lotExpense.value = item.lot;
   valueSelectLot.value = item.lot;
+  valueSelectSpent.value = item.spent;
   modal.toggleModal();
 };
 
@@ -375,11 +404,19 @@ const getDataCostsPLanting = async () => {
   try {
     const { costs } = await getCostsPlanting(idFarm.value);
     const { lots } = await getLots(idFarm.value);
+    const { spents } = await getTypeSpents(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
     costs.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
       let lotExpense = item.lot;
+      let spentsType = item.spent._id;
+      spents.forEach((item) => {
+        if (item._id == spentsType) {
+          spentsType = item.name;
+        }
+      });
+      item.spent = spentsType;
       lots.forEach((item) => {
         if (item._id == lotExpense) {
           lotExpense = item.name;
@@ -406,10 +443,17 @@ const getDataCostsPLanting = async () => {
 async function postDataCostsPlanting() {
   isLoading.value = true;
   const { lots } = await getLots(idFarm.value);
+  const { spents } = await getTypeSpents(idFarm.value);
 
   lots.forEach((item) => {
     if (item.name == lotExpense.value) {
       lotExpense.value = item._id;
+    }
+  });
+
+  spents.forEach((item) => {
+    if (item.name == spentActivityExpense.value) {
+      spentActivityExpense.value = item._id;
     }
   });
 
@@ -420,6 +464,7 @@ async function postDataCostsPlanting() {
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
         lot: lotExpense.value,
+        spent: spentActivityExpense.value,
       },
       idFarm.value
     );
@@ -440,10 +485,17 @@ async function postDataCostsPlanting() {
 async function updateDataCostsPlanting() {
   isLoading.value = true;
   const { lots } = await getLots(idFarm.value);
+  const { spents } = await getTypeSpents(idFarm.value);
 
   lots.forEach((item) => {
     if (item.name == lotExpense.value) {
       lotExpense.value = item._id;
+    }
+  });
+
+  spents.forEach((item) => {
+    if (item.name == spentActivityExpense.value) {
+      spentActivityExpense.value = item._id;
     }
   });
 
@@ -455,6 +507,7 @@ async function updateDataCostsPlanting() {
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
         lot: lotExpense.value,
+        spent: spentActivityExpense.value,
       },
       idFarm.value
     );

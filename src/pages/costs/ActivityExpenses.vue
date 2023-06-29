@@ -145,7 +145,6 @@
               @onWrite="getInputName"
             />
             <Input
-              class="q-mb-md"
               label="Descripción"
               :required="true"
               type="text"
@@ -153,6 +152,24 @@
               :value="valueInputDescription"
               v-model="descriptionActivityExpense"
               @onWrite="getInputDescription"
+            />
+            <Select
+              class="q-pb-md"
+              @onSelect="getSelectWork"
+              type="work"
+              :required="true"
+              label="Tipo de labor"
+              :ruless="rules"
+              :value="valueSelectWork"
+            />
+            <Select
+              class="q-pb-md"
+              @onSelect="getSelectSpent"
+              type="spent"
+              :required="true"
+              label="Tipo de gasto"
+              :ruless="rules"
+              :value="valueSelectSpent"
             />
             <Input
               class="q-pb-xs"
@@ -197,14 +214,17 @@ import {
   postActivityExpenses,
   updateActivityExpenses,
 } from "@/api/costs/activityexpenses";
+import { getTypeLabors } from "@/api/maintenance/type-labors";
+import { getTypeSpents } from "@/api/maintenance/type-spents";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
+import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
+import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
 import { useQuasar } from "quasar";
 import { computed, onMounted, ref, watch } from "vue";
-import { useStorage } from "@/stores/localStorage.js";
 
 const $q = useQuasar();
 
@@ -240,10 +260,14 @@ let tab = ref("active");
 let nameActivityExpense = ref("");
 let descriptionActivityExpense = ref("");
 let worthActivityExpense = ref("");
+let workActivityExpense = ref("");
+let spentActivityExpense = ref("");
+let valueSelectSpent = ref("");
 
 let valueInputName = ref("");
 let valueInputDescription = ref("");
 let valueInputWorth = ref("");
+let valueSelectWork = ref("");
 
 const columns = ref([
   {
@@ -259,6 +283,24 @@ const columns = ref([
     name: "name",
     label: "Nombre",
     field: "name",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
+    name: "work",
+    label: "Tipo Labor",
+    field: "work",
+    align: "left",
+    sortable: true,
+    headerStyle: "font-size: var(--font-large); font-weight: bold;",
+    style: "font-size: var(--font-large);",
+  },
+  {
+    name: "spent",
+    label: "Tipo de gasto",
+    field: "spent",
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -297,6 +339,14 @@ const getInputName = (value) => {
   nameActivityExpense.value = value;
 };
 
+const getSelectWork = (value) => {
+  workActivityExpense.value = value;
+};
+
+const getSelectSpent = (value) => {
+  spentActivityExpense.value = value;
+};
+
 const getInputDescription = (value) => {
   descriptionActivityExpense.value = value;
 };
@@ -328,9 +378,13 @@ const editActivityExpenseCosts = (item) => {
   valueInputName.value = item.name;
   valueInputDescription.value = item.description;
   valueInputWorth.value = item.worth;
+  valueSelectWork.value = item.work;
   nameActivityExpense.value = item.name;
   descriptionActivityExpense.value = item.description;
   worthActivityExpense.value = item.worth;
+  workActivityExpense.value = item.work;
+  valueSelectSpent.value = item.spent;
+  spentActivityExpense.value = item.spent;
   modal.toggleModal();
 };
 
@@ -348,10 +402,30 @@ const getDataActivityExpenses = async () => {
   loading.value = true;
   try {
     const { activityexpenses } = await getActivityExpenses(idFarm.value);
+    const { works } = await getTypeLabors(idFarm.value);
+    const { spents } = await getTypeSpents(idFarm.value);
+
     let countActive = 1;
     let countInactive = 1;
     activityexpenses.forEach((item) => {
       item.status = item.status ? "Inactivo" : "Activo";
+
+      let spentsType = item.spent._id;
+      let worksType = item.work._id;
+
+      spents.forEach((item) => {
+        if (item._id == spentsType) {
+          spentsType = item.name;
+        }
+      });
+      item.spent = spentsType;
+      works.forEach((item) => {
+        if (item._id == worksType) {
+          worksType = item.name;
+        }
+      });
+      item.work = worksType;
+
       if (item.status == "Activo") {
         item.id = countActive++;
         rows.value.push(item);
@@ -369,12 +443,30 @@ const getDataActivityExpenses = async () => {
 
 async function postDataActivityExpense() {
   isLoading.value = true;
+
+  const { works } = await getTypeLabors(idFarm.value);
+  const { spents } = await getTypeSpents(idFarm.value);
+
+  spents.forEach((item) => {
+    if (item.name == spentActivityExpense.value) {
+      spentActivityExpense.value = item._id;
+    }
+  });
+
+  works.forEach((item) => {
+    if (item.name == workActivityExpense.value) {
+      workActivityExpense.value = item._id;
+    }
+  });
+
   try {
-    const activityexpenses = await postActivityExpenses(
+    await postActivityExpenses(
       {
         name: nameActivityExpense.value,
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
+        work: workActivityExpense.value,
+        spent: spentActivityExpense.value,
       },
       idFarm.value
     );
@@ -394,13 +486,31 @@ async function postDataActivityExpense() {
 
 async function updateDataActivityExpense() {
   isLoading.value = true;
+
+  const { works } = await getTypeLabors(idFarm.value);
+  const { spents } = await getTypeSpents(idFarm.value);
+
+  works.forEach((item) => {
+    if (item.name == workActivityExpense.value) {
+      workActivityExpense.value = item._id;
+    }
+  });
+
+  spents.forEach((item) => {
+    if (item.name == spentActivityExpense.value) {
+      spentActivityExpense.value = item._id;
+    }
+  });
+
   try {
-    const response = await updateActivityExpenses(
+    await updateActivityExpenses(
       {
         id: idActivityExpense.value,
         name: nameActivityExpense.value,
         description: descriptionActivityExpense.value,
         worth: worthActivityExpense.value,
+        work: workActivityExpense.value,
+        spent: spentActivityExpense.value,
       },
       idFarm.value
     );
@@ -427,7 +537,7 @@ async function updateDataActivityExpense() {
 async function activeActivityExpenseCosts(id) {
   loading.value = true;
   try {
-    const active = await activeActivityExpenses(id, idFarm.value);
+    await activeActivityExpenses(id, idFarm.value);
     showNotification("positive", "Gasto de actividad activado correctamente");
     loading.value = false;
     rows.value = [];
@@ -442,7 +552,7 @@ async function activeActivityExpenseCosts(id) {
 async function inactiveActivityExpenseCosts(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveActivityExpenses(id, idFarm.value);
+    await inactiveActivityExpenses(id, idFarm.value);
     loading.value = false;
     showNotification(
       "positive",

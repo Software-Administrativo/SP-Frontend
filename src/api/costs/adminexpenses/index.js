@@ -1,5 +1,5 @@
-import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
+import { sugarAxios } from "../../global";
 
 /**
  * data: data Admin Expenses
@@ -30,6 +30,7 @@ const postAdminExpenses = async (type, idFarm) => {
         name: type.name,
         description: type.description,
         worth: type.worth,
+        spent: type.spent
       },
       {
         headers: {
@@ -53,6 +54,7 @@ const updateAdminExpenses = async (item, idFarm) => {
         name: item.name,
         description: item.description,
         worth: item.worth,
+        spent: item.spent
       },
       {
         headers: {
@@ -106,9 +108,6 @@ const activeAdminExpenses = async (id, idFarm) => {
 };
 
 export {
-  getAdminExpenses,
-  postAdminExpenses,
-  inactiveAdminExpenses,
-  activeAdminExpenses,
-  updateAdminExpenses,
+  activeAdminExpenses, getAdminExpenses, inactiveAdminExpenses, postAdminExpenses, updateAdminExpenses
 };
+

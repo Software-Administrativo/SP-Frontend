@@ -1,5 +1,5 @@
-import { sugarAxios } from "../../global";
 import { getToken } from "@/helpers";
+import { sugarAxios } from "../../global";
 
 /**
  * data: data Activity Expenses
@@ -21,15 +21,17 @@ const getActivityExpenses = async (idFarm) => {
   }
 };
 
-const postActivityExpenses = async (type, idFarm) => {
+const postActivityExpenses = async (item, idFarm) => {
   try {
     const tokenExist = getToken();
     const { data } = await sugarAxios.post(
       `/costs/activityexpenses/register`,
       {
-        name: type.name,
-        description: type.description,
-        worth: type.worth,
+        name: item.name,
+        description: item.description,
+        worth: item.worth,
+        work: item.work,
+        spent: item.spent
       },
       {
         headers: {
@@ -53,6 +55,8 @@ const updateActivityExpenses = async (item, idFarm) => {
         name: item.name,
         description: item.description,
         worth: item.worth,
+        work: item.work,
+        spent: item.spent
       },
       {
         headers: {
@@ -106,9 +110,6 @@ const activeActivityExpenses = async (id, idFarm) => {
 };
 
 export {
-  getActivityExpenses,
-  postActivityExpenses,
-  inactiveActivityExpenses,
-  activeActivityExpenses,
-  updateActivityExpenses,
+  activeActivityExpenses, getActivityExpenses, inactiveActivityExpenses, postActivityExpenses, updateActivityExpenses
 };
+
