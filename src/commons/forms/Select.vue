@@ -38,6 +38,9 @@ import { getEps } from "@/api/maintenance/eps";
 import { getLots } from "@/api/maintenance/lots";
 import { getTypeLabors } from "@/api/maintenance/type-labors";
 import { getTypeSpents } from "@/api/maintenance/type-spents";
+import { getTypePays } from "@/api/maintenance/type-pays";
+import { getPeople } from "@/api/maintenance/people";
+import { getActivityExpenses } from "@/api/costs/activityexpenses";
 import { getTransformationModels } from "@/api/transformation/modelss";
 import { useStorage } from "@/stores/localStorage.js";
 import { computed, onMounted, ref, watch } from "vue";
@@ -254,6 +257,23 @@ onMounted(async () => {
     types.value = spents.map((item) => {
       return item.name;
     });
+  } else if (props.type === "people") {
+    const { people } = await getPeople(idFarm.value);
+    types.value = people.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "typepay") {
+    const { pays } = await getTypePays(idFarm.value);
+    types.value = pays.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "activity") {
+    const { activityexpenses } = await getActivityExpenses(idFarm.value);
+    types.value = activityexpenses.map((item) => {
+      return item.name;
+    });
+  } else if (props.type === "statePay") {
+    types.value = ["Pendiente", "Pago"];
   }
 });
 

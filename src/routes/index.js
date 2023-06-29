@@ -67,6 +67,11 @@ const router = createRouter({
           name: "cost-planting",
           component: () => import("../pages/costs/CostsPlanting.vue"),
         },
+        {
+          path: "payroll",
+          name: "cost-payroll-expenses",
+          component: () => import("../pages/costs/PayrollExpenses.vue"),
+        },
       ],
     },
     {

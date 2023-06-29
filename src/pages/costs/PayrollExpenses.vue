@@ -2,11 +2,11 @@
   <div class="q-py-sm table-container">
     <div class="row">
       <i class="icon icon-backRoute q-pt-lg" @click="$router.back()" />
-      <h6 class="title q-my-lg">Gastos de Siembra</h6>
+      <h6 class="title q-my-lg">Gastos de Nómina</h6>
     </div>
     <q-separator class="separator" />
     <div class="container-content">
-      <ButtonAdd @onClick="clickButton" label="Crear nuevo gasto de siembra" />
+      <ButtonAdd @onClick="clickButton" label="Crear nuevo gasto de nómina" />
       <div class="container-table q-mt-md q-pa-md" rounded>
         <q-card>
           <q-tabs
@@ -18,8 +18,8 @@
             align="justify"
             narrow-indicator
           >
-            <q-tab name="active" label="Activos" />
-            <q-tab name="inactive" label="Inactivos" />
+            <q-tab name="active" label="Pendientes" />
+            <q-tab name="inactive" label="Pagos" />
           </q-tabs>
 
           <q-separator />
@@ -29,7 +29,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Siembra"
+                title="Gastos de Nómina"
                 row-key="name"
                 :rows="rows"
                 :columns="columns"
@@ -57,20 +57,30 @@
                         icon="edit_note"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="editCostsPlanting(props.row)"
+                        @click="editPayrollCosts(props.row)"
                       >
                         <q-tooltip class="bg-indigo" :offset="[10, 10]">
                           Editar
                         </q-tooltip>
                       </q-btn>
                       <q-btn
+                        icon="payment"
+                        text-color="blue-10"
+                        class="col text-bold q-pa-none icon-table"
+                        @click="payPayrollCosts(props.row)"
+                      >
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                          Pagar
+                        </q-tooltip>
+                      </q-btn>
+                      <q-btn
                         icon="highlight_off"
                         text-color="blue-10"
                         class="col text-bold q-pa-none icon-table"
-                        @click="inactivePlantingCosts(props.row._id)"
+                        @click="deletePayrollCosts(props.row._id)"
                       >
                         <q-tooltip class="bg-indigo" :offset="[10, 10]">
-                          Desactivar
+                          Eliminar
                         </q-tooltip>
                       </q-btn>
                     </q-btn-group>
@@ -82,7 +92,7 @@
               <q-table
                 flat
                 bordered
-                title="Gastos de Siembra"
+                title="Gastos de Nómina"
                 row-key="name"
                 :rows="inactiveRows"
                 :columns="columns"
@@ -107,13 +117,13 @@
                   <td class="accions-td">
                     <q-btn-group class="full-width full-height" outline square>
                       <q-btn
+                        icon="highlight_off"
                         text-color="blue-10"
-                        class="col q-pa-none"
-                        @click="activeCostsPlantingCosts(props.row._id)"
+                        class="col text-bold q-pa-none icon-table"
+                        @click="declinePayrollCosts(props.row._id)"
                       >
-                        <i class="icon icon-check"></i>
                         <q-tooltip class="bg-indigo" :offset="[10, 10]">
-                          Activar
+                          Declinar pago
                         </q-tooltip>
                       </q-btn>
                     </q-btn-group>
@@ -128,55 +138,58 @@
   </div>
   <template v-if="modal.modalIsOpen">
     <ModalForm class="modal">
-      <div class="modal-planting">
+      <div class="modal-payroll">
         <h6 class="q-my-md text-center">{{ titleModal }}</h6>
         <div class="row q-px-xl">
           <div class="col-12">
-            <Input
-              label="Nombre"
-              :required="true"
-              type="text"
-              :ruless="rules"
-              :value="valueInputName"
-              v-model="nameActivityExpense"
-              @onWrite="getInputName"
-            />
             <Select
               class="q-pb-lg"
-              type="lots"
-              label="Lote"
-              :v-model="lotExpense"
+              type="people"
+              label="Persona"
+              :v-model="peopleCost"
               :required="true"
               :ruless="rules"
-              :value="valueSelectLot"
-              @onSelect="getSelectLot"
+              :value="valueSelectPeople"
+              @onSelect="getSelectPeople"
             />
             <Select
               class="q-pb-md"
-              @onSelect="getSelectSpent"
-              type="spent"
-              :required="true"
+              type="typepay"
               label="Tipo de gasto"
+              :v-model="payCost"
+              :required="true"
               :ruless="rules"
-              :value="valueSelectSpent"
+              :value="valueSelectPay"
+              @onSelect="getSelectPay"
+            />
+            <Select
+              class="q-pb-md"
+              type="activity"
+              label="Tipo de actividad"
+              :v-model="activityCost"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectActivity"
+              @onSelect="getSelectActivity"
             />
             <Input
               label="Valor"
-              type="text"
+              type="number"
               :required="true"
               :ruless="rules"
+              v-model="worthCost"
               :value="valueInputWorth"
-              v-model="worthActivityExpense"
               @onWrite="getInputWorth"
             />
-            <Input
-              class="q-mb-md"
-              label="Descripción"
-              type="text"
-              :required="false"
-              :value="valueInputDescription"
-              v-model="descriptionActivityExpense"
-              @onWrite="getInputDescription"
+            <Select
+              class="q-pb-md"
+              type="statePay"
+              label="Estado del pago"
+              :v-model="statePayCost"
+              :required="true"
+              :ruless="rules"
+              :value="valueSelectStatus"
+              @onSelect="getSelectStatus"
             />
             <span class="text-required q-pb-sm"
               >Todos los campos con <span class="text-red">*</span> son
@@ -191,7 +204,7 @@
               <ButtonSave
                 v-else
                 :disable="disableSave"
-                @onClick="updateDataCostsPlanting"
+                @onClick="updateDataCostsPayroll"
               />
             </div>
             <div class="spinner" v-if="isLoading">
@@ -205,14 +218,13 @@
 </template>
 <script setup>
 import {
-  activeCostsPlanting,
-  getCostsPlanting,
-  inactiveCostsPlanting,
-  postCostsPlanting,
-  updateCostsPlanting,
-} from "@/api/costs/costsplanting";
-import { getLots } from "@/api/maintenance/lots";
-import { getTypeSpents } from "@/api/maintenance/type-spents";
+  getCostsPayroll,
+  deleteCostsPayroll,
+  postCostsPayroll,
+  updateCostsPayroll,
+  payCostsPayroll,
+  declineCostsPayroll,
+} from "@/api/costs/payrollexpenses";
 import ButtonAdd from "@/commons/ButtonAdd.vue";
 import ButtonSave from "@/commons/forms/ButtonSave.vue";
 import Input from "@/commons/forms/Input.vue";
@@ -220,7 +232,10 @@ import Select from "@/commons/forms/Select.vue";
 import ModalForm from "@/modules/global/ModalForm.vue";
 import { useStorage } from "@/stores/localStorage.js";
 import { modalState } from "@/stores/modal.js";
+import { getActivityExpenses } from "@/api/costs/activityexpenses";
 import { useQuasar } from "quasar";
+import { getTypePays } from "@/api/maintenance/type-pays";
+import { getPeople } from "@/api/maintenance/people";
 import { computed, onMounted, ref, watch } from "vue";
 
 const $q = useQuasar();
@@ -231,15 +246,16 @@ const loading = ref(false);
 const typeAction = ref(true);
 const rows = ref([]);
 const inactiveRows = ref([]);
-const idCostsPlanting = ref();
+const idCostsPayroll = ref();
 const storage = useStorage();
 const isLoading = ref(false);
 
 const disableSave = computed(() => {
   if (
-    nameActivityExpense.value == "" ||
-    worthActivityExpense.value == "" ||
-    lotExpense.value == ""
+    worthCost.value == "" ||
+    payCost.value == "" ||
+    peopleCost.value == "" ||
+    activityCost.value == ""
   ) {
     return true;
   } else if (isLoading.value == true) {
@@ -254,16 +270,16 @@ const rules = [(v) => !!v || "Este campo es requerido"];
 let filter = ref("");
 let tab = ref("active");
 
-let nameActivityExpense = ref("");
-let descriptionActivityExpense = ref("");
-let worthActivityExpense = ref("");
-let lotExpense = ref("");
-let spentActivityExpense = ref("");
+let worthCost = ref("");
+let payCost = ref("");
+let peopleCost = ref("");
+let activityCost = ref("");
+let statePayCost = ref("");
 
-let valueSelectSpent = ref("");
-let valueInputName = ref("");
-let valueSelectLot = ref("");
-let valueInputDescription = ref("");
+let valueSelectStatus = ref("");
+let valueSelectPay = ref("");
+let valueSelectActivity = ref("");
+let valueSelectPeople = ref("");
 let valueInputWorth = ref("");
 
 const columns = ref([
@@ -277,36 +293,27 @@ const columns = ref([
     style: "font-size: var(--font-large);",
   },
   {
-    name: "name",
-    label: "Nombre",
-    field: "name",
+    name: "people",
+    label: "Persona",
+    field: (row) => row.people.name,
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
     style: "font-size: var(--font-large);",
   },
   {
-    name: "spent",
-    label: "Tipo de gasto",
-    field: "spent",
+    name: "typepay",
+    label: "Pago",
+    field: (row) => row.typepay.name,
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
     style: "font-size: var(--font-large);",
   },
   {
-    name: "description",
-    label: "Descripción",
-    field: "description",
-    align: "left",
-    sortable: true,
-    headerStyle: "font-size: var(--font-large); font-weight: bold;",
-    style: "font-size: var(--font-large);",
-  },
-  {
-    name: "lot",
-    label: "Lote",
-    field: "lot",
+    name: "activity",
+    label: "Actividad",
+    field: (row) => row.activity.name,
     align: "left",
     sortable: true,
     headerStyle: "font-size: var(--font-large); font-weight: bold;",
@@ -332,60 +339,61 @@ const columns = ref([
   },
 ]);
 
-const getInputName = (value) => {
-  nameActivityExpense.value = value;
-};
-
-const getInputDescription = (value) => {
-  descriptionActivityExpense.value = value;
-};
-
 const getInputWorth = (value) => {
-  worthActivityExpense.value = value;
+  worthCost.value = value;
 };
 
-const getSelectLot = (value) => {
-  lotExpense.value = value;
+const getSelectPeople = (value) => {
+  peopleCost.value = value;
 };
 
-const getSelectSpent = (value) => {
-  spentActivityExpense.value = value;
+const getSelectActivity = (value) => {
+  activityCost.value = value;
+};
+
+const getSelectPay = (value) => {
+  payCost.value = value;
+};
+
+const getSelectStatus = (value) => {
+  statePayCost.value = value;
 };
 
 const clickButton = () => {
-  titleModal.value = "REGISTRAR GASTO DE SIEMBRA";
+  titleModal.value = "REGISTRAR GASTO DE NÓMINA";
   resetValuesForm();
   typeAction.value = true;
   modal.toggleModal();
 };
 
 const resetValuesForm = () => {
-  valueInputName.value = "";
-  valueInputDescription.value = "";
   valueInputWorth.value = "";
-  valueSelectLot.value = "";
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
-  lotExpense.value = "";
-  valueSelectSpent.value = "";
-  spentActivityExpense.value = "";
+  valueSelectPeople.value = "";
+  valueSelectPay.value = "";
+  valueSelectActivity.value = "";
+  activityCost.value = "";
+  worthCost.value = "";
+  peopleCost.value = "";
+  payCost.value = "";
+  idCostsPayroll.value = "";
+  valueSelectStatus.value = "";
+  statePayCost.value = "";
 };
 
-const editCostsPlanting = (item) => {
-  titleModal.value = "EDITAR GASTO DE SIEMBRA";
+const editPayrollCosts = (item) => {
+  titleModal.value = "EDITAR GASTO DE NÓMINA";
   typeAction.value = false;
-  idCostsPlanting.value = item._id;
-  valueInputName.value = item.name;
-  valueInputDescription.value = item.description;
+  idCostsPayroll.value = item._id;
   valueInputWorth.value = item.worth;
-  nameActivityExpense.value = item.name;
-  spentActivityExpense.value = item.spent;
-  descriptionActivityExpense.value = item.description;
-  worthActivityExpense.value = item.worth;
-  lotExpense.value = item.lot;
-  valueSelectLot.value = item.lot;
-  valueSelectSpent.value = item.spent;
+  valueSelectPeople.value = item.people.name;
+  valueSelectPay.value = item.typepay.name;
+  valueSelectActivity.value = item.activity.name;
+  valueSelectStatus.value = item.statuspay;
+  activityCost.value = item.activity.name;
+  worthCost.value = item.worth;
+  peopleCost.value = item.people.name;
+  payCost.value = item.typepay.name;
+  statePayCost.value = item.statuspay;
   modal.toggleModal();
 };
 
@@ -397,41 +405,24 @@ const showNotification = (type, message) => {
   });
 };
 
-const getDataCostsPLanting = async () => {
+const getDataCostsPayroll = async () => {
   rows.value = [];
   inactiveRows.value = [];
   loading.value = true;
   try {
-    const { costs } = await getCostsPlanting(idFarm.value);
-    const { lots } = await getLots(idFarm.value);
-    const { spents } = await getTypeSpents(idFarm.value);
+    const { payrolls } = await getCostsPayroll(idFarm.value);
     let countActive = 1;
     let countInactive = 1;
-    costs.forEach((item) => {
-      item.status = item.status ? "Inactivo" : "Activo";
-      let lotExpense = item.lot;
-      let spentsType = item.spent._id;
-      spents.forEach((item) => {
-        if (item._id == spentsType) {
-          spentsType = item.name;
-        }
-      });
-      item.spent = spentsType;
-      lots.forEach((item) => {
-        if (item._id == lotExpense) {
-          lotExpense = item.name;
-        }
-      });
-      item.lot = lotExpense;
-      if (item.status == "Activo") {
+    payrolls.forEach((item) => {
+      item.statuspay = item.statuspay ? "Pendiente" : "Pagado";
+
+      if (item.statuspay == "Pendiente") {
         item.id = countActive++;
         rows.value.push(item);
       } else {
         item.id = countInactive++;
         inactiveRows.value.push(item);
       }
-      item.description =
-        item.description.trim() == "" ? "No registra" : item.description;
     });
     loading.value = false;
   } catch (error) {
@@ -442,37 +433,48 @@ const getDataCostsPLanting = async () => {
 
 async function postDataCostsPlanting() {
   isLoading.value = true;
-  const { lots } = await getLots(idFarm.value);
-  const { spents } = await getTypeSpents(idFarm.value);
+  const { people } = await getPeople(idFarm.value);
+  const { pays } = await getTypePays(idFarm.value);
+  const { activityexpenses } = await getActivityExpenses(idFarm.value);
 
-  lots.forEach((item) => {
-    if (item.name == lotExpense.value) {
-      lotExpense.value = item._id;
+  people.forEach((item) => {
+    if (item.name == peopleCost.value) {
+      peopleCost.value = item._id;
     }
   });
 
-  spents.forEach((item) => {
-    if (item.name == spentActivityExpense.value) {
-      spentActivityExpense.value = item._id;
+  pays.forEach((item) => {
+    if (item.name == payCost.value) {
+      payCost.value = item._id;
+    }
+  });
+
+  activityexpenses.forEach((item) => {
+    if (item.name == activityCost.value) {
+      activityCost.value = item._id;
     }
   });
 
   try {
-    await postCostsPlanting(
+    await postCostsPayroll(
       {
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
-        lot: lotExpense.value,
-        spent: spentActivityExpense.value,
+        people: peopleCost.value,
+        typepay: payCost.value,
+        activity: activityCost.value,
+        worth: worthCost.value,
+        statuspay: statePayCost.value
+          ? statePayCost.value == "Pendiente"
+            ? 1
+            : 0
+          : 1,
       },
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Gasto de siembra registrado correctamente");
+    showNotification("positive", "Gasto de nómina registrado correctamente");
     modal.toggleModal();
     rows.value = [];
-    getDataCostsPLanting();
+    getDataCostsPayroll();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -482,40 +484,51 @@ async function postDataCostsPlanting() {
   }
 }
 
-async function updateDataCostsPlanting() {
+async function updateDataCostsPayroll() {
   isLoading.value = true;
-  const { lots } = await getLots(idFarm.value);
-  const { spents } = await getTypeSpents(idFarm.value);
+  const { people } = await getPeople(idFarm.value);
+  const { pays } = await getTypePays(idFarm.value);
+  const { activityexpenses } = await getActivityExpenses(idFarm.value);
 
-  lots.forEach((item) => {
-    if (item.name == lotExpense.value) {
-      lotExpense.value = item._id;
+  people.forEach((item) => {
+    if (item.name == peopleCost.value) {
+      peopleCost.value = item._id;
     }
   });
 
-  spents.forEach((item) => {
-    if (item.name == spentActivityExpense.value) {
-      spentActivityExpense.value = item._id;
+  pays.forEach((item) => {
+    if (item.name == payCost.value) {
+      payCost.value = item._id;
+    }
+  });
+
+  activityexpenses.forEach((item) => {
+    if (item.name == activityCost.value) {
+      activityCost.value = item._id;
     }
   });
 
   try {
-    await updateCostsPlanting(
+    await updateCostsPayroll(
       {
-        id: idCostsPlanting.value,
-        name: nameActivityExpense.value,
-        description: descriptionActivityExpense.value,
-        worth: worthActivityExpense.value,
-        lot: lotExpense.value,
-        spent: spentActivityExpense.value,
+        id: idCostsPayroll.value,
+        people: peopleCost.value,
+        typepay: payCost.value,
+        activity: activityCost.value,
+        worth: worthCost.value,
+        statuspay: statePayCost.value
+          ? statePayCost.value == "Pendiente"
+            ? 1
+            : 0
+          : 1,
       },
       idFarm.value
     );
     isLoading.value = false;
-    showNotification("positive", "Gasto de siembra actualizado correctamente");
+    showNotification("positive", "Gasto de nómina actualizado correctamente");
     modal.toggleModal();
     rows.value = [];
-    getDataCostsPLanting();
+    getDataCostsPayroll();
   } catch {
     isLoading.value = false;
     showNotification(
@@ -523,35 +536,48 @@ async function updateDataCostsPlanting() {
       "Ocurrió un error, por favor verifique los datos"
     );
   }
-  nameActivityExpense.value = "";
-  descriptionActivityExpense.value = "";
-  worthActivityExpense.value = "";
+  worthCost.value = "";
 }
 
-async function activeCostsPlantingCosts(id) {
+async function payPayrollCosts(id) {
   loading.value = true;
   try {
-    const active = await activeCostsPlanting(id, idFarm.value);
-    showNotification("positive", "Gasto de siembra activado correctamente");
+    await payCostsPayroll(id._id, idFarm.value);
+    showNotification("positive", "Gasto de nómina pagado correctamente");
     loading.value = false;
     rows.value = [];
     inactiveRows.value = [];
-    getDataCostsPLanting();
+    getDataCostsPayroll();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
   }
 }
 
-async function inactivePlantingCosts(id) {
+async function deletePayrollCosts(id) {
   loading.value = false;
   try {
-    const inactive = await inactiveCostsPlanting(id, idFarm.value);
+    await deleteCostsPayroll(id, idFarm.value);
     loading.value = false;
-    showNotification("positive", "Gasto de siembra desactivado correctamente");
+    showNotification("positive", "Gasto de nómina eliminado correctamente");
     rows.value = [];
     inactiveRows.value = [];
-    getDataCostsPLanting();
+    getDataCostsPayroll();
+  } catch (error) {
+    loading.value = false;
+    showNotification("negative", "Ocurrió un error");
+  }
+}
+
+async function declinePayrollCosts(id) {
+  loading.value = false;
+  try {
+    await declineCostsPayroll(id, idFarm.value);
+    loading.value = false;
+    showNotification("positive", "Gasto de nómina declinado correctamente");
+    rows.value = [];
+    inactiveRows.value = [];
+    getDataCostsPayroll();
   } catch (error) {
     loading.value = false;
     showNotification("negative", "Ocurrió un error");
@@ -563,11 +589,11 @@ const idFarm = computed(() => {
 });
 
 watch(idFarm, () => {
-  getDataCostsPLanting();
+  getDataCostsPayroll();
 });
 
 onMounted(() => {
-  getDataCostsPLanting();
+  getDataCostsPayroll();
 });
 </script>
 <style scoped>
@@ -581,11 +607,11 @@ onMounted(() => {
   border: 2px solid var(--color-gray);
   border-radius: 10px;
 }
-.modal-planting {
+.modal-payroll {
   overflow-y: scroll;
   max-height: 450px;
 }
-.modal-planting::-webkit-scrollbar {
+.modal-payroll::-webkit-scrollbar {
   display: none;
 }
 .icon-backRoute {

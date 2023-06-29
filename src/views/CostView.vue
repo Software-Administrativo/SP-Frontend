@@ -10,9 +10,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-import { useRoute } from "vue-router";
 import ListModules from "@/modules/global/ListModules.vue";
+import { computed, ref } from "vue";
+import { useRoute } from "vue-router";
 
 const routeName = computed(() => {
   return useRoute().name;
@@ -33,6 +33,11 @@ const itemsListModules = ref([
     label: "Gastos administrativos",
     icon: "icon icon-product",
     name: "cost-admin-expenses",
+  },
+  {
+    label: "Gastos de Nómina",
+    icon: "icon icon-payroll",
+    name: "cost-payroll-expenses",
   },
 ]);
 </script>
